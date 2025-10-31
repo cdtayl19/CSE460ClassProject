@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <button id="btn">Call Server</button>
+
+  <script>
+    document.getElementById("btn").addEventListener("click", () => {
+      fetch('http://127.0.0.1:8080/api')
+        .then(response => response.json())
+        .then(data => console.log("Server response:", data))
+        .catch(err => console.error(err));
+    });
+  </script>
+</body>
+</html>
