@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+  <title>Login Page</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button id="signInBtn">Sign In</button>
+    <button id="createAccountBtn">Create Account</button>
+  </div>
+
+  <script>
+    document.getElementById("signInBtn").addEventListener("click", () => {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      console.log("Sign In clicked:", username, password);
+      // Here you could send a fetch request to your server
+    });
+
+    document.getElementById("createAccountBtn").addEventListener("click", () => {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      console.log("Create Account clicked:", username, password);
+      // Here you could send a fetch request to create a new user
+    });
+  </script>
+</body>
+</html>
