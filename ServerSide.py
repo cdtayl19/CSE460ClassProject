@@ -6,5 +6,9 @@ app = Flask(__name__)
 def home():
     return render_template("Login.html")
 
+@app.route("/create-account")
+def createUser():
+    return render_template("CreateUser.html")
+
 if __name__ == "__main__":
     app.run(port=8080)

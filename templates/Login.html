@@ -2,7 +2,7 @@
 <head>
   <title>Login Page</title>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
 </head>
 
 <body>
@@ -22,9 +22,7 @@
     });
 
     document.getElementById("createAccountBtn").addEventListener("click", () => {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      console.log("Create Account clicked:", username, password);
+      window.location.href = '/create-account';
     });
   </script>
 </body>
