@@ -28,6 +28,7 @@ app = Flask(__name__)
 def home():
     return render_template("Login.html")
 
+
 @app.route("/create-account", methods=["GET", "POST"])
 def createUser():
     if request.method == "POST":
@@ -63,6 +64,16 @@ def createUser():
         return jsonify({"status": "success", "message": f"User {user_data["username"]} created!"})
     
     return render_template("CreateUser.html")
+
+
+@app.route("/student")
+def student():
+    return render_template("StudentPage.html")
+
+
+@app.route("/admin")
+def admin():
+    return render_template("AdminPage.html")
 
 if __name__ == "__main__":
     app.run(port=8080)

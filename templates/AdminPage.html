@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<head>
+  <title>Admin Page</title>
+
+  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+</head>
+
+<body>
+  <div class="starter-container">
+    <h2>Admin Page</h2>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
