@@ -36,7 +36,12 @@
             },
             body: JSON.stringify(newAccount)})
             .then(response => response.json())
-            .then(data => console.log("Server says:", data))
+            .then(data => {
+                console.log("Server says:", data);
+                if (data.status === "success") {    // If successful, returns to login page
+                    window.location.href = "/";
+                }
+            })
         });
 
     document.getElementById("cancel").addEventListener("click", () => {
