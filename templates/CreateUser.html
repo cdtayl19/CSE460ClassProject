@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <head>
-  <title>Create User</title>
+    <title>Create User</title>
 
-  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
 </head>
 
 <body>
-  <div class="create-user-container">
-    <h2>Create User</h2>
-    <input type="text" id="firstname" placeholder="First Name"><br>
-    <input type="text" id="lastname" placeholder="Last Name"><br>
-    <input type="text" id="email" placeholder="Email"><br>
-    <input type="text" id="username" placeholder="New Username"><br>
-    <input type="text" id="password" placeholder="New Password"><br>
-    <button id="createAccountBtn">Create Account</button>
-    <button id="cancel">Cancel</button>
+    <div class="create-user-container">
+        <h2>Create User</h2>
+        <input type="text" id="firstname" placeholder="First Name"><br>
+        <input type="text" id="lastname" placeholder="Last Name"><br>
+        <input type="text" id="email" placeholder="Email"><br>
+        <input type="text" id="username" placeholder="New Username"><br>
+        <input type="text" id="password" placeholder="New Password"><br>
+        <button id="createAccountBtn">Create Account</button>
+        <button id="cancel">Cancel</button>
+    </div>
 
-  </div>
+    <script>
+    document.getElementById("createAccountBtn").addEventListener("click", (event) => {
+        /* IF VALUES ARE NOT EMPTY!!!!!!!!!!!!!!! */
+        const firstname = document.getElementById("firstname").value;
+        const lastname = document.getElementById("lastname").value;
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-  <script>
-    document.getElementById("createAccountBtn").addEventListener("click", () => {
-      /* IF VALUES ARE NOT EMPTY!!!!!!!!!!!!!!! */
-      const firstname = document.getElementById("firstname").value;
-      const lastname = document.getElementById("lastname").value;
-      const email = document.getElementById("email").value;
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const newAccount = {firstname: firstname, lastname: lastname, email: email, username: username, password: password};
-      console.log("New User Created");
-    });
+        const newAccount = {firstname, lastname, email, username, password};
+        
+        fetch("/create-account", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newAccount)})
+            .then(response => response.json())
+            .then(data => console.log("Server says:", data))
+        });
 
     document.getElementById("cancel").addEventListener("click", () => {
-      window.location.href = '/';
+        window.location.href = '/';
     });
-  </script>
+    </script>
 </body>
 </html>
