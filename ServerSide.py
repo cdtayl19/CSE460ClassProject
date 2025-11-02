@@ -18,6 +18,7 @@ def createUser():
     if request.method == "POST":
         user_data = request.get_json()
 
+        # Empty filed checks
         if user_data["firstname"] == "":
             return jsonify({"status": "fail", "message": "First name cannot be empty."})
         if user_data["lastname"] == "":
