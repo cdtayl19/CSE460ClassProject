@@ -18,6 +18,17 @@ def createUser():
     if request.method == "POST":
         user_data = request.get_json()
 
+        if user_data["firstname"] == "":
+            return jsonify({"status": "fail", "message": "First name cannot be empty."})
+        if user_data["lastname"] == "":
+            return jsonify({"status": "fail", "message": "Last name cannot be empty."})
+        if user_data["email"] == "":
+            return jsonify({"status": "fail", "message": "Email cannot be empty."})
+        if user_data["username"] == "":
+            return jsonify({"status": "fail", "message": "Username cannot be empty."})
+        if user_data["password"] == "":
+            return jsonify({"status": "fail", "message": "Password cannot be empty."})
+
         # Send user data to csv for storage
         with open(FILE_NAME, 'a', newline='') as new_file:
             fieldnames = ['firstname', 'lastname', 'email', 'username', 'password', 'role']

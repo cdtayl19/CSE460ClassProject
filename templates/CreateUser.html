@@ -17,6 +17,10 @@
         <button id="cancel">Cancel</button>
     </div>
 
+    <div>
+        <p id="message"></p>
+    </div>
+
     <script>
     document.getElementById("createAccountBtn").addEventListener("click", (event) => {
         /* IF VALUES ARE NOT EMPTY!!!!!!!!!!!!!!! */
@@ -40,6 +44,9 @@
                 console.log("Server says:", data);
                 if (data.status === "success") {    // If successful, returns to login page
                     window.location.href = "/";
+                } else {
+                    console.log(data.message);
+                    document.getElementById("message").innerHTML = data.message;
                 }
             })
         });
