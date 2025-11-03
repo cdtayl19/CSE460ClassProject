@@ -24,8 +24,33 @@ def csv_write(user_data):
 # Server Stuff
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def home():
+    if request.method == "POST":
+        user_data = request.get_json()
+
+        # Empty field check  -- consider moving to client side
+        if user_data["username"] == "":
+            return jsonify({"status": "fail", "message": "Must enter valid username."})
+        if user_data["password"] == "":
+            return jsonify({"status": "fail", "message": "Must enter valid password."})
+        
+
+        # Existence checks
+        df = pd.read_csv(FILE_NAME)
+
+        # If username is found check if password matches, else send fail message
+        # If username is found and password matches, send success message; else send fail message
+        if user_data["username"] in df["Username"].values:
+            user = df.loc[df["Username"] == user_data["username"]].iloc[0]
+
+            if user_data["password"] == user["Password"]:
+                return jsonify({"status": "success", "role":  user["Role"], "message": f"User {user_data["username"]} logged in."})
+            else:
+                return jsonify({"status": "fail", "message": "Incorrect username/password."})
+        else:
+            return jsonify({"status": "fail", "message": "Username does not exist."})
+
     return render_template("Login.html")
 
 
@@ -34,7 +59,7 @@ def createUser():
     if request.method == "POST":
         user_data = request.get_json()
 
-        # Empty field checks
+        # Empty field checks -- consider moving to client side
         if user_data["firstname"] == "":
             return jsonify({"status": "fail", "message": "First name cannot be empty."})
         if user_data["lastname"] == "":

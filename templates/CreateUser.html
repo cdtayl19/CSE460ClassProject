@@ -37,18 +37,19 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newAccount)})
-            .then(response => response.json())
-            .then(data => {
-                console.log("Server says:", data);
-                if (data.status === "success") {    // If successful, returns to login page
-                    window.location.href = "/";
-                } else {
-                    console.log(data.message);
-                    document.getElementById("message").innerHTML = data.message;
-                }
-            })
-        });
+            body: JSON.stringify(newAccount)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Server says:", data);
+            if (data.status === "success") {    // If successful, returns to login page
+                window.location.href = "/";
+            } else {
+                console.log(data.message);
+                document.getElementById("message").innerHTML = data.message;
+            }
+        })
+    });
 
     document.getElementById("cancel").addEventListener("click", () => {
         window.location.href = '/';

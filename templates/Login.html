@@ -14,11 +14,39 @@
     <button id="createAccountBtn">Create Account</button>
   </div>
 
+  <div>
+    <p id="message"></p>
+  </div>
+
   <script>
     document.getElementById("signInBtn").addEventListener("click", () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
-      console.log("Sign In clicked:", username, password);
+
+      const userAccount = {username, password};
+
+      fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userAccount)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Server says:", data);
+        if (data.status === "success") {    // If successful, go to new page
+          if (data.role == "student") {
+            window.location.href = "/student";  // If role = student go to student page, same for admin.
+          } else {                              // Keep in mind that 'role' only exists in success messages. 
+            window.location.href = "/admin";
+          }
+          
+        } else {
+          console.log(data.message);
+          document.getElementById("message").innerHTML = data.message;
+        }
+      })
     });
 
     document.getElementById("createAccountBtn").addEventListener("click", () => {
