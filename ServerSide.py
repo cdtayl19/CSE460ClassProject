@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import pandas as pd
 import csv
 
@@ -24,6 +24,16 @@ def csv_write(user_data):
 
 # Server Stuff
 app = Flask(__name__)
+app.secret_key = "32895"
+
+@app.route("/current-user", methods=["GET", "POST"])
+def get_current_user():
+    if request.method == "GET":
+        if "current_user" in session:
+            return jsonify({"status": "success", "user": session["current_user"]})
+        else:
+            return jsonify({"status": "fail", "message": "No user logged in."})
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -36,7 +46,6 @@ def home():
         if user_data["password"] == "":
             return jsonify({"status": "fail", "message": "Must enter valid password."})
         
-
         # Existence checks
         df = pd.read_csv(FILE_NAME)
 
@@ -45,9 +54,9 @@ def home():
         if user_data["username"] in df["Username"].values:
             user = df.loc[df["Username"] == user_data["username"]].iloc[0]
             if user_data["password"] == user["Password"]:
-                CURRENT_USER = user.to_dict()   # Stores information about the 'current user'
-                print("Logged in user:", CURRENT_USER)
-                return jsonify({"status": "success", "role": CURRENT_USER["Role"], "message": f"User {CURRENT_USER["Username"]} logged in."})
+                session["current_user"] = user.to_dict()    # Stores information about the 'current user'
+                print("Logged in user:", session["current_user"])
+                return jsonify({"status": "success", "role": session["current_user"]["Role"], "message": f"User {session["current_user"]["Username"]} logged in."})
             else:
                 return jsonify({"status": "fail", "message": "Incorrect username/password."})
         else:
@@ -95,6 +104,11 @@ def createUser():
 
 @app.route("/student")
 def student():
+    if "current_user" in session:
+        return jsonify({"status": "success", "user": session["current_user"]})
+    else:
+        return jsonify({"status": "fail", "message": "No user logged in."})
+    
     return render_template("StudentPage.html")
 
 
@@ -106,6 +120,7 @@ def admin():
 @app.route("/request-club")
 def requestNewClub():
     return render_template("NewClubRequest.html")
+
 
 if __name__ == "__main__":
     app.run(port=8080)
