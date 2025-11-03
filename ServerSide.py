@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import csv
 
+CURRENT_USER = None
 
 # CSV Stuff
 FILE_NAME = "User_Accounts.csv"
@@ -43,9 +44,10 @@ def home():
         # If username is found and password matches, send success message; else send fail message
         if user_data["username"] in df["Username"].values:
             user = df.loc[df["Username"] == user_data["username"]].iloc[0]
-
             if user_data["password"] == user["Password"]:
-                return jsonify({"status": "success", "role":  user["Role"], "message": f"User {user_data["username"]} logged in."})
+                CURRENT_USER = user.to_dict()   # Stores information about the 'current user'
+                print("Logged in user:", CURRENT_USER)
+                return jsonify({"status": "success", "role": CURRENT_USER["Role"], "message": f"User {CURRENT_USER["Username"]} logged in."})
             else:
                 return jsonify({"status": "fail", "message": "Incorrect username/password."})
         else:
