@@ -100,5 +100,10 @@ def student():
 def admin():
     return render_template("AdminPage.html")
 
+
+@app.route("/request-club")
+def requestNewClub():
+    return render_template("NewClubRequest.html")
+
 if __name__ == "__main__":
     app.run(port=8080)

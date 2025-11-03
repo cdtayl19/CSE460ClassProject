@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <title>New Club Request</title>
+
+  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+</head>
+
+<body>
+  <div class="request-container">
+    <h2>New Club Request</h2>
+    <button id="submit">Send Request</button>
+    <button id="cancel">Cancel</button>
+  </div>
+
+  <script>
+    document.getElementById("cancel").addEventListener("click", () => {
+      window.location.href = '/student';
+    });
+  </script>
+</body>
+</html>
