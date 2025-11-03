@@ -115,8 +115,6 @@ def student():
         return render_template("StudentPage.html")
     else:
         return redirect("/")
-    
-    
 
 
 @app.route("/admin")
