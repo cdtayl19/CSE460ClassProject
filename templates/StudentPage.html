@@ -8,10 +8,15 @@
 <body>
   <div class="starter-container">
     <h2>Student Page</h2>
+    <button id="newClubBtn">New Club Request</button>
     <button id="logoutBtn">Logout</button>
   </div>
 
   <script>
+    document.getElementById("newClubBtn").addEventListener("click", () => {
+      window.location.href = '/request-club';
+    });
+
     document.getElementById("logoutBtn").addEventListener("click", () => {
       window.location.href = '/';
     });
