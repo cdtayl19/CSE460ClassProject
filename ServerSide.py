@@ -122,7 +122,7 @@ def admin():
     return render_template("AdminPage.html")
 
 
-@app.route("/request-club")
+@app.route("/request-new-club")
 def requestNewClub():
     return render_template("NewClubRequest.html")
 
