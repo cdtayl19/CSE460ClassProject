@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect
 import pandas as pd
 import csv
 
@@ -25,6 +25,13 @@ def csv_write(user_data):
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/")
+
 
 @app.route("/current-user", methods=["GET", "POST"])
 def get_current_user():
@@ -105,11 +112,11 @@ def createUser():
 @app.route("/student")
 def student():
     if "current_user" in session:
-        return jsonify({"status": "success", "user": session["current_user"]})
+        return render_template("StudentPage.html")
     else:
-        return jsonify({"status": "fail", "message": "No user logged in."})
+        return redirect("/")
     
-    return render_template("StudentPage.html")
+    
 
 
 @app.route("/admin")
