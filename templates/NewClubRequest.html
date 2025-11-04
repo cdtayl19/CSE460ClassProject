@@ -6,23 +6,53 @@
 </head>
 
 <body>
-  <div class="request-container">
-    <h2>New Club Request</h2>
-    
-    <label>Club Name: </label>
-    <input type="text" id="clubName"><br><br>
+    <div class="request-container">
+        <h2>New Club Request</h2>
+        
+        <label>Club Name: </label>
+        <input type="text" id="clubName"><br><br>
+        
+        <label>Topic of Interest: </label>
+        <input type="text" id="topic"><br><br>
+        
+        <label>Description: </label><br>
+        <textarea id="description" rows="4" cols="50"></textarea><br><br>
+        
+        <button id="sendRequest">Send Request</button>
+        <button id="cancel">Cancel</button>
+    </div>
 
-    <label>Topic of Interest: </label>
-    <input type="text" id="clubName"><br><br>
-
-    <label>Description: </label><br>
-    <textarea id="w3review" name="w3review" rows="4" cols="50"></textarea><br><br>
-
-    <button id="submit">Send Request</button>
-    <button id="cancel">Cancel</button>
-  </div>
+    <div>
+        <p id="message"></p>
+    </div>
 
   <script>
+    document.getElementById("sendRequest").addEventListener("click", (event) => {
+        const clubName = document.getElementById("clubName").value;
+        const topic = document.getElementById("topic").value;
+        const description = document.getElementById("description").value;
+        
+        const details = {clubName, topic, description};
+
+        fetch("/request-new-club", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(details)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Server says:", data);
+            if (data.status === "success") {    // If successful, returns to login page
+                window.location.href = "/student";
+            } else {
+                console.log(data.message);
+                document.getElementById("message").innerHTML = data.message;
+            }
+        })
+    });
+
     document.getElementById("cancel").addEventListener("click", () => {
       window.location.href = '/student';
     });

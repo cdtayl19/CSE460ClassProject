@@ -21,6 +21,12 @@ def csv_write(user_data):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(user_data)
 
+def csv_write_new_club_requests(club_request_data):
+    with open("NewClubRequests.csv", 'a', newline='') as new_file:
+        fieldnames = ['submittedBy', 'clubName', 'topic', 'description']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(club_request_data)
+
 
 # Server Stuff
 app = Flask(__name__)
@@ -122,8 +128,32 @@ def admin():
     return render_template("AdminPage.html")
 
 
-@app.route("/request-new-club")
+@app.route("/request-new-club", methods=["GET", "POST"])
 def requestNewClub():
+    if request.method == "POST":
+        club_request_data = request.get_json()
+
+        club_request_data["submittedBy"] = session["current_user"]["Username"]
+        #print(club_request_data["submittedBy"]) # PRINTED GOOD
+
+        # Empty field checks -- consider moving to client side
+        if club_request_data["clubName"] == "":
+            return jsonify({"status": "fail", "message": "Club name cannot be empty."})
+        if club_request_data["topic"] == "":
+            return jsonify({"status": "fail", "message": "Club topic cannot be empty."})
+        if club_request_data["description"] == "":
+            return jsonify({"status": "fail", "message": "Club description cannot be empty."})
+        
+        df = pd.read_csv("NewClubRequests.csv")
+
+        if club_request_data["clubName"] in df["Club Name"].values:
+            return jsonify({"status": "fail", "message": "Club with that name already exists."})
+
+        csv_write_new_club_requests(club_request_data)
+
+        #print("Received new club request:", club_request_data)
+        return jsonify({"status": "success", "message": f"Request for {club_request_data["clubName"]} sent!"})
+    
     return render_template("NewClubRequest.html")
 
 
