@@ -7,11 +7,30 @@
 
 <body>
   <div class="starter-container">
-    <h2>Admin Page</h2>
+    <h2 id="greeting">Admin Page</h2>
+    <h3>You have {} new requests. </h3>
     <button id="logoutBtn">Logout</button>
   </div>
 
   <script>
+    let user = {};
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      const response = await fetch("/current-user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await response.json();
+      user = data.user;
+      document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;    // Displays user's first name
+      //console.log(user.Firstname);
+    });
+
+
+
     document.getElementById("logoutBtn").addEventListener("click", () => {
       window.location.href = '/logout';
     });

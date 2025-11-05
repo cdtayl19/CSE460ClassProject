@@ -125,7 +125,11 @@ def student():
 
 @app.route("/admin")
 def admin():
-    return render_template("AdminPage.html")
+    if "current_user" in session:
+        return render_template("AdminPage.html")
+    else:
+        return redirect("/")
+    
 
 
 @app.route("/request-new-club", methods=["GET", "POST"])
