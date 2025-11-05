@@ -157,5 +157,10 @@ def requestNewClub():
     return render_template("NewClubRequest.html")
 
 
+@app.route("/view-club-requests", methods=["GET", "POST"])
+def viewClubRequests():
+    return render_template("ViewclubRequests.html")
+
+
 if __name__ == "__main__":
     app.run(port=8080)

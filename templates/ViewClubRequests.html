@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+  <title>View Club Requests</title>
+
+  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+</head>
+
+<body>
+  <div class="starter-container">
+    <h2>Club Requests</h2>
+    <button id="prevBtn">Prev</button>
+    <button id="nextBtn">Next</button>
+    <button id="approveBtn">Approve</button>
+    <button id="goBackBtn">Back</button>
+  </div>
+
+  <script>
+    document.getElementById("goBackBtn").addEventListener("click", () => {
+      window.location.href = '/admin';
+    });
+  </script>
+</body>
+</html>
