@@ -48,6 +48,15 @@ def get_current_user():
             return jsonify({"status": "fail", "message": "No user logged in."})
 
 
+@app.route("/club-requests", methods=["GET", "POST"])
+def get_club_requests():
+    if request.method == "GET":
+        df = pd.read_csv("NewClubRequests.csv")
+        return jsonify({"status": "success", "number": len(df)})
+
+    
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":

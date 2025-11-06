@@ -8,24 +8,37 @@
 <body>
   <div class="starter-container">
     <h2 id="greeting">Admin Page</h2>
-    <h3>You have {} new requests. </h3>
+    <h3 id="requests">You have {} new requests. </h3>
     <button id="logoutBtn">Logout</button>
   </div>
 
   <script>
     let user = {};
+    let requests = 0;
 
     window.addEventListener("DOMContentLoaded", async () => {
-      const response = await fetch("/current-user", {
+      let response = await fetch("/current-user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
         }
       });
 
-      const data = await response.json();
+      let data = await response.json();
       user = data.user;
       document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;    // Displays user's first name
+      //console.log(user.Firstname);
+
+      response = await fetch("/club-requests", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      data = await response.json();
+      requestNum = data.number;
+      document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";    // Displays number of club requests
       //console.log(user.Firstname);
     });
 
