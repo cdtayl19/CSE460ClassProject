@@ -6,18 +6,61 @@
 </head>
 
 <body>
-  <div class="starter-container">
-    <h2>Club Requests</h2>
-    <button id="prevBtn">Prev</button>
-    <button id="nextBtn">Next</button>
-    <button id="approveBtn">Approve</button>
-    <button id="goBackBtn">Back</button>
-  </div>
+    <div class="starter-container">
+        <h2>Club Requests</h2>
+        <div id="display">
+            <p id="user">Submitted by: </p>
+            <p id="name">Club Name: </p>
+            <p id="topic">Topic: </p>
+            <label>Description:</label><br>
+            <textarea id="description" rows="4" cols="50"></textarea><br><br>
+        </div>
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+        <button id="approveBtn">Approve</button>
+        <button id="goBackBtn">Back</button>
+    </div>
 
-  <script>
-    document.getElementById("goBackBtn").addEventListener("click", () => {
-      window.location.href = '/admin';
-    });
-  </script>
+    <script>
+        let currentIndex = 0;
+        
+        async function getClubRequest(index) {
+            const response = await fetch(`/get-club-request?index=${index}`, {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json" 
+                },
+            });
+            
+            data = await response.json();
+            return data;
+        }
+
+    
+        window.addEventListener("DOMContentLoaded", async () => {
+            let data = await getClubRequest(currentIndex);
+
+            console.log(data.data);
+
+            if (data.status === "success") {
+                document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
+                document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
+                document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
+                document.getElementById("description").innerHTML = data.data["Details"];
+            } else {
+                console.error(data.message);
+            }            
+        });
+
+
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            currentIndex++;
+            let data = getClubRequest(currentIndex);
+        });
+
+        document.getElementById("goBackBtn").addEventListener("click", () => {
+          window.location.href = '/admin';
+        });
+    </script>
 </body>
 </html>

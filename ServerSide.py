@@ -39,6 +39,7 @@ def logout():
     return redirect("/")
 
 
+# Change route to get-current-user
 @app.route("/current-user", methods=["GET", "POST"])
 def get_current_user():
     if request.method == "GET":
@@ -48,6 +49,7 @@ def get_current_user():
             return jsonify({"status": "fail", "message": "No user logged in."})
 
 
+# Change route to get-club-requests
 @app.route("/club-requests", methods=["GET", "POST"])
 def get_club_requests():
     if request.method == "GET":
@@ -55,6 +57,19 @@ def get_club_requests():
         return jsonify({"status": "success", "number": len(df)})
 
     
+@app.route("/get-club-request", methods=["GET"])
+def get_club_request():
+    
+    index = request.args.get("index", type=int)    
+    df = pd.read_csv("NewClubRequests.csv")
+
+    
+    print(df.loc[index].to_dict())
+
+    if 0 <= index < len(df): 
+        return jsonify({"status": "success", "data": df.loc[index].to_dict()})
+    else:
+        return jsonify({"status": "fail", "message": "Invalid index."})  
 
 
 @app.route("/", methods=["GET", "POST"])
