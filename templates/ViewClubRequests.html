@@ -9,10 +9,10 @@
     <div class="starter-container">
         <h2>Club Requests</h2>
         <div id="display">
-            <p id="user">Submitted by: </p>
-            <p id="name">Club Name: </p>
-            <p id="topic">Topic: </p>
-            <label>Description:</label><br>
+            <p id="user"></p>
+            <p id="name"></p>
+            <p id="topic"></p>
+            <label></label><br>
             <textarea id="description" rows="4" cols="50"></textarea><br><br>
         </div>
         <button id="prevBtn">Prev</button>
@@ -47,7 +47,7 @@
                 document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
                 document.getElementById("description").innerHTML = data.data["Details"];
             } else {
-                console.error(data.message);
+                document.getElementById("description").innerHTML = data.message;
             }            
         });
 

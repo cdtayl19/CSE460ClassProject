@@ -64,7 +64,10 @@ def get_club_request():
     df = pd.read_csv("NewClubRequests.csv")
 
     
-    print(df.loc[index].to_dict())
+    #print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>>>  {len(df)}")
+
+    if len(df) == 0:
+        return jsonify({"status": "fail", "message": "No new requests."})
 
     if 0 <= index < len(df): 
         return jsonify({"status": "success", "data": df.loc[index].to_dict()})
