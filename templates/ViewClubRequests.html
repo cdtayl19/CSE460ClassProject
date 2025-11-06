@@ -35,7 +35,6 @@
             data = await response.json();
             return data;
         }
-
     
         window.addEventListener("DOMContentLoaded", async () => {
             let data = await getClubRequest(currentIndex);
@@ -52,10 +51,32 @@
             }            
         });
 
+        document.getElementById("prevBtn").addEventListener("click", async () => {
+            currentIndex--;
+            let data = await getClubRequest(currentIndex);
 
-        document.getElementById("nextBtn").addEventListener("click", () => {
+            if (data.status === "success") {
+                document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
+                document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
+                document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
+                document.getElementById("description").innerHTML = data.data["Details"];
+            } else {
+                console.error(data.message);
+            }
+        });
+
+        document.getElementById("nextBtn").addEventListener("click", async () => {
             currentIndex++;
-            let data = getClubRequest(currentIndex);
+            let data = await getClubRequest(currentIndex);
+
+            if (data.status === "success") {
+                document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
+                document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
+                document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
+                document.getElementById("description").innerHTML = data.data["Details"];
+            } else {
+                console.error(data.message);
+            }
         });
 
         document.getElementById("goBackBtn").addEventListener("click", () => {
