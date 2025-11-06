@@ -32,7 +32,7 @@ def csv_write_new_club_requests(club_request_data):
 app = Flask(__name__)
 app.secret_key = "32895"
 
-
+# Logs out of the app
 @app.route("/logout")
 def logout():
     session.pop("user", None)
@@ -40,6 +40,7 @@ def logout():
 
 
 # Change route to get-current-user
+# Sets the current user.
 @app.route("/current-user", methods=["GET", "POST"])
 def get_current_user():
     if request.method == "GET":
@@ -50,39 +51,42 @@ def get_current_user():
 
 
 # Change route to get-club-requests
+# Returns number of entries in NewClubRequests.csv
 @app.route("/club-requests", methods=["GET", "POST"])
 def get_club_requests():
     if request.method == "GET":
         df = pd.read_csv("NewClubRequests.csv")
         return jsonify({"status": "success", "number": len(df)})
 
-    
+
+# Returns individual entry from NewClubRequests.csv
 @app.route("/get-club-request", methods=["GET"])
 def get_club_request():
-    
+
+    # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
     index = request.args.get("index", type=int)    
+
+    # Creates dataframe from csv
     df = pd.read_csv("NewClubRequests.csv")
 
-    
-    #print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>>>  {len(df)}")
-
-
+    # Returns 'No new requests' if NewClubRequests.csv is empty
     if len(df) == 0:
         return jsonify({"status": "fail", "message": "No new requests."})
 
-
+    # Returns dataframe row at specified index
     if 0 <= index < len(df): 
         return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
     
-
+    # Wraps back around to first entry if index > dataframe length. When using nextBtn
     if index >= len(df):
         return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
     
-
+    # Wraps back around to last entry row if index < 0. When using prevBtn
     if index < 0:
         return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
 
 
+# Login Page
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
@@ -113,6 +117,7 @@ def home():
     return render_template("Login.html")
 
 
+# Adds entry to User_Accounts.csv
 @app.route("/create-account", methods=["GET", "POST"])
 def createUser():
     if request.method == "POST":
@@ -150,6 +155,7 @@ def createUser():
     return render_template("CreateUser.html")
 
 
+# Displays student page tailored to current user
 @app.route("/student")
 def student():
     if "current_user" in session:
@@ -158,6 +164,7 @@ def student():
         return redirect("/")
 
 
+# Displays admin page tailored to current user
 @app.route("/admin")
 def admin():
     if "current_user" in session:
@@ -166,14 +173,16 @@ def admin():
         return redirect("/")
     
 
-
+# Adds entry to NewClubRequests.csv
 @app.route("/request-new-club", methods=["GET", "POST"])
 def requestNewClub():
     if request.method == "POST":
+
+        # Retrieve data from user request
         club_request_data = request.get_json()
 
+        # Sets submittedBy field to current user
         club_request_data["submittedBy"] = session["current_user"]["Username"]
-        #print(club_request_data["submittedBy"]) # PRINTED GOOD
 
         # Empty field checks -- consider moving to client side
         if club_request_data["clubName"] == "":
@@ -183,19 +192,22 @@ def requestNewClub():
         if club_request_data["description"] == "":
             return jsonify({"status": "fail", "message": "Club description cannot be empty."})
         
+        # Creates dataframe from NewClubRequests.csv
         df = pd.read_csv("NewClubRequests.csv")
 
+        # Will no add new club, if club name already exists. 
         if club_request_data["clubName"] in df["Club Name"].values:
             return jsonify({"status": "fail", "message": "Club with that name already exists."})
 
+        # Writes new club request to NewClubRequests.csv
         csv_write_new_club_requests(club_request_data)
 
-        #print("Received new club request:", club_request_data)
         return jsonify({"status": "success", "message": f"Request for {club_request_data["clubName"]} sent!"})
     
     return render_template("NewClubRequest.html")
 
 
+# View Club Requests Page
 @app.route("/view-club-requests", methods=["GET", "POST"])
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
