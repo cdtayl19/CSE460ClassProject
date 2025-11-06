@@ -66,13 +66,17 @@ def get_club_request():
     
     #print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>>>  {len(df)}")
 
+
     if len(df) == 0:
         return jsonify({"status": "fail", "message": "No new requests."})
 
+
     if 0 <= index < len(df): 
-        return jsonify({"status": "success", "data": df.loc[index].to_dict()})
-    else:
-        return jsonify({"status": "fail", "message": "Invalid index."})  
+        return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
+    
+
+    if index >= len(df):
+        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})  
 
 
 @app.route("/", methods=["GET", "POST"])
