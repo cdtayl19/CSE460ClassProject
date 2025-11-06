@@ -8,7 +8,11 @@
 <body>
   <div class="starter-container">
     <h2 id="greeting">Admin Page</h2>
-    <h3 id="requests">You have {} new requests. </h3>
+    <div>
+      <label id="requests">You have {} new requests. </label>
+      <button id="requetsBtn">View</button>
+    </div><br>
+    
     <button id="logoutBtn">Logout</button>
   </div>
 
@@ -43,9 +47,13 @@
     });
 
 
-
     document.getElementById("logoutBtn").addEventListener("click", () => {
       window.location.href = '/logout';
+    });
+
+    
+    document.getElementById("requetsBtn").addEventListener("click", () => {
+      window.location.href = '/view-club-requests';
     });
   </script>
 </body>
