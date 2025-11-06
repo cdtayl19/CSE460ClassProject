@@ -76,7 +76,11 @@ def get_club_request():
     
 
     if index >= len(df):
-        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})  
+        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
+    
+
+    if index < 0:
+        return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
 
 
 @app.route("/", methods=["GET", "POST"])

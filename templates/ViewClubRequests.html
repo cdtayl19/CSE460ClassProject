@@ -60,6 +60,7 @@
                 document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
                 document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
                 document.getElementById("description").innerHTML = data.data["Details"];
+                currentIndex = data.index;
             } else {
                 console.error(data.message);
             }
