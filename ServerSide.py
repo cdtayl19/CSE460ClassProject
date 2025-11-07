@@ -33,6 +33,12 @@ def write_approved_club_requests(approved_club_data):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(approved_club_data)
 
+def write_messages(message):
+    with open("Messages.csv", 'a', newline='') as new_file:
+        fieldnames = ['To', 'From', 'Topic', 'Message']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(message)
+
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
@@ -126,6 +132,7 @@ def get_club_request():
 def approveRequest():
     if request.method == "POST":
         approved_data = request.get_json()
+        
         # Send club data to approved.csv
         approved_data = request.get_json()
         holder = {
@@ -137,6 +144,7 @@ def approveRequest():
             "Events": "None"
         }
         write_approved_club_requests(holder)
+        
         # Remove approved club from requests
         df = pd.read_csv("NewClubRequests.csv")
         df = df[df["Club Name"] != approved_data["name"]]
@@ -145,7 +153,8 @@ def approveRequest():
         print(f"DF Length: {len(df)}")
 
         # Send message to student who submitted club request
-        
+        message = {"To": approved_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["name"]} has been approved!"}
+        write_messages(message)
 
         # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
         # However empty display remains if final/only request is approved. 

@@ -76,7 +76,7 @@
         });
 
         document.getElementById("approveBtn").addEventListener("click", async () => {            
-            fetch("/approve-club-request", {
+            await fetch("/approve-club-request", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -86,7 +86,7 @@
 
             // Reset display to first request
             currentIndex = 0
-            
+
             let data = await getClubRequest(currentIndex);
             display(data);
         });
