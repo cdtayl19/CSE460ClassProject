@@ -80,6 +80,10 @@
                 },
                 body: JSON.stringify(pending)
             })
+
+            currentIndex++;
+            let data = await getClubRequest(currentIndex);
+            display(data);
         });
 
         document.getElementById("goBackBtn").addEventListener("click", () => {
