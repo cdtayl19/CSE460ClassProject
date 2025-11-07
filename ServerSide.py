@@ -52,7 +52,7 @@ def logout():
 
 # Later, change route to get-current-user
 # Sets the current user.
-@app.route("/current-user", methods=["GET", "POST"])
+@app.route("/current-user", methods=["GET"])
 def get_current_user():
     if request.method == "GET":
         if "current_user" in session:
@@ -63,13 +63,14 @@ def get_current_user():
 
 # Later, change route to get-club-requests
 # Returns number of entries in NewClubRequests.csv
-@app.route("/club-requests", methods=["GET", "POST"])
+@app.route("/club-requests", methods=["GET"])
 def get_club_requests():
     if request.method == "GET":
         df = pd.read_csv("NewClubRequests.csv")
         return jsonify({"status": "success", "number": len(df)})
 
 
+# Gets the number of messages in Messages.csv
 @app.route("/get-messages", methods=["GET"])
 def get_messages():
     if request.method == "GET":
@@ -111,7 +112,7 @@ def home():
 # Returns individual entry from NewClubRequests.csv
 @app.route("/get-club-request", methods=["GET"])
 def get_club_request():
-    # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
+    # Retrieves index from arguments
     index = request.args.get("index", type=int)
 
     # Creates dataframe from csv
@@ -134,31 +135,41 @@ def get_club_request():
         return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
 
 
-@app.route("/get-message", methods=["GET", "POST"])
+# Gets a single message by its index
+@app.route("/get-message", methods=["GET"])
 def get_message():
     if request.method == "GET":
+
+        # Retrieves index from arguments 
         index = request.args.get("index", type=int)
+
+        # Creates dataframe from csv
         df = pd.read_csv("Messages.csv")
         
+        # Empty check
         if len(df) == 0:
             return jsonify({"status": "fail", "message": "No new messages."})   
         
+        # Valid index
         if 0 <= index < len(df): 
             return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
         
+        # Next button wrap around
         if index >= len(df):
             return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
         
+        # Prev button wrap around
         if index < 0:
             return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
         
 
+# Removes message from Messages.csv
 @app.route("/delete-message", methods=["POST"])
 def delete_message():
     if request.method == "POST":
         data = request.get_json()
 
-        # Remove approved club from requests
+        # Remove message
         df = pd.read_csv("Messages.csv")
         df = df[df["Message"] != data["message"]]
         df.reset_index(drop=True, inplace=True)
@@ -167,12 +178,14 @@ def delete_message():
         return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
     
 
+# Adds club to ApprovedClubs.csv
 @app.route("/approve-club-request", methods=["GET", "POST"])
 def approveRequest():
     if request.method == "POST":
         approved_data = request.get_json()
         
         # Send club data to approved.csv
+        # Adds fields 'members' & 'events' needed for later
         approved_data = request.get_json()
         holder = {
             "Submitted By": approved_data["user"], 
@@ -199,6 +212,7 @@ def approveRequest():
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
 
+# Removes club request from NewClubRequests.csv
 @app.route("/deny-club-request", methods=["GET", "POST"])
 def denyRequest():
     if request.method == "POST":
@@ -309,7 +323,7 @@ def requestNewClub():
 
 
 # View Club Requests Page
-@app.route("/view-club-requests", methods=["GET", "POST"])
+@app.route("/view-club-requests", methods=["GET"])
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
 
