@@ -39,9 +39,9 @@
                 document.getElementById("from").innerHTML = "from: " + data.data["From"];
                 document.getElementById("message").innerHTML = data.data["Message"];
 
-                pending.to = data.data["to"];
-                pending.to = data.data["from"];
-                pending.to = data.data["message"];
+                pending.to = data.data["To"];
+                pending.from = data.data["From"];
+                pending.message = data.data["Message"];
 
                 currentIndex = data.index;
             } else {
@@ -66,8 +66,8 @@
             let data = await getMessage(currentIndex);
             display(data);
         });
-/*
-        document.getElementById("deleteBtn").addEventListener("click", async () => {            
+
+        document.getElementById("deleteBtn").addEventListener("click", async () => {                        
             await fetch("/delete-message", {
                 method: "POST",
                 headers: {
@@ -82,7 +82,7 @@
             let data = await getMessage(currentIndex);
             display(data);
         });
-*/
+
         document.getElementById("goBackBtn").addEventListener("click", () => {
           window.location.href = '/student';
         });
