@@ -35,7 +35,7 @@ def write_approved_club_requests(approved_club_data):
 
 def write_messages(message):
     with open("Messages.csv", 'a', newline='') as new_file:
-        fieldnames = ['To', 'From', 'Topic', 'Message']
+        fieldnames = ['To', 'From', 'Message']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
