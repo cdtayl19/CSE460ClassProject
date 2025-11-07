@@ -27,6 +27,11 @@ def csv_write_new_club_requests(club_request_data):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(club_request_data)
 
+def write_approved_club_requests(approved_club_data):
+    with open("ApprovedClubs.csv", 'a', newline='') as new_file:
+        fieldnames = ['Submitted By', 'Club Name', 'Topic', 'Details', 'Members', 'Events']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(approved_club_data)
 
 # Server Stuff
 app = Flask(__name__)
@@ -115,6 +120,41 @@ def home():
             return jsonify({"status": "fail", "message": "Username does not exist."})
 
     return render_template("Login.html")
+
+
+@app.route("/approve-club-request", methods=["GET", "POST"])
+def approveRequest():
+    if request.method == "POST":
+        approved_data = request.get_json()
+
+        #print(approved_data)
+        #print(approved_data["user"])
+        #print(approved_data["name"])
+
+
+        # Send club data to approved.csv
+        approved_data = request.get_json()
+        holder = {
+            "Submitted By": approved_data["user"], 
+            "Club Name": approved_data["name"], 
+            "Topic": approved_data["topic"], 
+            "Details": approved_data["description"], 
+            "Members": "None", 
+            "Events": "None"
+        }
+        write_approved_club_requests(holder)
+        #return jsonify({"status": "success", "message": f"New {approved_data["Club Name"]} club has been approved!"})
+
+         # Remove approved club from requests
+        #df = pd.read_csv("NewClubRequests.csv")
+        #df = df[df["Club Name"] != approved_data]
+
+
+        # Send message to student who submitted club request
+        return jsonify({"status": "success", "message": f"Test"})
+
+
+        
 
 
 # Adds entry to User_Accounts.csv
