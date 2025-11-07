@@ -51,6 +51,9 @@
 
                 currentIndex = data.index;
             } else {
+                document.getElementById("user").innerHTML = "";
+                document.getElementById("name").innerHTML = "";
+                document.getElementById("topic").innerHTML = "";
                 document.getElementById("description").innerHTML = data.message;
             }            
         }
@@ -81,7 +84,9 @@
                 body: JSON.stringify(pending)
             })
 
-            currentIndex++;
+            // Reset display to first request
+            currentIndex = 0
+            
             let data = await getClubRequest(currentIndex);
             display(data);
         });

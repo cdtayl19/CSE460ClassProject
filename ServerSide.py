@@ -64,33 +64,6 @@ def get_club_requests():
         return jsonify({"status": "success", "number": len(df)})
 
 
-# Returns individual entry from NewClubRequests.csv
-@app.route("/get-club-request", methods=["GET"])
-def get_club_request():
-
-    # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
-    index = request.args.get("index", type=int)
-
-    # Creates dataframe from csv
-    df = pd.read_csv("NewClubRequests.csv")
-
-    # Returns 'No new requests' if NewClubRequests.csv is empty
-    if len(df) == 0:
-        return jsonify({"status": "fail", "message": "No new requests."})
-
-    # Returns dataframe row at specified index
-    if 0 <= index < len(df): 
-        return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
-    
-    # Wraps back around to first entry if index > dataframe length. When using nextBtn
-    if index >= len(df):
-        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
-    
-    # Wraps back around to last entry row if index < 0. When using prevBtn
-    if index < 0:
-        return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
-
-
 # Login Page
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -121,17 +94,38 @@ def home():
 
     return render_template("Login.html")
 
+# Returns individual entry from NewClubRequests.csv
+@app.route("/get-club-request", methods=["GET"])
+def get_club_request():
+    # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
+    index = request.args.get("index", type=int)
+    #print(f"Index: {index}")
+
+    # Creates dataframe from csv
+    df = pd.read_csv("NewClubRequests.csv")
+    #print(f"DF Length: {len(df)}")
+
+    # Returns 'No new requests' if NewClubRequests.csv is empty
+    if len(df) == 0:
+        return jsonify({"status": "fail", "message": "No new requests."})
+    
+    # Returns dataframe row at specified index
+    if 0 <= index < len(df): 
+        return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
+    
+    # Wraps back around to first entry if index > dataframe length. When using nextBtn
+    if index >= len(df):
+        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
+    
+    # Wraps back around to last entry row if index < 0. When using prevBtn
+    if index < 0:
+        return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
+
 
 @app.route("/approve-club-request", methods=["GET", "POST"])
 def approveRequest():
     if request.method == "POST":
         approved_data = request.get_json()
-
-        #print(approved_data)
-        #print(approved_data["user"])
-        #print(approved_data["name"])
-
-
         # Send club data to approved.csv
         approved_data = request.get_json()
         holder = {
@@ -143,16 +137,19 @@ def approveRequest():
             "Events": "None"
         }
         write_approved_club_requests(holder)
-
         # Remove approved club from requests
         df = pd.read_csv("NewClubRequests.csv")
         df = df[df["Club Name"] != approved_data["name"]]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("NewClubRequests.csv", index=False)
-
+        print(f"DF Length: {len(df)}")
 
         # Send message to student who submitted club request
-        return jsonify({"status": "success", "message": f"Test"})
+        
+
+        # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
+        # However empty display remains if final/only request is approved. 
+        return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
 
         
