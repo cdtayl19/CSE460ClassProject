@@ -69,7 +69,7 @@ def get_club_requests():
 def get_club_request():
 
     # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
-    index = request.args.get("index", type=int)    
+    index = request.args.get("index", type=int)
 
     # Creates dataframe from csv
     df = pd.read_csv("NewClubRequests.csv")

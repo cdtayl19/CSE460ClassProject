@@ -36,12 +36,8 @@
             data = await response.json();
             return data;
         }
-    
-        window.addEventListener("DOMContentLoaded", async () => {
-            let data = await getClubRequest(currentIndex);
 
-            console.log(data.data);
-
+        function display(data) {
             if (data.status === "success") {
                 document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
                 document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
@@ -52,51 +48,28 @@
                 pending.name = data.data["Club Name"];
                 pending.topic = data.data["Topic"];
                 pending.description = data.data["Details"];
+
+                currentIndex = data.index;
             } else {
                 document.getElementById("description").innerHTML = data.message;
             }            
+        }
+    
+        window.addEventListener("DOMContentLoaded", async () => {
+            let data = await getClubRequest(currentIndex);
+            display(data);
         });
 
         document.getElementById("prevBtn").addEventListener("click", async () => {
             currentIndex--;
             let data = await getClubRequest(currentIndex);
-
-            if (data.status === "success") {
-                document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
-                document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
-                document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
-                document.getElementById("description").innerHTML = data.data["Details"];
-
-                pending.user = data.data["Submitted By"];
-                pending.name = data.data["Club Name"];
-                pending.topic = data.data["Topic"];
-                pending.description = data.data["Details"];
-
-                currentIndex = data.index;
-            } else {
-                console.error(data.message);
-            }
+            display(data);
         });
 
         document.getElementById("nextBtn").addEventListener("click", async () => {
             currentIndex++;
             let data = await getClubRequest(currentIndex);
-
-            if (data.status === "success") {
-                document.getElementById("user").innerHTML = "Submitted by: " + data.data["Submitted By"];
-                document.getElementById("name").innerHTML = "Club Name: " + data.data["Club Name"];
-                document.getElementById("topic").innerHTML = "Topic: " + data.data["Topic"];
-                document.getElementById("description").innerHTML = data.data["Details"];
-
-                pending.user = data.data["Submitted By"];
-                pending.name = data.data["Club Name"];
-                pending.topic = data.data["Topic"];
-                pending.description = data.data["Details"];
-
-                currentIndex = data.index;
-            } else {
-                console.error(data.message);
-            }
+            display(data);
         });
 
         document.getElementById("approveBtn").addEventListener("click", async () => {            
