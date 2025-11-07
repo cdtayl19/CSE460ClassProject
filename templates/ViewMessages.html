@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<head>
+  <title>View Messages</title>
+
+  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+</head>
+
+<body>
+    <div class="starter-container">
+        <h2>Messages</h2>
+        <div id="display">
+            <p id="from"></p>
+            <textarea id="message" rows="4" cols="50"></textarea><br><br>
+        </div>
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+        <button id="deleteBtn">Delete</button><br>
+        <button id="goBackBtn">Back</button>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let pending = {"to": "", "from": "", "message": ""};
+
+        async function getMessage(index) {
+            const response = await fetch(`/get-message?index=${index}`, {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json" 
+                },
+            });
+            
+            data = await response.json();
+            return data;
+        }
+
+        function display(data) {
+            if (data.status === "success") {
+                document.getElementById("from").innerHTML = "from: " + data.data["From"];
+                document.getElementById("message").innerHTML = data.data["Message"];
+
+                //pending.user = data.data["Submitted By"];
+                pending.to = data.data["to"];
+                pending.to = data.data["from"];
+                pending.to = data.data["message"];
+
+            } else {
+                document.getElementById("from").innerHTML = "";
+                document.getElementById("message").innerHTML = data.message;
+            }            
+        }
+    
+        window.addEventListener("DOMContentLoaded", async () => {
+            let data = await getMessage(currentIndex);
+            display(data);
+        });
+/*
+        document.getElementById("prevBtn").addEventListener("click", async () => {
+            currentIndex--;
+            let data = await getMessage(currentIndex);
+            display(data);
+        });
+
+        document.getElementById("nextBtn").addEventListener("click", async () => {
+            currentIndex++;
+            let data = await getMessage(currentIndex);
+            display(data);
+        });
+
+        document.getElementById("deleteBtn").addEventListener("click", async () => {            
+            await fetch("/delete-message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(pending)
+            })
+
+            // Reset display to first request
+            currentIndex = 0
+
+            let data = await getMessage(currentIndex);
+            display(data);
+        });
+
+        document.getElementById("goBackBtn").addEventListener("click", () => {
+          window.location.href = '/student';
+        });
+        */
+    </script>
+</body>
+</html>

@@ -77,6 +77,7 @@ def get_messages():
         user_messages = df[df["To"] == session["current_user"]["Username"]]
         print(user_messages)
         return jsonify({"status": "success", "number": len(user_messages)})
+    
 
 
 # Login Page
@@ -109,6 +110,7 @@ def home():
 
     return render_template("Login.html")
 
+
 # Returns individual entry from NewClubRequests.csv
 @app.route("/get-club-request", methods=["GET"])
 def get_club_request():
@@ -136,6 +138,34 @@ def get_club_request():
     if index < 0:
         return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
 
+
+@app.route("/get-message", methods=["GET", "POST"])
+def get_message():
+    if request.method == "GET":
+        index = request.args.get("index", type=int)
+        df = pd.read_csv("Messages.csv")
+        if len(df) == 0:
+            return jsonify({"status": "fail", "message": "No new messages."})   
+        if 0 <= index < len(df): 
+            return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
+        if index >= len(df):
+            return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
+        if index < 0:
+            return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
+        
+@app.route("/delete-message", methods=["POST"])
+def delete_message():
+    if request.method == "POST":
+        data = request.get_json()
+
+        # Remove approved club from requests
+        df = pd.read_csv("Messages.csv")
+        df = df[df["Message"] != data["message"]]
+        df.reset_index(drop=True, inplace=True)
+        df.to_csv("NewClubRequests.csv", index=False)
+        #print(f"DF Length: {len(df)}")
+        return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
+    
 
 @app.route("/approve-club-request", methods=["GET", "POST"])
 def approveRequest():
@@ -285,6 +315,10 @@ def requestNewClub():
 @app.route("/view-club-requests", methods=["GET", "POST"])
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
+
+@app.route("/view-messages", methods=["GET"])
+def viewMessages():
+    return render_template("viewMessages.html")
 
 
 if __name__ == "__main__":
