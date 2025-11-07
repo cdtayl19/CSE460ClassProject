@@ -144,12 +144,16 @@ def get_message():
     if request.method == "GET":
         index = request.args.get("index", type=int)
         df = pd.read_csv("Messages.csv")
+        
         if len(df) == 0:
             return jsonify({"status": "fail", "message": "No new messages."})   
+        
         if 0 <= index < len(df): 
             return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
+        
         if index >= len(df):
             return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
+        
         if index < 0:
             return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
         
@@ -162,7 +166,7 @@ def delete_message():
         df = pd.read_csv("Messages.csv")
         df = df[df["Message"] != data["message"]]
         df.reset_index(drop=True, inplace=True)
-        df.to_csv("NewClubRequests.csv", index=False)
+        df.to_csv("Messages.csv", index=False)
         #print(f"DF Length: {len(df)}")
         return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
     

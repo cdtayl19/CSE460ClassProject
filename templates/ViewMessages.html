@@ -39,11 +39,11 @@
                 document.getElementById("from").innerHTML = "from: " + data.data["From"];
                 document.getElementById("message").innerHTML = data.data["Message"];
 
-                //pending.user = data.data["Submitted By"];
                 pending.to = data.data["to"];
                 pending.to = data.data["from"];
                 pending.to = data.data["message"];
 
+                currentIndex = data.index;
             } else {
                 document.getElementById("from").innerHTML = "";
                 document.getElementById("message").innerHTML = data.message;
