@@ -18,6 +18,7 @@
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
         <button id="approveBtn">Approve</button>
+        <button id="denyBtn">Deny</button><br>
         <button id="goBackBtn">Back</button>
     </div>
 
@@ -77,6 +78,22 @@
 
         document.getElementById("approveBtn").addEventListener("click", async () => {            
             await fetch("/approve-club-request", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(pending)
+            })
+
+            // Reset display to first request
+            currentIndex = 0
+
+            let data = await getClubRequest(currentIndex);
+            display(data);
+        });
+
+        document.getElementById("denyBtn").addEventListener("click", async () => {            
+            await fetch("/deny-club-request", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

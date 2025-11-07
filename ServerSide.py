@@ -150,7 +150,7 @@ def approveRequest():
         df = df[df["Club Name"] != approved_data["name"]]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("NewClubRequests.csv", index=False)
-        print(f"DF Length: {len(df)}")
+        #print(f"DF Length: {len(df)}")
 
         # Send message to student who submitted club request
         message = {"To": approved_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["name"]} has been approved!"}
@@ -160,7 +160,25 @@ def approveRequest():
         # However empty display remains if final/only request is approved. 
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
+@app.route("/deny-club-request", methods=["GET", "POST"])
+def denyRequest():
+    if request.method == "POST":
+        denied_data = request.get_json()
 
+        # Remove approved club from requests
+        df = pd.read_csv("NewClubRequests.csv")
+        df = df[df["Club Name"] != denied_data["name"]]
+        df.reset_index(drop=True, inplace=True)
+        df.to_csv("NewClubRequests.csv", index=False)
+        #print(f"DF Length: {len(df)}")
+
+        # Send message to student who submitted club request
+        message = {"To": denied_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {denied_data["name"]} has been rejected."}
+        write_messages(message)
+
+        # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
+        # However empty display remains if final/only request is approved. 
+        return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
         
 
 
