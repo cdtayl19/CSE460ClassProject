@@ -43,6 +43,7 @@ def write_messages(message):
 app = Flask(__name__)
 app.secret_key = "32895"
 
+
 # Logs out of the app
 @app.route("/logout")
 def logout():
@@ -52,31 +53,28 @@ def logout():
 
 # Later, change route to get-current-user
 # Sets the current user.
-@app.route("/current-user", methods=["GET"])
+@app.route("/current-user")
 def get_current_user():
-    if request.method == "GET":
-        if "current_user" in session:
-            return jsonify({"status": "success", "user": session["current_user"]})
-        else:
-            return jsonify({"status": "fail", "message": "No user logged in."})
+    if "current_user" in session:
+        return jsonify({"status": "success", "user": session["current_user"]})
+    else:
+        return jsonify({"status": "fail", "message": "No user logged in."})
 
 
 # Later, change route to get-club-requests
 # Returns number of entries in NewClubRequests.csv
-@app.route("/club-requests", methods=["GET"])
+@app.route("/club-requests")
 def get_club_requests():
-    if request.method == "GET":
-        df = pd.read_csv("NewClubRequests.csv")
-        return jsonify({"status": "success", "number": len(df)})
+    df = pd.read_csv("NewClubRequests.csv")
+    return jsonify({"status": "success", "number": len(df)})
 
 
 # Gets the number of messages in Messages.csv
-@app.route("/get-messages", methods=["GET"])
+@app.route("/get-messages")
 def get_messages():
-    if request.method == "GET":
-        df = pd.read_csv("Messages.csv")
-        user_messages = df[df["To"] == session["current_user"]["Username"]]
-        return jsonify({"status": "success", "number": len(user_messages)})
+    df = pd.read_csv("Messages.csv")
+    user_messages = df[df["To"] == session["current_user"]["Username"]]
+    return jsonify({"status": "success", "number": len(user_messages)})
     
 
 # Login Page
@@ -110,7 +108,7 @@ def home():
 
 
 # Returns individual entry from NewClubRequests.csv
-@app.route("/get-club-request", methods=["GET"])
+@app.route("/get-club-request")
 def get_club_request():
     # Retrieves index from arguments
     index = request.args.get("index", type=int)
@@ -136,31 +134,30 @@ def get_club_request():
 
 
 # Gets a single message by its index
-@app.route("/get-message", methods=["GET"])
+@app.route("/get-message")
 def get_message():
-    if request.method == "GET":
 
-        # Retrieves index from arguments 
-        index = request.args.get("index", type=int)
+    # Retrieves index from arguments 
+    index = request.args.get("index", type=int)
 
-        # Creates dataframe from csv
-        df = pd.read_csv("Messages.csv")
+    # Creates dataframe from csv
+    df = pd.read_csv("Messages.csv")
         
-        # Empty check
-        if len(df) == 0:
-            return jsonify({"status": "fail", "message": "No new messages."})   
+    # Empty check
+    if len(df) == 0:
+        return jsonify({"status": "fail", "message": "No new messages."})   
         
-        # Valid index
-        if 0 <= index < len(df): 
-            return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
+    # Valid index
+    if 0 <= index < len(df): 
+        return jsonify({"status": "success", "index": index, "data": df.loc[index].to_dict()})
         
-        # Next button wrap around
-        if index >= len(df):
-            return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
+    # Next button wrap around
+    if index >= len(df):
+        return jsonify({"status": "success", "index": 0, "data": df.loc[0].to_dict()})
         
-        # Prev button wrap around
-        if index < 0:
-            return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
+    # Prev button wrap around
+    if index < 0:
+        return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
         
 
 # Removes message from Messages.csv
@@ -179,7 +176,7 @@ def delete_message():
     
 
 # Adds club to ApprovedClubs.csv
-@app.route("/approve-club-request", methods=["GET", "POST"])
+@app.route("/approve-club-request", methods=["POST"])
 def approveRequest():
     if request.method == "POST":
         approved_data = request.get_json()
@@ -213,7 +210,7 @@ def approveRequest():
 
 
 # Removes club request from NewClubRequests.csv
-@app.route("/deny-club-request", methods=["GET", "POST"])
+@app.route("/deny-club-request", methods=["POST"])
 def denyRequest():
     if request.method == "POST":
         denied_data = request.get_json()
@@ -323,11 +320,11 @@ def requestNewClub():
 
 
 # View Club Requests Page
-@app.route("/view-club-requests", methods=["GET"])
+@app.route("/view-club-requests")
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
 
-@app.route("/view-messages", methods=["GET"])
+@app.route("/view-messages")
 def viewMessages():
     return render_template("viewMessages.html")
 
