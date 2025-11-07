@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <head>
-  <title>Admin Page</title>
-
-  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+	<title>Admin Page</title>
 </head>
 
 <body>
-  <div class="starter-container">
-    <h2 id="greeting">Admin Page</h2>
-    <div>
-      <label id="requests">You have {} new requests. </label>
-      <button id="requetsBtn">View</button>
-    </div><br>
-    
-    <button id="logoutBtn">Logout</button>
-  </div>
+	<div class="starter-container">
+		<h2 id="greeting">Admin Page</h2>
+		<div>
+			<label id="requests">You have {} new requests. </label>
+			<button id="requetsBtn">View</button>
+		</div><br>
+		
+		<button id="logoutBtn">Logout</button>
+	</div>
 
-  <script>
-    let user = {};
-    let requests = 0;
+	<script>
+		let user = {};
+		let requests = 0;
 
-    window.addEventListener("DOMContentLoaded", async () => {
-      let response = await fetch("/current-user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      let data = await response.json();
-      user = data.user;
-      document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;    // Displays user's first name
-      //console.log(user.Firstname);
-
-      response = await fetch("/club-requests", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      data = await response.json();
-      requestNum = data.number;
-      document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";    // Displays number of club requests
-      //console.log(user.Firstname);
-    });
-
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      window.location.href = '/logout';
-    });
-
-    
-    document.getElementById("requetsBtn").addEventListener("click", () => {
-      window.location.href = '/view-club-requests';
-    });
-  </script>
+		window.addEventListener("DOMContentLoaded", async () => {
+			let response = await fetch("/current-user", {
+                method: "GET",
+				headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            let data = await response.json();
+            user = data.user;
+            document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;
+            
+            response = await fetch("/club-requests", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            requestNum = data.number;
+            document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+        });
+        
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            window.location.href = '/logout';
+        });
+        
+        document.getElementById("requetsBtn").addEventListener("click", () => {
+            window.location.href = '/view-club-requests';
+        });
+    </script>
 </body>
 </html>

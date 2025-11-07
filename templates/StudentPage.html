@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <head>
-  <title>Student Page</title>
-
-  <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
+    <title>Student Page</title>
 </head>
 
 <body>
-  <div class="starter-container">
-    <h2 id="greeting">Student Page</h2>
+    <div class="starter-container">
+        <h2 id="greeting">Student Page</h2>
 
-    <div>
-      <label id="messages">You have {} new messages. </label>
-      <button id="messageBtn">View</button>
-    </div><br>
+        <div>
+            <label id="messages">You have {} new messages. </label>
+            <button id="messageBtn">View</button>
+        </div><br>
 
-    <button id="newClubBtn">New Club Request</button>
-    <button id="logoutBtn">Logout</button>
-  </div>
+        <button id="newClubBtn">New Club Request</button>
+        <button id="logoutBtn">Logout</button>
+    </div>
 
-  <script>
-    let user = {};
-
-    window.addEventListener("DOMContentLoaded", async () => {
-      let response = await fetch("/current-user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      let data = await response.json();
-      user = data.user;
-      document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;    // Displays user's first name
-      //console.log(user.Firstname);
-
-      response = await fetch("/get-messages", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      data = await response.json();
-      messageNum = data.number;
-      document.getElementById("messages").innerHTML = "You have " + messageNum + " new messages.";    // Displays number of messages
-    });
-
-    document.getElementById("newClubBtn").addEventListener("click", () => {
-      window.location.href = '/request-new-club';
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      window.location.href = '/logout';
-    });
-
-    document.getElementById("messageBtn").addEventListener("click", () => {
-      window.location.href = '/view-messages';
-    });
-
-
-  </script>
+    <script>
+        let user = {};
+        
+        window.addEventListener("DOMContentLoaded", async () => {
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+            user = data.user;
+            document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;
+            
+            response = await fetch("/get-messages", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            messageNum = data.number;
+            document.getElementById("messages").innerHTML = "You have " + messageNum + " new messages.";
+        });
+    
+        document.getElementById("newClubBtn").addEventListener("click", () => {
+            window.location.href = '/request-new-club';
+        });
+    
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            window.location.href = '/logout';
+        });
+    
+        document.getElementById("messageBtn").addEventListener("click", () => {
+            window.location.href = '/view-messages';
+        });
+    </script>
 </body>
 </html>

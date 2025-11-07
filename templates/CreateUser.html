@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <head>
     <title>Create User</title>
-
-    <!--<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">-->
 </head>
 
 <body>
@@ -22,38 +20,36 @@
     </div>
 
     <script>
-    document.getElementById("createAccountBtn").addEventListener("click", (event) => {
-        const firstname = document.getElementById("firstname").value;
-        const lastname = document.getElementById("lastname").value;
-        const email = document.getElementById("email").value;
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const role = "student"
+        document.getElementById("createAccountBtn").addEventListener("click", (event) => {
+            const firstname = document.getElementById("firstname").value;
+            const lastname = document.getElementById("lastname").value;
+            const email = document.getElementById("email").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const role = "student";
 
-        const newAccount = {firstname, lastname, email, username, password, role};
-        
-        fetch("/create-account", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newAccount)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Server says:", data);
-            if (data.status === "success") {    // If successful, returns to login page
-                window.location.href = "/";
-            } else {
-                console.log(data.message);
-                document.getElementById("message").innerHTML = data.message;
-            }
-        })
-    });
+            const newAccount = {firstname, lastname, email, username, password, role};
 
-    document.getElementById("cancel").addEventListener("click", () => {
-        window.location.href = '/';
-    });
+            fetch("/create-account", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newAccount)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    window.location.href = "/";
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            })
+        });
+
+        document.getElementById("cancel").addEventListener("click", () => {
+            window.location.href = '/';
+        });
     </script>
 </body>
 </html>

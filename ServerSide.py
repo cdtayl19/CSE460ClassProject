@@ -50,7 +50,7 @@ def logout():
     return redirect("/")
 
 
-# Change route to get-current-user
+# Later, change route to get-current-user
 # Sets the current user.
 @app.route("/current-user", methods=["GET", "POST"])
 def get_current_user():
@@ -61,7 +61,7 @@ def get_current_user():
             return jsonify({"status": "fail", "message": "No user logged in."})
 
 
-# Change route to get-club-requests
+# Later, change route to get-club-requests
 # Returns number of entries in NewClubRequests.csv
 @app.route("/club-requests", methods=["GET", "POST"])
 def get_club_requests():
@@ -75,10 +75,8 @@ def get_messages():
     if request.method == "GET":
         df = pd.read_csv("Messages.csv")
         user_messages = df[df["To"] == session["current_user"]["Username"]]
-        print(user_messages)
         return jsonify({"status": "success", "number": len(user_messages)})
     
-
 
 # Login Page
 @app.route("/", methods=["GET", "POST"])
@@ -101,7 +99,6 @@ def home():
             user = df.loc[df["Username"] == user_data["username"]].iloc[0]
             if user_data["password"] == user["Password"]:
                 session["current_user"] = user.to_dict()    # Stores information about the 'current user'
-                print("Logged in user:", session["current_user"])
                 return jsonify({"status": "success", "role": session["current_user"]["Role"], "message": f"User {session["current_user"]["Username"]} logged in."})
             else:
                 return jsonify({"status": "fail", "message": "Incorrect username/password."})
@@ -116,11 +113,9 @@ def home():
 def get_club_request():
     # Retrieves index from arguments sent by fetch(`/get-club-request?index=${index}`
     index = request.args.get("index", type=int)
-    #print(f"Index: {index}")
 
     # Creates dataframe from csv
     df = pd.read_csv("NewClubRequests.csv")
-    #print(f"DF Length: {len(df)}")
 
     # Returns 'No new requests' if NewClubRequests.csv is empty
     if len(df) == 0:
@@ -157,6 +152,7 @@ def get_message():
         if index < 0:
             return jsonify({"status": "success", "index": len(df) - 1, "data": df.loc[len(df) - 1].to_dict()})
         
+
 @app.route("/delete-message", methods=["POST"])
 def delete_message():
     if request.method == "POST":
@@ -167,7 +163,7 @@ def delete_message():
         df = df[df["Message"] != data["message"]]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("Messages.csv", index=False)
-        #print(f"DF Length: {len(df)}")
+
         return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
     
 
@@ -193,7 +189,6 @@ def approveRequest():
         df = df[df["Club Name"] != approved_data["name"]]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("NewClubRequests.csv", index=False)
-        #print(f"DF Length: {len(df)}")
 
         # Send message to student who submitted club request
         message = {"To": approved_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["name"]} has been approved!"}
@@ -202,6 +197,7 @@ def approveRequest():
         # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
         # However empty display remains if final/only request is approved. 
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
+
 
 @app.route("/deny-club-request", methods=["GET", "POST"])
 def denyRequest():
@@ -213,7 +209,6 @@ def denyRequest():
         df = df[df["Club Name"] != denied_data["name"]]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("NewClubRequests.csv", index=False)
-        #print(f"DF Length: {len(df)}")
 
         # Send message to student who submitted club request
         message = {"To": denied_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {denied_data["name"]} has been rejected."}
@@ -223,7 +218,6 @@ def denyRequest():
         # However empty display remains if final/only request is approved. 
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
         
-
 
 # Adds entry to User_Accounts.csv
 @app.route("/create-account", methods=["GET", "POST"])
@@ -257,7 +251,6 @@ def createUser():
         # Send user data to csv for storage
         csv_write(user_data)
 
-        print("Received new account:", user_data)
         return jsonify({"status": "success", "message": f"User {user_data["username"]} created!"})
     
     return render_template("CreateUser.html")
