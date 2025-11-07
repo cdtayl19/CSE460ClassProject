@@ -70,6 +70,15 @@ def get_club_requests():
         return jsonify({"status": "success", "number": len(df)})
 
 
+@app.route("/get-messages", methods=["GET"])
+def get_messages():
+    if request.method == "GET":
+        df = pd.read_csv("Messages.csv")
+        user_messages = df[df["To"] == session["current_user"]["Username"]]
+        print(user_messages)
+        return jsonify({"status": "success", "number": len(user_messages)})
+
+
 # Login Page
 @app.route("/", methods=["GET", "POST"])
 def home():

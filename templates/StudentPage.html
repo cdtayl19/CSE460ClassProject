@@ -8,6 +8,12 @@
 <body>
   <div class="starter-container">
     <h2 id="greeting">Student Page</h2>
+
+    <div>
+      <label id="messages">You have {} new messages. </label>
+      <button id="messageBtn">View</button>
+    </div><br>
+
     <button id="newClubBtn">New Club Request</button>
     <button id="logoutBtn">Logout</button>
   </div>
@@ -16,17 +22,28 @@
     let user = {};
 
     window.addEventListener("DOMContentLoaded", async () => {
-      const response = await fetch("/current-user", {
+      let response = await fetch("/current-user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
         }
       });
 
-      const data = await response.json();
+      let data = await response.json();
       user = data.user;
       document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;    // Displays user's first name
       //console.log(user.Firstname);
+
+      response = await fetch("/get-messages", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      data = await response.json();
+      messageNum = data.number;
+      document.getElementById("messages").innerHTML = "You have " + messageNum + " new messages.";    // Displays number of messages
     });
 
     document.getElementById("newClubBtn").addEventListener("click", () => {
