@@ -143,11 +143,12 @@ def approveRequest():
             "Events": "None"
         }
         write_approved_club_requests(holder)
-        #return jsonify({"status": "success", "message": f"New {approved_data["Club Name"]} club has been approved!"})
 
-         # Remove approved club from requests
-        #df = pd.read_csv("NewClubRequests.csv")
-        #df = df[df["Club Name"] != approved_data]
+        # Remove approved club from requests
+        df = pd.read_csv("NewClubRequests.csv")
+        df = df[df["Club Name"] != approved_data["name"]]
+        df.reset_index(drop=True, inplace=True)
+        df.to_csv("NewClubRequests.csv", index=False)
 
 
         # Send message to student who submitted club request
