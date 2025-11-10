@@ -7,6 +7,7 @@
     <div class="starter-container">
         <h2>School Clubs:</h2>
         <div id="list"></div>
+        <button id="backBtn">Back</button>
 
         <!--<div id="test">
             <a>jumpman</a>
@@ -39,6 +40,12 @@
                     </div><br><br>`;
                 list.appendChild(li);
             });
+        });
+
+        //<a id="link" href="/club-page">${club["Club Name"]}</a>
+        //const response = await fetch(`/get-message?index=${index}`, {
+        document.getElementById("backBtn").addEventListener("click", () => {
+            window.location.href = '/student';
         });
 
     </script>
