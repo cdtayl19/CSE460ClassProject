@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect
 import pandas as pd
 import csv
+import json
 
 CURRENT_USER = None
 
@@ -333,6 +334,17 @@ def viewMessages():
 @app.route("/browse-clubs")
 def browseClubs():
     return render_template("ClubListings.html")
+
+
+@app.route("/get-clubs")
+def getClubs():
+    df = pd.read_csv("ApprovedClubs.csv")
+    
+    if df.empty:
+        return jsonify({"status": "fail", "message": "No approved clubs found."})
+    
+    clubs = json.loads(df.to_json(orient="records"))
+    return jsonify({"status": "success", "clubs": clubs})
 
 
 if __name__ == "__main__":

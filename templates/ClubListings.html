@@ -6,9 +6,50 @@
 <body>
     <div class="starter-container">
         <h2>School Clubs:</h2>
+        <div id="list"></div>
+
+        <!--<div id="test">
+            <a>jumpman</a>
+            <p>Club leader {}</p>
+            <p>Members: {}</p>
+        </div>-->
     </div>
 
     <script>
+        window.addEventListener("DOMContentLoaded", async () => {
+			let response = await fetch("/get-clubs", {
+                method: "GET",
+				headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            let data = await response.json();
+
+            const clubs = data.clubs;
+
+            const list = document.getElementById("list");
+            
+            clubs.forEach(club => {
+                const li = document.createElement("li");
+                li.innerHTML = `<div>
+                    <a id="link" href="/student">${club["Club Name"]}</a>
+                    Leader: ${club["Leader"]}<br>   
+                    Topic: ${club["Topic"]}
+                    </div><br><br>`;
+                list.appendChild(li);
+            });
+        });
+
     </script>
 </body>
+<style>
+    #list {
+        font-size: larger;
+    }
+
+    #link {
+        margin-right: 20px;
+    }
+</style>
 </html>
