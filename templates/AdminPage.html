@@ -10,6 +10,8 @@
 			<label id="requests">You have {} new requests. </label>
 			<button id="requetsBtn">View</button>
 		</div><br>
+
+        <button id="clubBrowseBtn">Browse Clubs</button><br><br>
 		
 		<button id="logoutBtn">Logout</button>
 	</div>
@@ -48,6 +50,10 @@
         
         document.getElementById("requetsBtn").addEventListener("click", () => {
             window.location.href = '/view-club-requests';
+        });
+
+        document.getElementById("clubBrowseBtn").addEventListener("click", () => {
+            window.location.href = '/browse-clubs';
         });
     </script>
 </body>

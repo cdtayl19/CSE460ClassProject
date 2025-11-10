@@ -324,9 +324,15 @@ def requestNewClub():
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
 
+
 @app.route("/view-messages")
 def viewMessages():
     return render_template("viewMessages.html")
+
+
+@app.route("/browse-clubs")
+def browseClubs():
+    return render_template("ClubListings.html")
 
 
 if __name__ == "__main__":
