@@ -29,7 +29,7 @@ def csv_write_new_club_requests(club_request_data):
 
 def write_approved_club_requests(approved_club_data):
     with open("ApprovedClubs.csv", 'a', newline='') as new_file:
-        fieldnames = ['Submitted By', 'Club Name', 'Topic', 'Details', 'Members', 'Events']
+        fieldnames = ['Leader', 'Club Name', 'Topic', 'Details', 'Members', 'Events']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(approved_club_data)
 
@@ -185,7 +185,7 @@ def approveRequest():
         # Adds fields 'members' & 'events' needed for later
         approved_data = request.get_json()
         holder = {
-            "Submitted By": approved_data["user"], 
+            "Leader": approved_data["user"], 
             "Club Name": approved_data["name"], 
             "Topic": approved_data["topic"], 
             "Details": approved_data["description"], 
