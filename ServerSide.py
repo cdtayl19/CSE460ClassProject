@@ -347,5 +347,10 @@ def getClubs():
     return jsonify({"status": "success", "clubs": clubs})
 
 
+@app.route("/club-page")
+def clubPage():
+    return render_template("ClubPage.html")
+
+
 if __name__ == "__main__":
     app.run(port=8080)
