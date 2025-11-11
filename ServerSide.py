@@ -349,7 +349,14 @@ def getClubs():
 
 @app.route("/club-page")
 def clubPage():
-    return render_template("ClubPage.html")
+    club_name = request.args.get("name")
+    #print(club_name)
+    df = pd.read_csv("ApprovedClubs.csv")
+    club = df[df["Club Name"] == club_name]
+    club_info = club.iloc[0].to_dict()
+    print(club_info)
+
+    return render_template("ClubPage.html", club=club_info)
 
 
 if __name__ == "__main__":

@@ -33,17 +33,33 @@
             
             clubs.forEach(club => {
                 const li = document.createElement("li");
-                li.innerHTML = `<div>
-                    <a id="link" href="/club-page">${club["Club Name"]}</a>
-                    Leader: ${club["Leader"]}<br>   
-                    Topic: ${club["Topic"]}
-                    </div><br><br>`;
+                li.innerHTML = `
+                    <div>
+                        <span class="link" data-name="${club["Club Name"]}">${club["Club Name"]}</span>
+                        Leader: ${club["Leader"]}<br>   
+                        Topic: ${club["Topic"]}
+                    </div><br><br>
+                `;
                 list.appendChild(li);
             });
         });
 
-        //<a id="link" href="/club-page">${club["Club Name"]}</a>
         //const response = await fetch(`/get-message?index=${index}`, {
+        document.addEventListener("click", e => {
+            if (e.target.classList.contains("link")) {
+                
+                // Prevents page navigation from clicking the link.
+                // Allows the js to handle navigation, and NOT the html. 
+                e.preventDefault();
+
+                const clubName = e.target.dataset.name;
+                console.log("Club:", clubName);
+
+                window.location.href = `/club-page?name=${encodeURIComponent(clubName)}`;
+            }
+        });
+
+        
         document.getElementById("backBtn").addEventListener("click", () => {
             window.location.href = '/student';
         });
@@ -55,7 +71,10 @@
         font-size: larger;
     }
 
-    #link {
+    .link {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
         margin-right: 20px;
     }
 </style>

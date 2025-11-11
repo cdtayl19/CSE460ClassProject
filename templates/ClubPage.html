@@ -5,14 +5,17 @@
 
 <body>
     <div class="starter-container">
-        <h1 id="greeting">Welcome to the {}'s page!</h1>
-        <p id="leader">Club Leader: {}</p>
-        <list id="members"> Members:
-            <li></li>
-        </list>
-        <list id="events"> Upcoming Events:
-            <li></li>
-        </list>
+        
+        <div id="info">
+            <h1>{{ club["Club Name"] }}</h1>
+            <p><strong>Leader:</strong> {{ club["Leader"] }}</p>
+            <p><strong>Topic:</strong> {{ club["Topic"] }}</p>
+            <p><strong>Details:</strong> {{ club["Details"] }}</p>
+            <p><strong>Members:</strong> {{ club["Members"] }}</p>
+            <p><strong>Events:</strong> {{ club["Events"] }}</p>
+        </div>
+
+        
 
         <div id="studentButtons">
             <button>Request to Join!</button>
