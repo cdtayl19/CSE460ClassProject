@@ -40,6 +40,12 @@ def write_messages(message):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
+def write_join_club_requests(message):
+    with open("JoinRequests.csv", 'a', newline='') as new_file:
+        fieldnames = ['Student', 'Leader', 'Club Name']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(message)
+
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
@@ -362,10 +368,16 @@ def clubPage():
 @app.route("/send-join-request", methods=["POST"])
 def sendJoinRequest():
     if request.method == "POST":
-        data = request.get_json()
-        print(data)
+        join_request_data = request.get_json()        
 
-        
+        join_request_from   = join_request_data["user"]["Username"]
+        join_request_to     = join_request_data["leader"]
+        join_request_club   = join_request_data["clubName"]
+
+        join_request_message = {"Student": join_request_from, "Leader": join_request_to, "Club Name": join_request_club}
+        #print(join_request_message)
+
+        write_join_club_requests(join_request_message)
 
     return jsonify({"status": "success"})
 
