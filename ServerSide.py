@@ -359,5 +359,18 @@ def clubPage():
     return render_template("ClubPage.html", club=club_info)
 
 
+@app.route("/send-join-request", methods=["POST"])
+def sendJoinRequest():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+
+        
+
+    return jsonify({"status": "success"})
+
+    
+
+
 if __name__ == "__main__":
     app.run(port=8080)

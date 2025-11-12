@@ -7,27 +7,78 @@
     <div class="starter-container">
         
         <div id="info">
-            <h1>{{ club["Club Name"] }}</h1>
-            <p><strong>Leader:</strong> {{ club["Leader"] }}</p>
+            <!-- Store club name -->
+            <h1 id="name" data-name="{{ club['Club Name'] }}">
+                {{ club["Club Name"] }}
+            </h1>
+            
+            <!-- Store leader -->
+            <p id="leader" data-name="{{ club['Leader'] }}">
+                <strong>Leader:</strong> 
+                {{ club["Leader"] }}
+            </p>
+
             <p><strong>Topic:</strong> {{ club["Topic"] }}</p>
             <p><strong>Details:</strong> {{ club["Details"] }}</p>
             <p><strong>Members:</strong> {{ club["Members"] }}</p>
             <p><strong>Events:</strong> {{ club["Events"] }}</p>
         </div>
 
-        
+        <div id="joinRequests">
+            <label id="requests">You have {} new requests. </label>
+			<button id="requetsBtn">View</button>
+        </div>
 
         <div id="studentButtons">
-            <button>Request to Join!</button>
+            <button id="join">Request to Join!</button>
         </div><br>
 
         <div id="adminButtons">
             <button>Create Event</button>
         </div>
+
+        <div>
+            <button id="backBtn">Back</button>
+        </div>
+
+        
         
     </div>
 
     <script>
+        document.getElementById("join").addEventListener("click", async () => {
+
+            let response = await fetch("/current-user", {
+                method: "GET",
+				headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            let data = await response.json();
+            
+            user = data.user;   
+            
+            let clubName = document.getElementById("name").dataset.name;
+            let leader = document.getElementById("leader").dataset.name;
+            
+            const joinReq = {user, leader, clubName}; 
+
+            fetch("/send-join-request", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(joinReq)
+            })
+            
+            document.getElementById("studentButtons").innerHTML = "Your request to join has been sent!";
+
+        });
+
+        document.getElementById("backBtn").addEventListener("click", () => {
+            window.location.href = '/student';
+        });
     </script>
 </body>
 </html>
