@@ -381,7 +381,13 @@ def sendJoinRequest():
 
     return jsonify({"status": "success"})
 
-    
+# Gets the number of join requests in JoinRequests.csv
+@app.route("/get-join-requests")
+def get_join_requests():
+    club_name = request.args.get("club")
+    df = pd.read_csv("JoinRequests.csv")
+    join_requests = df[df["Club Name"] == club_name]
+    return jsonify({"status": "success", "number": len(join_requests)})
 
 
 if __name__ == "__main__":

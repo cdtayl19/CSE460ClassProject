@@ -46,6 +46,22 @@
     </div>
 
     <script>
+        window.addEventListener("DOMContentLoaded", async () => {
+            let clubName = document.getElementById("name").dataset.name;
+
+            // Get the number of join requests
+            let response = await fetch(`/get-join-requests?club=${clubName}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            requestNum = data.number;
+            document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+        });
+
         document.getElementById("join").addEventListener("click", async () => {
 
             let response = await fetch("/current-user", {
@@ -77,7 +93,7 @@
         });
 
         document.getElementById("backBtn").addEventListener("click", () => {
-            window.location.href = '/student';
+            window.location.href = '/browse-clubs';
         });
     </script>
 </body>
