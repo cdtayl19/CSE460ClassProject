@@ -401,8 +401,6 @@ def get_request():
     
     df = pd.read_csv("JoinRequests.csv")
     club_requests = df[df["Club Name"] == club_name].reset_index(drop=True)
-
-    print(club_requests)
     
     # Empty check
     if len(club_requests) == 0:
@@ -423,6 +421,55 @@ def get_request():
 
 
 
+@app.route("/approve-join-request", methods=["POST"])
+def approve_join():
+    if request.method == "POST":
+        approved_data = request.get_json()
+
+        # Tells pandas that "Members" is type string
+        # Lists options for empty values
+        df = pd.read_csv("ApprovedClubs.csv", dtype={"Members": str}, na_values=["", "None", "nan", "NaN"])
+
+        idx = df.index[df["Club Name"] == approved_data["club"]][0]
+
+        current_members = df.at[idx, "Members"]
+        
+    
+        if pd.isna(current_members) or current_members in ["", "None"]:
+            members_list = []
+        else:
+            members_list = json.loads(current_members)
+        
+        print(f"members_list >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {members_list}")
+
+        if approved_data["student"] not in members_list:
+            members_list.append(approved_data["student"])
+
+        print(f"members_list >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {members_list}")
+
+        df.at[idx, "Members"] = json.dumps(members_list)
+        df.to_csv("ApprovedClubs.csv", index=False)
+
+        # Remove approved club from requests
+        df = pd.read_csv("JoinRequests.csv")
+        df = df[~((df["Student"] == approved_data["student"]) & (df["Club Name"] == approved_data["club"]))]
+        df.reset_index(drop=True, inplace=True)
+        df.to_csv("JoinRequests.csv", index=False)
+#
+#        # Send message to student who submitted club request
+#        message = {"To": approved_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["name"]} has been approved!"}
+#        write_messages(message)
+#
+#        # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
+#        # However empty display remains if final/only request is approved. 
+        return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
+
+
+
+
+
+#@app.route("deny-join-request")
+#def deny_join():
 
 if __name__ == "__main__":
     app.run(port=8080)
