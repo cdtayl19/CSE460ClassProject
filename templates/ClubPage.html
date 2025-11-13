@@ -35,7 +35,7 @@
                 <label id="requests">You have {} new requests. </label>
 			    <button id="viewBtn">View</button>
             </div>
-            <button>Create Event</button>
+            <button id="createEventBtn">Create Event</button>
         </div>
 
         <div>
@@ -127,6 +127,10 @@
             let clubName = document.getElementById("name").dataset.name;
             window.location.href = `/view-join-requests?club=${clubName}`;
         })
+
+        document.getElementById("createEventBtn").addEventListener("click", () => {
+            window.location.href = '/create-event';
+        });
     </script>
 </body>
 </html>

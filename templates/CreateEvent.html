@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <title>Create Event</title>
+</head>
+
+<body>
+    <div class="create-event-container">
+        <h2>Create Event</h2>
+        <input type="text" id="eventName" placeholder="Event Name"><br>
+        <input type="text" id="date" placeholder="Date"><br>
+        <input type="text" id="time" placeholder="Start Time"><br>
+        <input type="text" id="location" placeholder="Location"><br>
+        <input type="text" id="maxGuests" placeholder="Max Guests"><br>
+
+        <label>Description: </label><br>
+        <textarea id="description" rows="4" cols="50"></textarea><br><br>
+
+        <button id="createEventBtn">Create Event</button>
+        <button id="cancel">Cancel</button>
+    </div>
+
+    <div>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        document.getElementById("createEventBtn").addEventListener("click", () => {
+            const eventName = document.getElementById("eventName").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const location = document.getElementById("location").value;
+            const maxGuests = document.getElementById("maxGuests").value;
+            const description = document.getElementById("description").value;
+
+            const newEvent = {eventName, date, time, location, maxGuests, description};
+
+            /*fetch("/create-account", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newAccount)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    window.location.href = "/";
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            })*/
+        });
+
+        document.getElementById("cancel").addEventListener("click", () => {
+            window.location.href = '/club-page';
+        });
+    </script>
+</body>
+</html>

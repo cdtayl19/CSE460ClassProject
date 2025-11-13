@@ -458,9 +458,6 @@ def approve_join():
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
 
-
-
-
 @app.route("/deny-join-request", methods=["POST"])
 def deny_join():
     if request.method == "POST":
@@ -479,6 +476,50 @@ def deny_join():
         # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
         # However empty display remains if final/only request is approved. 
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
+
+
+@app.route("/create-event", methods=["GET", "POST"])
+def create_event():
+#    if request.method == "POST":
+#        user_data = request.get_json()
+#
+#        # Empty field checks -- consider moving to client side
+#        if user_data["firstname"] == "":
+#            return jsonify({"status": "fail", "message": "First name cannot be empty."})
+#        if user_data["lastname"] == "":
+#            return jsonify({"status": "fail", "message": "Last name cannot be empty."})
+#        if user_data["email"] == "":
+#            return jsonify({"status": "fail", "message": "Email cannot be empty."})
+#        if user_data["username"] == "":
+#            return jsonify({"status": "fail", "message": "Username cannot be empty."})
+#        if user_data["password"] == "":
+#            return jsonify({"status": "fail", "message": "Password cannot be empty."})
+#        
+#        # Existing account checks
+#        df = pd.read_csv(FILE_NAME)
+#
+#        # Existing email check
+#        if user_data["email"] in df["Email"].values:
+#            return jsonify({"status": "fail", "message": "Account with that email already exists."})
+#        
+#        # Existing username check
+#        if user_data["username"] in df["Username"].values:
+#            return jsonify({"status": "fail", "message": "Account with that username already exists."})
+#
+#        # Send user data to csv for storage
+#        csv_write(user_data)
+#
+#        return jsonify({"status": "success", "message": f"User {user_data["username"]} created!"})
+#    
+    return render_template("CreateEvent.html")
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(port=8080)
