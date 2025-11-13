@@ -52,7 +52,9 @@
         });
 
         document.getElementById("cancel").addEventListener("click", () => {
-            window.location.href = '/club-page';
+            let urlParams = new URLSearchParams(window.location.search);
+            let clubName = urlParams.get("club");
+            window.location.href = `/club-page?name=${encodeURIComponent(clubName)}`;
         });
     </script>
 </body>

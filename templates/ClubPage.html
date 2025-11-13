@@ -129,7 +129,8 @@
         })
 
         document.getElementById("createEventBtn").addEventListener("click", () => {
-            window.location.href = '/create-event';
+            let clubName = document.getElementById("name").dataset.name;
+            window.location.href = `/create-event?club=${clubName}`;
         });
     </script>
 </body>
