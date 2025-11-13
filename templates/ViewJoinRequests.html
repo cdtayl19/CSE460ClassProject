@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+    <title>View Join Requests</title>
+</head>
+
+<body>
+    <div class="starter-container">
+        <h2>Join Requests</h2>
+        <div id="display">
+            <p id="from"></p>
+            <textarea id="message" rows="4" cols="50"></textarea><br><br>
+        </div>
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+        <button id="deleteBtn">Delete</button><br>
+        <button id="goBackBtn">Back</button>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let pending = {"leader": "", "student": "", "message": ""};
+        let clubName = "";
+
+        async function getRequest(index, clubName) {            
+            let response = await fetch(`/get-join-request?name=${clubName}&index=${index}`, {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json" 
+                },
+            });
+            
+            data = await response.json();
+            return data;
+        }
+
+        function display(data) {
+            console.log(data);
+
+            if (data.status === "success") {
+                document.getElementById("from").innerHTML = "from: " + data.data["Student"];
+
+                message = data.data["Student"] + " would like to join " + data.data["Club Name"];
+                console.log(message);
+                
+                document.getElementById("message").innerHTML = message;
+
+
+                pending.leader = data.data["Leader"];
+                pending.student = data.data["From"];
+                pending.message = data.data["Message"];
+
+                currentIndex = data.index;
+            } else {
+                document.getElementById("from").innerHTML = "";
+                document.getElementById("message").innerHTML = data.message;
+            }            
+        }
+    
+        window.addEventListener("DOMContentLoaded", async () => {
+            let urlParams = new URLSearchParams(window.location.search);
+            clubName = urlParams.get("club");  
+            
+            let data = await getRequest(currentIndex, clubName);
+            display(data);
+        });
+
+        document.getElementById("prevBtn").addEventListener("click", async () => {
+            currentIndex--;
+            let data = await getRequest(currentIndex, clubName);
+            display(data);
+        });
+
+        document.getElementById("nextBtn").addEventListener("click", async () => {
+            currentIndex++;
+            console.log("Line 75: " + clubName)
+            let data = await getRequest(currentIndex, clubName);
+            display(data);
+        });
+
+        document.getElementById("deleteBtn").addEventListener("click", async () => {                        
+            await fetch("/delete-message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(pending)
+            })
+
+            // Reset display to first request
+            currentIndex = 0
+
+            let data = await getMessage(currentIndex);
+            display(data);
+        });
+
+        document.getElementById("goBackBtn").addEventListener("click", () => {
+            let urlParams = new URLSearchParams(window.location.search);
+            let clubName = urlParams.get("club");
+            window.location.href = `/club-page?name=${encodeURIComponent(clubName)}`;
+        });
+    </script>
+</body>
+</html>

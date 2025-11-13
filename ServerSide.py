@@ -334,7 +334,11 @@ def viewClubRequests():
 
 @app.route("/view-messages")
 def viewMessages():
-    return render_template("viewMessages.html")
+    return render_template("ViewMessages.html")
+
+@app.route("/view-join-requests")
+def viewRequests():
+    return render_template("ViewJoinRequests.html")
 
 
 @app.route("/browse-clubs")
@@ -360,7 +364,7 @@ def clubPage():
     df = pd.read_csv("ApprovedClubs.csv")
     club = df[df["Club Name"] == club_name]
     club_info = club.iloc[0].to_dict()
-    print(club_info)
+    #print(club_info)
 
     return render_template("ClubPage.html", club=club_info)
 
@@ -388,6 +392,36 @@ def get_join_requests():
     df = pd.read_csv("JoinRequests.csv")
     join_requests = df[df["Club Name"] == club_name]
     return jsonify({"status": "success", "number": len(join_requests)})
+
+
+@app.route("/get-join-request")
+def get_request():
+    index = request.args.get("index", type=int)
+    club_name  = request.args.get("name")
+    
+    df = pd.read_csv("JoinRequests.csv")
+    club_requests = df[df["Club Name"] == club_name].reset_index(drop=True)
+
+    print(club_requests)
+    
+    # Empty check
+    if len(club_requests) == 0:
+        return jsonify({"status": "fail", "message": "No new requests."})   
+        
+    # Valid index
+    if 0 <= index < len(club_requests): 
+        return jsonify({"status": "success", "index": index, "data": club_requests.loc[index].to_dict()})
+        
+    # Next button wrap around
+    if index >= len(club_requests):
+        return jsonify({"status": "success", "index": 0, "data": club_requests.loc[0].to_dict()})
+        
+    # Prev button wrap around
+    if index < 0:
+        return jsonify({"status": "success", "index": len(club_requests) - 1, "data": club_requests.loc[len(club_requests) - 1].to_dict()})
+
+
+
 
 
 if __name__ == "__main__":
