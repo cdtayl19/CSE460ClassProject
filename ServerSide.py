@@ -490,8 +490,6 @@ def create_event():
     if request.method == "POST":
         event_data = request.get_json()
 
-        print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>> {event_data}")
-
         # Empty field checks -- consider moving to client side
         if event_data["eventName"] == "":
             return jsonify({"status": "fail", "message": "Event name cannot be empty."})
@@ -520,25 +518,45 @@ def create_event():
            return jsonify({"status": "fail", "message": "Event with that name already exists."})
         
         holder = {
-            "Club Name":    event_data["clubName"], 
-            "Event Name":   event_data["eventName"], 
-            "Date":         event_data["date"], 
-            "Time":         event_data["time"],
-            "Location":     event_data["location"],
-            "Description":  event_data["description"],
-            "Max Guests":   event_data["maxGuests"]
+            "Club Name": event_data["clubName"], 
+            "Event Name": event_data["eventName"], 
+            "Date": event_data["date"], 
+            "Time": event_data["time"],
+            "Location": event_data["location"],
+            "Description": event_data["description"],
+            "Max Guests": event_data["maxGuests"]
         }
         
         # Send user data to csv for storage
         write_events(holder)
 
+        add_event_to_club(holder)
+
         return jsonify({"status": "success"})
     return render_template("CreateEvent.html")
 
 
+def add_event_to_club(club_event):
+    print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {club_event}")
 
+    # Tells pandas that "Members" is type string
+    # Lists options for empty values
+    df = pd.read_csv("ApprovedClubs.csv", dtype={"Events": str}, na_values=["", "None", "nan", "NaN"])
 
+    idx = df.index[df["Club Name"] == club_event["Club Name"]][0]
 
+    current_events = df.at[idx, "Events"]
+    
+    if pd.isna(current_events) or current_events in ["", "None"]:
+        events_list = []
+    else:
+        events_list = json.loads(current_events)
+        
+    if club_event["Event Name"] not in events_list:
+        events_list.append(club_event["Event Name"])
+
+    df.at[idx, "Events"] = json.dumps(events_list)
+    df.to_csv("ApprovedClubs.csv", index=False)
 
 
 
