@@ -480,20 +480,30 @@ def deny_join():
 
 @app.route("/create-event", methods=["GET", "POST"])
 def create_event():
-#    if request.method == "POST":
-#        user_data = request.get_json()
-#
-#        # Empty field checks -- consider moving to client side
-#        if user_data["firstname"] == "":
-#            return jsonify({"status": "fail", "message": "First name cannot be empty."})
-#        if user_data["lastname"] == "":
-#            return jsonify({"status": "fail", "message": "Last name cannot be empty."})
-#        if user_data["email"] == "":
-#            return jsonify({"status": "fail", "message": "Email cannot be empty."})
-#        if user_data["username"] == "":
-#            return jsonify({"status": "fail", "message": "Username cannot be empty."})
-#        if user_data["password"] == "":
-#            return jsonify({"status": "fail", "message": "Password cannot be empty."})
+    if request.method == "POST":
+        event_data = request.get_json()
+
+        print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>> {event_data}")
+
+        # Empty field checks -- consider moving to client side
+        if event_data["eventName"] == "":
+            return jsonify({"status": "fail", "message": "Event name cannot be empty."})
+        if event_data["date"] == "":
+            return jsonify({"status": "fail", "message": "Date name cannot be empty."})
+        if event_data["time"] == "":
+            return jsonify({"status": "fail", "message": "Time cannot be empty."})
+        if event_data["location"] == "":
+            return jsonify({"status": "fail", "message": "Location cannot be empty."})
+        
+        if event_data["maxGuests"] == "":
+            return jsonify({"status": "fail", "message": "Max guests cannot be empty."})
+        if not event_data["maxGuests"].isdigit():
+            return jsonify({"status": "fail", "message": "Max guests must be a valid integer."})
+        if int(event_data["maxGuests"]) <= 0:
+            return jsonify({"status": "fail", "message": "Max guests must be a positive number."})
+        
+        if event_data["description"] == "":
+            return jsonify({"status": "fail", "message": "Description cannot be empty."})
 #        
 #        # Existing account checks
 #        df = pd.read_csv(FILE_NAME)
@@ -509,8 +519,7 @@ def create_event():
 #        # Send user data to csv for storage
 #        csv_write(user_data)
 #
-#        return jsonify({"status": "success", "message": f"User {user_data["username"]} created!"})
-#    
+        return jsonify({"status": "success"})
     return render_template("CreateEvent.html")
 
 

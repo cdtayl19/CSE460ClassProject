@@ -24,7 +24,10 @@
     </div>
 
     <script>
-        document.getElementById("createEventBtn").addEventListener("click", () => {
+        document.getElementById("createEventBtn").addEventListener("click", async () => {
+            let urlParams = new URLSearchParams(window.location.search);
+            let clubName = urlParams.get("club");
+            
             const eventName = document.getElementById("eventName").value;
             const date = document.getElementById("date").value;
             const time = document.getElementById("time").value;
@@ -34,21 +37,21 @@
 
             const newEvent = {eventName, date, time, location, maxGuests, description};
 
-            /*fetch("/create-account", {
+            let response = await fetch("/create-event", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(newAccount)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    window.location.href = "/";
-                } else {
-                    document.getElementById("message").innerHTML = data.message;
-                }
-            })*/
+                body: JSON.stringify(newEvent)
+            });
+
+            let data = await response.json();
+
+            if (data.status === "success") {
+                window.location.href = `/club-page?name=${encodeURIComponent(clubName)}`;
+            } else {
+                document.getElementById("message").innerHTML = data.message;
+            }
         });
 
         document.getElementById("cancel").addEventListener("click", () => {
