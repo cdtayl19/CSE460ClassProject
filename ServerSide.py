@@ -455,10 +455,10 @@ def approve_join():
         df = df[~((df["Student"] == approved_data["student"]) & (df["Club Name"] == approved_data["club"]))]
         df.reset_index(drop=True, inplace=True)
         df.to_csv("JoinRequests.csv", index=False)
-#
-#        # Send message to student who submitted club request
-#        message = {"To": approved_data["user"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["name"]} has been approved!"}
-#        write_messages(message)
+
+        # Send message to student who submitted join request
+        message = {"To": approved_data["student"], "From": session["current_user"]["Username"], "Message":f"Your club request for {approved_data["club"]} has been approved!"}
+        write_messages(message)
 #
 #        # Return 'empty' message by default. If not really empty html file corrects and displays the correct screen.
 #        # However empty display remains if final/only request is approved. 
