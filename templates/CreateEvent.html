@@ -35,7 +35,7 @@
             const maxGuests = document.getElementById("maxGuests").value;
             const description = document.getElementById("description").value;
 
-            const newEvent = {eventName, date, time, location, maxGuests, description};
+            const newEvent = {clubName, eventName, date, time, location, maxGuests, description};
 
             let response = await fetch("/create-event", {
                 method: "POST",

@@ -46,6 +46,13 @@ def write_join_club_requests(message):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
+def write_events(message):
+    with open("Events.csv", 'a', newline='') as new_file:
+        #Club Name,Event Name,Date,Time,Location,Description,Max Guests
+        fieldnames = ['Club Name', 'Event Name', 'Date', 'Time', 'Location', 'Description', 'Max Guests']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(message)
+
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
@@ -504,21 +511,27 @@ def create_event():
         
         if event_data["description"] == "":
             return jsonify({"status": "fail", "message": "Description cannot be empty."})
-#        
-#        # Existing account checks
-#        df = pd.read_csv(FILE_NAME)
-#
-#        # Existing email check
-#        if user_data["email"] in df["Email"].values:
-#            return jsonify({"status": "fail", "message": "Account with that email already exists."})
-#        
-#        # Existing username check
-#        if user_data["username"] in df["Username"].values:
-#            return jsonify({"status": "fail", "message": "Account with that username already exists."})
-#
-#        # Send user data to csv for storage
-#        csv_write(user_data)
-#
+        
+        # Existing event checks
+        df = pd.read_csv("Events.csv")
+
+        # Existing event check by name
+        if event_data["eventName"] in df["Event Name"].values:
+           return jsonify({"status": "fail", "message": "Event with that name already exists."})
+        
+        holder = {
+            "Club Name":    event_data["clubName"], 
+            "Event Name":   event_data["eventName"], 
+            "Date":         event_data["date"], 
+            "Time":         event_data["time"],
+            "Location":     event_data["location"],
+            "Description":  event_data["description"],
+            "Max Guests":   event_data["maxGuests"]
+        }
+        
+        # Send user data to csv for storage
+        write_events(holder)
+
         return jsonify({"status": "success"})
     return render_template("CreateEvent.html")
 
