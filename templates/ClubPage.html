@@ -24,16 +24,17 @@
             <p><strong>Events:</strong> {{ club["Events"] }}</p>
         </div>
 
-        <div id="joinRequests">
-            <label id="requests">You have {} new requests. </label>
-			<button id="viewBtn">View</button>
-        </div>
+        
 
         <div id="studentButtons">
             <button id="join">Request to Join!</button>
         </div><br>
 
-        <div id="adminButtons">
+        <div id="leaderButtons">
+            <div id="joinRequests">
+                <label id="requests">You have {} new requests. </label>
+			    <button id="viewBtn">View</button>
+            </div>
             <button>Create Event</button>
         </div>
 
@@ -46,11 +47,37 @@
     </div>
 
     <script>
+        let user = {};
+
         window.addEventListener("DOMContentLoaded", async () => {
+            // Get the current user
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+            user = data.user;
+            
+            
             let clubName = document.getElementById("name").dataset.name;
+            let leader = document.getElementById("leader").dataset.name;
+
+            const studentButtons = document.getElementById("studentButtons");
+            const leaderButtons = document.getElementById("leaderButtons");
+
+            if (user.Username === leader) {
+                studentButtons.style.display = "none";
+                leaderButtons.style.display = "block";
+            } else {
+                studentButtons.style.display = "block";
+                leaderButtons.style.display = "none";
+            }
 
             // Get the number of join requests
-            let response = await fetch(`/get-join-requests?club=${clubName}`, {
+            response = await fetch(`/get-join-requests?club=${clubName}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
