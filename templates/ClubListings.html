@@ -8,7 +8,7 @@
         <h2>School Clubs:</h2>
         <div>
             <input type="text" id="serchBar" placeholder="Search"><br>
-            <div id="results" class="results-box"></div>
+            <div id="results" class="results-box" hidden></div>
         </div><br>
         <div id="list"></div>
         <button id="backBtn">Back</button>
@@ -64,6 +64,8 @@
             window.location.href = '/student';
         });
 
+
+
         document.addEventListener("input", e => {
             let clubNames = [];
 
@@ -72,6 +74,12 @@
             });
 
             const results = clubNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
+
+            if (document.getElementById("serchBar").value == "") {
+                document.getElementById("results").hidden = true;
+            } else {
+                document.getElementById("results").hidden = false;
+            }
 
             document.getElementById("results").innerHTML = results;
 
