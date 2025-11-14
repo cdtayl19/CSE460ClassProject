@@ -6,17 +6,17 @@
 <body>
     <div class="starter-container">
         <h2>School Clubs:</h2>
+        <div>
+            <input type="text" id="serchBar" placeholder="Search"><br>
+            <div id="results" class="results-box"></div>
+        </div><br>
         <div id="list"></div>
         <button id="backBtn">Back</button>
-
-        <!--<div id="test">
-            <a>jumpman</a>
-            <p>Club leader {}</p>
-            <p>Members: {}</p>
-        </div>-->
     </div>
 
     <script>
+        let data = {};
+
         window.addEventListener("DOMContentLoaded", async () => {
 			let response = await fetch("/get-clubs", {
                 method: "GET",
@@ -25,7 +25,7 @@
                 }
             });
             
-            let data = await response.json();
+            data = await response.json();
 
             const clubs = data.clubs;
 
@@ -64,6 +64,19 @@
             window.location.href = '/student';
         });
 
+        document.addEventListener("input", e => {
+            let clubNames = [];
+
+            data.clubs.forEach(club => {
+                clubNames.push(club["Club Name"])
+            });
+
+            const results = clubNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
+
+            document.getElementById("results").innerHTML = results;
+
+        });
+
     </script>
 </body>
 <style>
@@ -77,5 +90,13 @@
         text-decoration: underline;
         margin-right: 20px;
     }
+
+    .results-box {
+        position: absolute;
+        border: 1px solid;
+        width: 250px;
+        background: white;
+    }
+    
 </style>
 </html>
