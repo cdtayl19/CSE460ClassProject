@@ -68,21 +68,31 @@
 
         document.addEventListener("input", e => {
             let clubNames = [];
+            let results = [];
 
             data.clubs.forEach(club => {
                 clubNames.push(club["Club Name"])
             });
 
-            const results = clubNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
+            results = clubNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
 
             if (document.getElementById("serchBar").value == "") {
                 document.getElementById("results").hidden = true;
+                document.getElementById("results").innerHTML = "";
             } else {
                 document.getElementById("results").hidden = false;
+                document.getElementById("results").innerHTML = "";
+
+                results.forEach(result => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <div>
+                            <span class="link" data-name="${result}">${result}</span>
+                        </div><br>
+                    `;
+                    document.getElementById("results").appendChild(li);
+                })
             }
-
-            document.getElementById("results").innerHTML = results;
-
         });
 
     </script>
