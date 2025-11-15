@@ -1,5 +1,12 @@
 Leader,Club Name,Topic,Details,Members,Events
-Batman,Wayne Manor,crime fighting,adfasdf,None,None
-Batman,Justice League,anything,group of heros,None,None
-Batman,X men,anything,group of heros,None,None
-Batman,Avengers,anything,group of heros,None,None
+Batman,Wayne Manor,crime fighting,keeping gotham safe,,
+Superman,Justice League,world saving,group of heros,,
+GenericLeader,Generic Club 1,something,anyting,,
+GenericLeader,Generic Club 2,something,anyting,,
+GenericLeader,Generic Club 3,something,anyting,,
+GenericLeader,Generic Club 4,something,anyting,,
+GenericLeader,Generic Club 5,something,anyting,,
+GenericLeader,Generic Club 6,something,anyting,,
+GenericLeader,Generic Club 7,something,anyting,,
+Prof.X,X men,learning,mutants helping mutants,,
+Ironman,Avengers,anything,group of heros with better movies,"[""Spiderman""]","[""Infinity War"", ""Endgame""]"

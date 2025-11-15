@@ -1,4 +1,5 @@
 Firstname,Lastname,Email,Username,Password,Role
 Craig,Taylor,cdtaylor@email.com,cdtayl19,test123,admin
 Bruce,Wayne,bwayne@email.com,Batman,testtest,student
-Test,Test,test@email.com,TEST,tester,student
+Tony,Stark,tstark@email.com,Ironman,iron,student
+Peter,Parker,pparker@email.com,Spiderman,spidey,student
