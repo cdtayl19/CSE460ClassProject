@@ -44,7 +44,6 @@
             });
         });
 
-        //const response = await fetch(`/get-message?index=${index}`, {
         document.addEventListener("click", e => {
             if (e.target.classList.contains("link")) {
                 
@@ -53,7 +52,6 @@
                 e.preventDefault();
 
                 const clubName = e.target.dataset.name;
-                console.log("Club:", clubName);
 
                 window.location.href = `/club-page?name=${encodeURIComponent(clubName)}`;
             }

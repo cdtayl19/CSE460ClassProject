@@ -48,7 +48,6 @@ def write_join_club_requests(message):
 
 def write_events(message):
     with open("Events.csv", 'a', newline='') as new_file:
-        #Club Name,Event Name,Date,Time,Location,Description,Max Guests
         fieldnames = ['Club Name', 'Event Name', 'Date', 'Time', 'Location', 'Description', 'Max Guests']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
@@ -367,11 +366,9 @@ def getClubs():
 @app.route("/club-page")
 def clubPage():
     club_name = request.args.get("name")
-    #print(club_name)
     df = pd.read_csv("ApprovedClubs.csv")
     club = df[df["Club Name"] == club_name]
     club_info = club.iloc[0].to_dict()
-    #print(club_info)
 
     return render_template("ClubPage.html", club=club_info)
 
@@ -386,7 +383,6 @@ def sendJoinRequest():
         join_request_club   = join_request_data["clubName"]
 
         join_request_message = {"Student": join_request_from, "Leader": join_request_to, "Club Name": join_request_club}
-        #print(join_request_message)
 
         write_join_club_requests(join_request_message)
 
@@ -537,7 +533,6 @@ def create_event():
 
 
 def add_event_to_club(club_event):
-    print(f"LOOK HERE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {club_event}")
 
     # Tells pandas that "Members" is type string
     # Lists options for empty values
