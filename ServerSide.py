@@ -351,6 +351,10 @@ def viewRequests():
 def browseClubs():
     return render_template("ClubListings.html")
 
+@app.route("/browse-events")
+def browseEvents():
+    return render_template("EventListings.html")
+
 
 @app.route("/get-clubs")
 def getClubs():
