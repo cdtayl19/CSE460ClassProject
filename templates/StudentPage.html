@@ -12,7 +12,11 @@
             <button id="messageBtn">View</button>
         </div><br>
 
-        <button id="clubBrowseBtn">Browse Clubs</button><br><br>
+        <div id="browse-buttons">
+            <button id="clubBrowseBtn">Browse Clubs</button>
+            <button id="eventBrowseBtn">Browse Events</button>
+        </div><br>
+        
 
         <button id="newClubBtn">Create Club Request</button>
         <button id="logoutBtn">Logout</button>
@@ -59,6 +63,10 @@
 
         document.getElementById("clubBrowseBtn").addEventListener("click", () => {
             window.location.href = '/browse-clubs';
+        });
+
+        document.getElementById("eventBrowseBtn").addEventListener("click", () => {
+            window.location.href = '/browse-events';
         });
     </script>
 </body>
