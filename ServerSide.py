@@ -484,6 +484,50 @@ def approve_join():
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
 
+
+
+
+@app.route("/register-guest", methods=["POST"])
+def register_guest():
+    if request.method == "POST":
+        event_data = request.get_json()
+        print(f"LOOK HERE VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV")
+        print(event_data)
+        print(event_data["user"]["Username"])
+
+
+        # Tells pandas that "Registered Guests" is type string
+        # Lists options for empty values
+        df = pd.read_csv("Events.csv", dtype={"Registered Guests": str}, na_values=["", "None", "nan", "NaN"])
+
+        idx = df.index[df["Event Name"] == event_data["eventName"]][0]
+
+        current_guests = df.at[idx, "Registered Guests"]
+    
+        if pd.isna(current_guests) or current_guests in ["", "None"]:
+            guest_list = []
+        else:
+            guest_list = json.loads(current_guests)
+        
+        if event_data["user"]["Username"] not in guest_list:
+            guest_list.append(event_data["user"]["Username"])
+
+        df.at[idx, "Registered Guests"] = json.dumps(guest_list)
+        df.to_csv("Events.csv", index=False)
+
+        
+        # Send message to student who submitted join request
+        #message = {"To": event_data["Username"], "From": session["current_user"]["Username"], "Message":f"Your club request for {event_data["club"]} has been approved!"}
+        #write_messages(message)
+
+       
+        return jsonify({"status": "success"})
+
+
+
+
+
+
 @app.route("/deny-join-request", methods=["POST"])
 def deny_join():
     if request.method == "POST":

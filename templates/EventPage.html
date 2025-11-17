@@ -27,12 +27,11 @@
 
         
 
-        <div id="studentButtons">
-            <button id="join">Register for Event!</button>
-        </div><br>
+        
+        <button id="register">Register for Event!</button><br>
 
         <div id="leaderButtons">
-            <!-- NEED TO ADD EDIT BUTTONS -->
+            <!-- NEED TO ADD EDIT BUTTONS for LEADER -->
         </div><br>
 
         <div>
@@ -54,21 +53,14 @@
         
             let data = await response.json();
             user = data.user;
-            
-            
+                        
             let eventName = document.getElementById("name").dataset.name;
-            let leader = document.getElementById("leader").dataset.name;
 
-            const studentButtons = document.getElementById("studentButtons");
             const leaderButtons = document.getElementById("leaderButtons");
 
-            if (user.Username === leader) {
-                studentButtons.style.display = "none";
-                leaderButtons.style.display = "block";
-            } else {
-                studentButtons.style.display = "block";
-                leaderButtons.style.display = "none";
-            }
+            //if (user.Username === leader) {
+            //    leaderButtons.style.display = "block";
+            //}
 
             // Get the number of join requests
             //response = await fetch(`/get-join-requests?club=${clubName}`, {
@@ -83,7 +75,7 @@
             //document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
         });
 
-        /*document.getElementById("join").addEventListener("click", async () => {
+        document.getElementById("register").addEventListener("click", async () => {
 
             let response = await fetch("/current-user", {
                 method: "GET",
@@ -96,22 +88,21 @@
             
             user = data.user;   
             
-            let clubName = document.getElementById("name").dataset.name;
-            let leader = document.getElementById("leader").dataset.name;
+            let eventName = document.getElementById("name").dataset.name;
             
-            const joinReq = {user, leader, clubName}; 
+            const registerReq = {user, eventName}; 
 
-            fetch("/send-join-request", {
+            fetch("/register-guest", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(joinReq)
+                body: JSON.stringify(registerReq)
             })
             
-            document.getElementById("studentButtons").innerHTML = "Your request to join has been sent!";
+            document.getElementById("register").innerHTML = "You have registered for " + eventName + "!";
 
-        });*/
+        });
 
         document.getElementById("backBtn").addEventListener("click", () => {
             window.location.href = '/browse-events';
