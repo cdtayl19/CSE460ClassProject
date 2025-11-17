@@ -1,7 +1,119 @@
 <!DOCTYPE html>
 <head>
-    <title>Event Listings!!!!!!</title>
+    <title>Event Search</title>
 </head>
+
 <body>
-    <h1>Event Listings!!!!!!</h1>
+    <div class="starter-container">
+        <h2>Club Events:</h2>
+        <div>
+            <input type="text" id="serchBar" placeholder="Search"><br>
+            <div id="results" class="results-box" hidden></div>
+        </div><br>
+        <div id="list"></div>
+        <button id="backBtn">Back</button>
+    </div>
+
+    <script>
+        let data = {};
+
+        window.addEventListener("DOMContentLoaded", async () => {
+			let response = await fetch("/get-events", {
+                method: "GET",
+				headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            console.log(data);
+
+            const events = data.events;
+
+            const list = document.getElementById("list");
+            
+            events.forEach(event => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <div>
+                        <span class="link" data-name="${event["Event Name"]}">${event["Event Name"]}</span>
+                        Host: ${event["Club Name"]}<br>   
+                        Description: ${event["Description"]}
+                    </div><br><br>
+                `;
+                list.appendChild(li);
+            });
+        });
+
+        document.addEventListener("click", e => {
+            if (e.target.classList.contains("link")) {
+                
+                // Prevents page navigation from clicking the link.
+                // Allows the js to handle navigation, and NOT the html. 
+                e.preventDefault();
+
+                const eventName = e.target.dataset.name;
+
+                window.location.href = `/event-page?name=${encodeURIComponent(eventName)}`;
+            }
+        });
+
+        
+        document.getElementById("backBtn").addEventListener("click", () => {
+            window.location.href = '/student';
+        });
+
+
+
+        document.addEventListener("input", e => {
+            let eventNames = [];
+            let results = [];
+
+            data.events.forEach(event => {
+                eventNames.push(event["Event Name"])
+            });
+
+            results = eventNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
+
+            if (document.getElementById("serchBar").value == "") {
+                document.getElementById("results").hidden = true;
+                document.getElementById("results").innerHTML = "";
+            } else {
+                document.getElementById("results").hidden = false;
+                document.getElementById("results").innerHTML = "";
+
+                results.forEach(result => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <div>
+                            <span class="link" data-name="${result}">${result}</span>
+                        </div><br>
+                    `;
+                    document.getElementById("results").appendChild(li);
+                })
+            }
+        });
+
+    </script>
 </body>
+<style>
+    #list {
+        font-size: larger;
+    }
+
+    .link {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-right: 20px;
+    }
+
+    .results-box {
+        position: absolute;
+        border: 1px solid;
+        width: 250px;
+        background: white;
+    }
+    
+</style>
+</html>
