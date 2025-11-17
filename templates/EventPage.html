@@ -22,7 +22,12 @@
             <p><strong>Time:</strong> {{ event["Time"] }}</p>
             <p><strong>Location:</strong> {{ event["Location"] }}</p>
             <p><strong>Description:</strong> {{ event["Description"] }}</p>
-            <p><strong>Availability:</strong> {{ event["Max Guests"] }} guests may still attend.</p>
+            
+            <div>
+                <strong>Availability:</strong>
+                <span  id="availability">There are {{ event["Max Guests"] }} spots available.</span>
+            </div><br>
+            
         </div>
 
         
@@ -62,17 +67,19 @@
             //    leaderButtons.style.display = "block";
             //}
 
-            // Get the number of join requests
-            //response = await fetch(`/get-join-requests?club=${clubName}`, {
-            //    method: "GET",
-            //    headers: {
-            //        "Content-Type": "application/json"
-            //    }
-            //});
+            // Get the number of Registered Guests
+            response = await fetch(`/get-registered-guests?event=${eventName}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
             
-            //data = await response.json();
-            //requestNum = data.number;
-            //document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+            data = await response.json();
+            maxNum = data.max
+            guestNum = data.number;
+            console.log("Max: " + maxNum + ", Num: " + guestNum);
+            document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
         });
 
         document.getElementById("register").addEventListener("click", async () => {

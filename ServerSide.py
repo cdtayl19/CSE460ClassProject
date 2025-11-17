@@ -420,6 +420,31 @@ def get_join_requests():
     return jsonify({"status": "success", "number": len(join_requests)})
 
 
+
+# Gets the number of Registered Guests of an Event
+@app.route("/get-registered-guests")
+def get_registered_guests():
+    event_name = request.args.get("event")
+    #print(f"Line 428: {event_name}")
+    
+    df = pd.read_csv("Events.csv", na_values=["", "None", "nan", "NaN"])
+    event = df[df["Event Name"] == event_name]
+    max_guests = int(event.iloc[0]["Max Guests"])
+
+    current_guests = event.iloc[0]["Registered Guests"]
+    #print(f"Line 435: {current_guests}")
+
+    if pd.isna(current_guests):
+        registered_guests = []
+    else:
+        registered_guests = json.loads(event.iloc[0]["Registered Guests"])
+
+    #print(f"Line 434: reg: {len(registered_guests)}, max: {max_guests}")
+    
+    return jsonify({"status": "success", "max": max_guests,  "number": len(registered_guests)})
+
+
+
 @app.route("/get-join-request")
 def get_request():
     index = request.args.get("index", type=int)
@@ -484,17 +509,10 @@ def approve_join():
         return jsonify({"status": "fail", "message": "No new requests.", "length": len(df)})
 
 
-
-
-
 @app.route("/register-guest", methods=["POST"])
 def register_guest():
     if request.method == "POST":
         event_data = request.get_json()
-        print(f"LOOK HERE VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV")
-        print(event_data)
-        print(event_data["user"]["Username"])
-
 
         # Tells pandas that "Registered Guests" is type string
         # Lists options for empty values
@@ -522,10 +540,6 @@ def register_guest():
 
        
         return jsonify({"status": "success"})
-
-
-
-
 
 
 @app.route("/deny-join-request", methods=["POST"])
