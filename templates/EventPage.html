@@ -27,7 +27,7 @@
             <span> {{ event["Description"] }}</span><br><br>
             
             <strong>Availability:</strong>
-            <span  id="availability">There are {{ event["Max Guests"] }} spots available.</span><br><br>
+            <span  id="availability"> 0 / {{ event["Max Guests"] }} students have registered.</span><br><br>
         </div>
 
         <div id="register">
@@ -61,9 +61,9 @@
 
             if (maxNum - guestNum <= 0) {
                 document.getElementById("register").style.display = "none";
-                document.getElementById("availability").innerHTML = "There are no more spots available.";
+                document.getElementById("availability").innerHTML = "Registration for this event is full.";
             } else {
-                document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
+                document.getElementById("availability").innerHTML = guestNum + " / " + maxNum + " students have registered.";
             }
 
         }
