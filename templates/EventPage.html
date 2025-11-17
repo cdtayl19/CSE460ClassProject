@@ -58,7 +58,14 @@
             
             let maxNum = data.max
             let guestNum = data.number;
-            document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
+
+            if (maxNum - guestNum <= 0) {
+                document.getElementById("register").style.display = "none";
+                document.getElementById("availability").innerHTML = "There are no more spots available.";
+            } else {
+                document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
+            }
+
         }
 
         window.addEventListener("DOMContentLoaded", async () => {
