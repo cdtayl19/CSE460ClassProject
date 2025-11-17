@@ -425,21 +425,19 @@ def get_join_requests():
 @app.route("/get-registered-guests")
 def get_registered_guests():
     event_name = request.args.get("event")
-    #print(f"Line 428: {event_name}")
     
     df = pd.read_csv("Events.csv", na_values=["", "None", "nan", "NaN"])
     event = df[df["Event Name"] == event_name]
+
+    # Must convert to int. Else improper JSON error. 
     max_guests = int(event.iloc[0]["Max Guests"])
 
     current_guests = event.iloc[0]["Registered Guests"]
-    #print(f"Line 435: {current_guests}")
 
     if pd.isna(current_guests):
         registered_guests = []
     else:
         registered_guests = json.loads(event.iloc[0]["Registered Guests"])
-
-    print(f"Line 434: reg: {len(registered_guests)}, max: {max_guests}")
     
     return jsonify({"status": "success", "max": max_guests,  "number": len(registered_guests)})
 

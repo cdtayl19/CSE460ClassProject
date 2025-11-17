@@ -8,54 +8,56 @@
         
         <div id="info">
             <!-- Store event name -->
-            <h1 id="name" data-name="{{ event['Event Name'] }}">
-                {{ event["Event Name"] }}
-            </h1>
+            <h1 id="name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
             
             <!-- Store host -->
-            <p id="host" data-name="{{ event['Club Name'] }}">
-                <strong>Host:</strong> 
-                {{ event["Club Name"] }}
-            </p>
+            <strong>Host:</strong>
+            <span id="host" data-name="{{ event['Club Name'] }}"> {{ event["Club Name"] }} </span><br><br>
 
-            <p><strong>Date:</strong> {{ event["Date"] }}</p>
-            <p><strong>Time:</strong> {{ event["Time"] }}</p>
-            <p><strong>Location:</strong> {{ event["Location"] }}</p>
-            <p><strong>Description:</strong> {{ event["Description"] }}</p>
+            <strong>Date:</strong>
+            <span> {{ event["Date"] }}</span><br><br>
             
-            <div>
-                <strong>Availability:</strong>
-                <!--<span  id="availability">There are {{ event["Max Guests"] }} spots available.</span>-->
-                <span  id="availability">TEST</span>
-            </div><br>
+            <strong>Time:</strong>
+            <span> {{ event["Time"] }}</span><br><br>
             
+            <strong>Location:</strong> 
+            <span> {{ event["Location"] }}</span><br><br>
+            
+            <strong>Description:</strong> 
+            <span> {{ event["Description"] }}</span><br><br>
+            
+            <strong>Availability:</strong>
+            <span  id="availability">There are {{ event["Max Guests"] }} spots available.</span><br><br>
         </div>
 
+        <div id="register">
+            <button >Register for Event!</button><br>
+        </div>
         
-
-        
-        <button id="register">Register for Event!</button><br>
-
         <div id="leaderButtons">
             <!-- NEED TO ADD EDIT BUTTONS for LEADER -->
         </div><br>
 
-        <div>
-            <button id="backBtn">Back</button>
-        </div>
+        <button id="backBtn">Back</button>
+        
     </div>
 
     <script>
         let user = {};
         let eventName = document.getElementById("name").dataset.name;
 
-        async function updateAvailability(data) {
-            console.log("Entered updateAvailability()");
-
+        async function updateAvailability() {   
+            let response = await fetch(`/get-registered-guests?event=${eventName}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            let data = await response.json();
             
             let maxNum = data.max
             let guestNum = data.number;
-            console.log("Max: " + maxNum + ", GuestNum: " + guestNum);
             document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
         }
 
@@ -71,41 +73,16 @@
             let data = await response.json();
             user = data.user;
 
-            const leaderButtons = document.getElementById("leaderButtons");
+            //const leaderButtons = document.getElementById("leaderButtons");
 
             //if (user.Username === leader) {
             //    leaderButtons.style.display = "block";
-            //}
-
-            // Get the number of Registered Guests
-
-            response = await fetch(`/get-registered-guests?event=${eventName}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
+            //}            
             
-            data = await response.json();
-            
-            updateAvailability(data);
+            updateAvailability();
         });
 
-        document.getElementById("register").addEventListener("click", async () => {
-
-            let response = await fetch("/current-user", {
-                method: "GET",
-				headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            let data = await response.json();
-            
-            user = data.user;   
-            
-            let eventName = document.getElementById("name").dataset.name;
-            
+        document.getElementById("register").addEventListener("click", async () => {                        
             const registerReq = {user, eventName}; 
 
             await fetch("/register-guest", {
@@ -117,32 +94,13 @@
             })
             
             document.getElementById("register").innerHTML = "You have registered for " + eventName + "!";
-
-            response = await fetch(`/get-registered-guests?event=${eventName}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
             
-            data = await response.json();
-            
-            updateAvailability(data);
+            updateAvailability();
         });
 
         document.getElementById("backBtn").addEventListener("click", () => {
             window.location.href = '/browse-events';
         });
-
-        /*document.getElementById("viewBtn").addEventListener("click", () => {
-            let clubName = document.getElementById("name").dataset.name;
-            window.location.href = `/view-join-requests?club=${clubName}`;
-        })*/
-
-        /*document.getElementById("createEventBtn").addEventListener("click", () => {
-            let clubName = document.getElementById("name").dataset.name;
-            window.location.href = `/create-event?club=${clubName}`;
-        });*/
     </script>
 </body>
 </html>
