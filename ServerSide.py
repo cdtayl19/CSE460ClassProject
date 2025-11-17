@@ -366,6 +366,16 @@ def getClubs():
     clubs = json.loads(df.to_json(orient="records"))
     return jsonify({"status": "success", "clubs": clubs})
 
+@app.route("/get-events")
+def getEvents():
+    df = pd.read_csv("Events.csv")
+    
+    if df.empty:
+        return jsonify({"status": "fail", "message": "No events found."})
+    
+    events = json.loads(df.to_json(orient="records"))
+    return jsonify({"status": "success", "events": events})
+
 
 @app.route("/club-page")
 def clubPage():
