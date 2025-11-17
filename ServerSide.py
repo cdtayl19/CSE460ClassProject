@@ -48,7 +48,7 @@ def write_join_club_requests(message):
 
 def write_events(message):
     with open("Events.csv", 'a', newline='') as new_file:
-        fieldnames = ['Club Name', 'Event Name', 'Date', 'Time', 'Location', 'Description', 'Max Guests']
+        fieldnames = ['Club Name', 'Event Name', 'Date', 'Time', 'Location', 'Description', 'Max Guests', 'Registered Guests']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
