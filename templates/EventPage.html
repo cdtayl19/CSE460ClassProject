@@ -25,7 +25,8 @@
             
             <div>
                 <strong>Availability:</strong>
-                <span  id="availability">There are {{ event["Max Guests"] }} spots available.</span>
+                <!--<span  id="availability">There are {{ event["Max Guests"] }} spots available.</span>-->
+                <span  id="availability">TEST</span>
             </div><br>
             
         </div>
@@ -46,6 +47,17 @@
 
     <script>
         let user = {};
+        let eventName = document.getElementById("name").dataset.name;
+
+        async function updateAvailability(data) {
+            console.log("Entered updateAvailability()");
+
+            
+            let maxNum = data.max
+            let guestNum = data.number;
+            console.log("Max: " + maxNum + ", GuestNum: " + guestNum);
+            document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
+        }
 
         window.addEventListener("DOMContentLoaded", async () => {
             // Get the current user
@@ -58,8 +70,6 @@
         
             let data = await response.json();
             user = data.user;
-                        
-            let eventName = document.getElementById("name").dataset.name;
 
             const leaderButtons = document.getElementById("leaderButtons");
 
@@ -68,6 +78,7 @@
             //}
 
             // Get the number of Registered Guests
+
             response = await fetch(`/get-registered-guests?event=${eventName}`, {
                 method: "GET",
                 headers: {
@@ -76,10 +87,8 @@
             });
             
             data = await response.json();
-            maxNum = data.max
-            guestNum = data.number;
-            console.log("Max: " + maxNum + ", Num: " + guestNum);
-            document.getElementById("availability").innerHTML = "There are " + (maxNum - guestNum) + " spots available.";
+            
+            updateAvailability(data);
         });
 
         document.getElementById("register").addEventListener("click", async () => {
@@ -99,7 +108,7 @@
             
             const registerReq = {user, eventName}; 
 
-            fetch("/register-guest", {
+            await fetch("/register-guest", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -109,6 +118,16 @@
             
             document.getElementById("register").innerHTML = "You have registered for " + eventName + "!";
 
+            response = await fetch(`/get-registered-guests?event=${eventName}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            
+            updateAvailability(data);
         });
 
         document.getElementById("backBtn").addEventListener("click", () => {
