@@ -386,6 +386,15 @@ def clubPage():
 
     return render_template("ClubPage.html", club=club_info)
 
+@app.route("/event-page")
+def eventPage():
+    event_name = request.args.get("name")
+    df = pd.read_csv("Events.csv")
+    event = df[df["Event Name"] == event_name]
+    event_info = event.iloc[0].to_dict()
+
+    return render_template("EventPage.html", event=event_info)
+
 
 @app.route("/send-join-request", methods=["POST"])
 def sendJoinRequest():
