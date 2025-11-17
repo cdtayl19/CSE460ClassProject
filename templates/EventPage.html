@@ -1,7 +1,131 @@
 <!DOCTYPE html>
 <head>
-    <title>Event Page!!!!!!</title>
+    <title>Event Page</title>
 </head>
+
 <body>
-    <h1>Event Page!!!!!!</h1>
+    <div class="starter-container">
+        
+        <div id="info">
+            <!-- Store event name -->
+            <h1 id="name" data-name="{{ event['Event Name'] }}">
+                {{ event["Event Name"] }}
+            </h1>
+            
+            <!-- Store host -->
+            <p id="host" data-name="{{ event['Club Name'] }}">
+                <strong>Host:</strong> 
+                {{ event["Club Name"] }}
+            </p>
+
+            <p><strong>Date:</strong> {{ event["Date"] }}</p>
+            <p><strong>Time:</strong> {{ event["Time"] }}</p>
+            <p><strong>Location:</strong> {{ event["Location"] }}</p>
+            <p><strong>Description:</strong> {{ event["Description"] }}</p>
+            <p><strong>Availability:</strong> {{ event["Max Guests"] }}</p>
+        </div>
+
+        
+
+        <div id="studentButtons">
+            <button id="join">Register for Event!</button>
+        </div><br>
+
+        <div id="leaderButtons">
+            <!-- NEED TO ADD EDIT BUTTONS -->
+        </div><br>
+
+        <div>
+            <button id="backBtn">Back</button>
+        </div>
+    </div>
+
+    <script>
+        let user = {};
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            // Get the current user
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+            user = data.user;
+            
+            
+            let eventName = document.getElementById("name").dataset.name;
+            let leader = document.getElementById("leader").dataset.name;
+
+            const studentButtons = document.getElementById("studentButtons");
+            const leaderButtons = document.getElementById("leaderButtons");
+
+            if (user.Username === leader) {
+                studentButtons.style.display = "none";
+                leaderButtons.style.display = "block";
+            } else {
+                studentButtons.style.display = "block";
+                leaderButtons.style.display = "none";
+            }
+
+            // Get the number of join requests
+            //response = await fetch(`/get-join-requests?club=${clubName}`, {
+            //    method: "GET",
+            //    headers: {
+            //        "Content-Type": "application/json"
+            //    }
+            //});
+            
+            //data = await response.json();
+            //requestNum = data.number;
+            //document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+        });
+
+        /*document.getElementById("join").addEventListener("click", async () => {
+
+            let response = await fetch("/current-user", {
+                method: "GET",
+				headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            let data = await response.json();
+            
+            user = data.user;   
+            
+            let clubName = document.getElementById("name").dataset.name;
+            let leader = document.getElementById("leader").dataset.name;
+            
+            const joinReq = {user, leader, clubName}; 
+
+            fetch("/send-join-request", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(joinReq)
+            })
+            
+            document.getElementById("studentButtons").innerHTML = "Your request to join has been sent!";
+
+        });*/
+
+        document.getElementById("backBtn").addEventListener("click", () => {
+            window.location.href = '/browse-events';
+        });
+
+        /*document.getElementById("viewBtn").addEventListener("click", () => {
+            let clubName = document.getElementById("name").dataset.name;
+            window.location.href = `/view-join-requests?club=${clubName}`;
+        })*/
+
+        /*document.getElementById("createEventBtn").addEventListener("click", () => {
+            let clubName = document.getElementById("name").dataset.name;
+            window.location.href = `/create-event?club=${clubName}`;
+        });*/
+    </script>
 </body>
+</html>
