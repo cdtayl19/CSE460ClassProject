@@ -31,6 +31,7 @@
 
         <div id="studentButtons" hidden>
             <button id="join">Request to Join!</button>
+            <span id="sent" hidden>Your request to join has been sent!</span>
             <button id="studentBackBtn">Back</button>
         </div>
 
@@ -125,7 +126,8 @@
                 body: JSON.stringify(joinReq)
             })
             
-            document.getElementById("studentButtons").innerHTML = "Your request to join has been sent!";
+            document.getElementById("join").hidden = true;
+            document.getElementById("sent").hidden = false;
 
         });
 
