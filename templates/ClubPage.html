@@ -35,15 +35,21 @@
                 <label id="requests">You have {} new requests. </label>
 			    <button id="viewBtn">View</button>
             </div><br>
-            <button id="createEventBtn">Create Event</button>
+
+            <button id="createEventBtn">Create Event</button><br><br>
+
+            <div id="dashboard">
+                <button id="chgLeader">Change Leader</button>
+                <button id="chgTopic">Change Topic</button>
+                <button id="chgDetails">Change Details</button>
+            </div>
+
+            <div id="chgControls" hidden></div>
         </div><br>
 
         <div>
             <button id="backBtn">Back</button>
         </div>
-
-        
-        
     </div>
 
     <script>
@@ -131,6 +137,81 @@
         document.getElementById("createEventBtn").addEventListener("click", () => {
             let clubName = document.getElementById("name").dataset.name;
             window.location.href = `/create-event?club=${clubName}`;
+        });
+    
+        document.getElementById("chgLeader").addEventListener("click", () => {
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Leader";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+
+        document.getElementById("chgTopic").addEventListener("click", () => {
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Topic";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+
+        document.getElementById("chgDetails").addEventListener("click", () => {
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Topic";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
         });
     </script>
 </body>
