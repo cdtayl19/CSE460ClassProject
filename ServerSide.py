@@ -655,6 +655,13 @@ def manage_club():
             df.loc[df["Club Name"] == club_name, "Topic"] = update_data["topic"]
             df.to_csv("ApprovedClubs.csv", index=False)
             return jsonify({"status": "success", "topic": update_data["topic"]})
+        
+        # Change club Details
+        if update_data["details"] != "":
+            df = pd.read_csv("ApprovedClubs.csv")
+            df.loc[df["Club Name"] == club_name, "Details"] = update_data["details"]
+            df.to_csv("ApprovedClubs.csv", index=False)
+            return jsonify({"status": "success", "details": update_data["details"]})
 
 
         return jsonify({"status": "fail", "message": "No input given."})

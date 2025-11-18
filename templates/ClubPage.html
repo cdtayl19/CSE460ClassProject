@@ -20,7 +20,7 @@
             <span id="topic">{{ club["Topic"] }}</span><br><br>
 
             <strong>Details: </strong>
-            <span>{{ club["Details"] }}</span><br><br>
+            <span id="details">{{ club["Details"] }}</span><br><br>
 
             <strong>Members: </strong>
             <span>{{ club["Members"] }}</span><br><br>
@@ -276,10 +276,38 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
+            // Confirm Details Change
+            confirm.addEventListener("click", async () => {
+                let newDetails = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: newDetails};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+                console.log(data.message);
+
+                if (data.status == "success") {
+                    console.log("Super Success!!!!!");
+                    document.getElementById("details").value = data.details;
+                    window.location.reload();
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });
+
+            // Cancel Leader Change
             cancel.addEventListener("click", () => {
                 const chgControls = document.getElementById("chgControls");
                 chgControls.hidden = true;
                 chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
             });
             
             input.appendChild(tBox);
