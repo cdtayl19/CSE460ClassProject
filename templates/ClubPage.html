@@ -49,7 +49,7 @@
                 <button id="chgLeader">Change Leader</button>
                 <button id="chgTopic">Change Topic</button>
                 <button id="chgDetails">Change Details</button>
-                <button id="chgMembers">Remove Members</button>
+                <button id="rmvMembers">Remove Members</button>
                 <button id="chgEvents">Cancel Events</button>
             </div>
 
@@ -168,7 +168,7 @@
             // Confirm Leader Change
             confirm.addEventListener("click", async () => {
                 let newLeader = tBox.value;
-                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: ""};
+                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: "", member: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -222,7 +222,7 @@
             // Confirm Topic Change
             confirm.addEventListener("click", async () => {
                 let newTopic = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: newTopic, details: ""};
+                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: "", member: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -277,7 +277,7 @@
             // Confirm Details Change
             confirm.addEventListener("click", async () => {
                 let newDetails = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: newDetails};
+                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: "", member: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -307,6 +307,60 @@
                 document.getElementById("message").innerHTML = "";
             });
             
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+
+        document.getElementById("rmvMembers").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "Remove Member";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Remove Member
+            confirm.addEventListener("click", async () => {
+                let byeMember = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: byeMember};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+                console.log(data.message);
+
+                if (data.status == "success") {
+                    console.log("Super Success!!!!!");
+                    window.location.reload();
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });
+
+            // Cancel Remove Member
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+
             input.appendChild(tBox);
             input.appendChild(confirm);
             input.appendChild(cancel);

@@ -662,7 +662,26 @@ def manage_club():
             df.loc[df["Club Name"] == club_name, "Details"] = update_data["details"]
             df.to_csv("ApprovedClubs.csv", index=False)
             return jsonify({"status": "success", "details": update_data["details"]})
+        
+        # Remove Member
+        if update_data["member"] != "":
+            df = pd.read_csv("ApprovedClubs.csv")
 
+            idx = df.index[df["Club Name"] == update_data["club"]][0]
+            current_members = df.at[idx, "Members"]
+            
+            if pd.isna(current_members):
+                return jsonify({"status": "fail", "message": "Club has no members to remove."})
+            else:
+                current_members = json.loads(current_members)
+
+                if update_data["member"] not in current_members:
+                    return jsonify({"status": "fail", "message": "Member not found in club."})
+                else:
+                    current_members.remove(update_data["member"])
+                    df.at[idx, "Members"] = json.dumps(current_members)
+                    df.to_csv("ApprovedClubs.csv", index=False)
+                    return jsonify({"status": "success", "message": "Member removed."})
 
         return jsonify({"status": "fail", "message": "No input given."})
 
