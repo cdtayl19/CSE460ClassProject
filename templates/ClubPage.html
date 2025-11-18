@@ -13,18 +13,21 @@
             </h1>
             
             <!-- Store leader -->
-            <p id="leader" data-name="{{ club['Leader'] }}">
-                <strong>Leader:</strong> 
-                {{ club["Leader"] }}
-            </p>
+            <strong>Leader: </strong>
+            <span id="leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
+            
+            <strong>Topic: </strong>
+            <span id="topic">{{ club["Topic"] }}</span><br><br>
 
-            <p><strong>Topic:</strong> {{ club["Topic"] }}</p>
-            <p><strong>Details:</strong> {{ club["Details"] }}</p>
-            <p><strong>Members:</strong> {{ club["Members"] }}</p>
-            <p><strong>Events:</strong> {{ club["Events"] }}</p>
-        </div>
+            <strong>Details: </strong>
+            <span>{{ club["Details"] }}</span><br><br>
 
-        
+            <strong>Members: </strong>
+            <span>{{ club["Members"] }}</span><br><br>
+
+            <strong>Events: </strong>
+            <span>{{ club["Events"] }}</span><br><br>
+        </div>       
 
         <div id="studentButtons" hidden>
             <button id="join">Request to Join!</button>
@@ -217,10 +220,38 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
+            // Confirm Topic Change
+            confirm.addEventListener("click", async () => {
+                let newTopic = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: newTopic, details: ""};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+                console.log(data.message);
+
+                if (data.status == "success") {
+                    console.log("Super Success!!!!!");
+                    document.getElementById("topic").value = data.topic;
+                    window.location.reload();
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });
+
+            // Cancel Leader Change
             cancel.addEventListener("click", () => {
                 const chgControls = document.getElementById("chgControls");
                 chgControls.hidden = true;
                 chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
             });
             
             input.appendChild(tBox);

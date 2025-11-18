@@ -636,11 +636,9 @@ def manage_club():
     if request.method == "POST":
         update_data = request.get_json()
         club_name = update_data["club"]
-        print(update_data)
 
+        # Change club Leader
         if update_data["leader"] != "":
-            print(update_data["leader"])
-
             df = pd.read_csv("User_Accounts.csv")
 
             if update_data["leader"] not in df["Username"].values:
@@ -650,6 +648,13 @@ def manage_club():
                 df.loc[df["Club Name"] == club_name, "Leader"] = update_data["leader"]
                 df.to_csv("ApprovedClubs.csv", index=False)
                 return jsonify({"status": "success", "leader": update_data["leader"]})
+            
+        # Change club Topic
+        if update_data["topic"] != "":
+            df = pd.read_csv("ApprovedClubs.csv")
+            df.loc[df["Club Name"] == club_name, "Topic"] = update_data["topic"]
+            df.to_csv("ApprovedClubs.csv", index=False)
+            return jsonify({"status": "success", "topic": update_data["topic"]})
 
 
         return jsonify({"status": "fail", "message": "No input given."})
