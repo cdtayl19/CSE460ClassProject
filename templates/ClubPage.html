@@ -26,30 +26,32 @@
 
         
 
-        <div id="studentButtons">
+        <div id="studentButtons" hidden>
             <button id="join">Request to Join!</button>
-        </div><br>
+            <button id="studentBackBtn">Back</button>
+        </div>
 
-        <div id="leaderButtons">
+        <div id="leaderButtons" hidden>
             <div id="joinRequests">
                 <label id="requests">You have {} new requests. </label>
 			    <button id="viewBtn">View</button>
             </div><br>
 
-            <button id="createEventBtn">Create Event</button><br><br>
+            <div>
+                <button id="createEventBtn">Create Event</button>
+                <button id="leaderBackBtn">Back</button>
+            </div><br><br>
 
             <div id="dashboard">
                 <button id="chgLeader">Change Leader</button>
                 <button id="chgTopic">Change Topic</button>
                 <button id="chgDetails">Change Details</button>
+                <button id="chgMembers">Remove Members</button>
+                <button id="chgEvents">Cancel Events</button>
             </div>
 
             <div id="chgControls" hidden></div>
         </div><br>
-
-        <div>
-            <button id="backBtn">Back</button>
-        </div>
     </div>
 
     <script>
@@ -67,7 +69,6 @@
             let data = await response.json();
             user = data.user;
             
-            
             let clubName = document.getElementById("name").dataset.name;
             let leader = document.getElementById("leader").dataset.name;
 
@@ -75,11 +76,9 @@
             const leaderButtons = document.getElementById("leaderButtons");
 
             if (user.Username === leader) {
-                studentButtons.style.display = "none";
-                leaderButtons.style.display = "block";
+                leaderButtons.hidden = false;
             } else {
-                studentButtons.style.display = "block";
-                leaderButtons.style.display = "none";
+                studentButtons.hidden = false;
             }
 
             // Get the number of join requests
@@ -125,7 +124,13 @@
 
         });
 
-        document.getElementById("backBtn").addEventListener("click", () => {
+        document.getElementById("studentBackBtn").addEventListener("click", () => {
+            console.log("Clicked");
+            window.location.href = '/browse-clubs';
+        });
+
+        document.getElementById("leaderBackBtn").addEventListener("click", () => {
+            console.log("Clicked");
             window.location.href = '/browse-clubs';
         });
 
@@ -140,6 +145,8 @@
         });
     
         document.getElementById("chgLeader").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -165,6 +172,8 @@
         });
 
         document.getElementById("chgTopic").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -190,12 +199,15 @@
         });
 
         document.getElementById("chgDetails").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
-            const tBox = document.createElement("input");
-            tBox.type = "text";
-            tBox.placeholder = "New Topic";
+            const tBox = document.createElement("textarea");
+            tBox.rows = 4;
+            tBox.cols = 50;
+            tBox.placeholder = "New Details";
 
             const confirm = document.createElement("button");
             confirm.innerText = "Confirm";
