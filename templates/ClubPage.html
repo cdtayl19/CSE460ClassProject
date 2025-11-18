@@ -51,11 +51,13 @@
             </div>
 
             <div id="chgControls" hidden></div>
+            <div id="message"></div>
         </div><br>
     </div>
 
     <script>
         let user = {};
+        let clubName = "";
 
         window.addEventListener("DOMContentLoaded", async () => {
             // Get the current user
@@ -69,7 +71,7 @@
             let data = await response.json();
             user = data.user;
             
-            let clubName = document.getElementById("name").dataset.name;
+            clubName = document.getElementById("name").dataset.name;
             let leader = document.getElementById("leader").dataset.name;
 
             const studentButtons = document.getElementById("studentButtons");
@@ -160,10 +162,38 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
+            // Confirm Leader Change
+            confirm.addEventListener("click", async () => {
+                let newLeader = tBox.value;
+                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: ""};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+                console.log(data.message);
+
+                if (data.status == "success") {
+                    console.log("Super Success!!!!!");
+                    document.getElementById("leader").value = data.leader;
+                    window.location.reload();
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });
+
+            // Cancel Leader Change
             cancel.addEventListener("click", () => {
                 const chgControls = document.getElementById("chgControls");
                 chgControls.hidden = true;
                 chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
             });
             
             input.appendChild(tBox);

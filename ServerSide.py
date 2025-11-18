@@ -420,7 +420,6 @@ def get_join_requests():
     return jsonify({"status": "success", "number": len(join_requests)})
 
 
-
 # Gets the number of Registered Guests of an Event
 @app.route("/get-registered-guests")
 def get_registered_guests():
@@ -440,7 +439,6 @@ def get_registered_guests():
         registered_guests = json.loads(event.iloc[0]["Registered Guests"])
     
     return jsonify({"status": "success", "max": max_guests,  "number": len(registered_guests)})
-
 
 
 @app.route("/get-join-request")
@@ -632,6 +630,29 @@ def add_event_to_club(club_event):
     df.at[idx, "Events"] = json.dumps(events_list)
     df.to_csv("ApprovedClubs.csv", index=False)
 
+
+@app.route("/manage-club", methods=["POST"])
+def manage_club():
+    if request.method == "POST":
+        update_data = request.get_json()
+        club_name = update_data["club"]
+        print(update_data)
+
+        if update_data["leader"] != "":
+            print(update_data["leader"])
+
+            df = pd.read_csv("User_Accounts.csv")
+
+            if update_data["leader"] not in df["Username"].values:
+                return jsonify({"status": "fail", "message": "Username does not exist."})
+            else:
+                df = pd.read_csv("ApprovedClubs.csv")
+                df.loc[df["Club Name"] == club_name, "Leader"] = update_data["leader"]
+                df.to_csv("ApprovedClubs.csv", index=False)
+                return jsonify({"status": "success", "leader": update_data["leader"]})
+
+
+        return jsonify({"status": "fail", "message": "No input given."})
 
 
 
