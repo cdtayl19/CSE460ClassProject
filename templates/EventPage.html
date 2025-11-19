@@ -156,7 +156,7 @@
             // Confirm Name Change
             confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: hostName, event: eventName, newName: newName, data: "", time: "", location: "", description: "", availability: ""};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
                 
                 let response = await fetch("/manage-event", {
                     method: "POST",
@@ -205,12 +205,12 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
-            // Confirm Name Change
-            /*confirm.addEventListener("click", async () => {
-                let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+            // Confirm Date Change
+            confirm.addEventListener("click", async () => {
+                let newDate = tBox.value;
+                let chgResponse = {club: hostName, event: eventName, newName: "", date: newDate, time: "", location: "", description: "", availability: ""};
                 
-                let response = await fetch("/manage-club", {
+                let response = await fetch("/manage-event", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -221,13 +221,13 @@
                 let data = await response.json();
 
                 if (data.status == "success") {
-                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                    window.location.reload();
                 } else {
                     document.getElementById("message").innerHTML = data.message;
                 }
-            });*/
+            });
 
-            // Cancel Leader Change
+            // Cancel Date Change
             cancel.addEventListener("click", () => {
                 const chgControls = document.getElementById("chgControls");
                 chgControls.hidden = true;
@@ -260,7 +260,7 @@
             // Confirm Name Change
             /*confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -312,7 +312,7 @@
             // Confirm Name Change
             /*confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -365,7 +365,7 @@
             // Confirm Name Change
             /*confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -417,7 +417,7 @@
             // Confirm Name Change
             /*confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",

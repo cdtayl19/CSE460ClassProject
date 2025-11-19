@@ -737,13 +737,13 @@ def manage_event():
                 df.loc[df["Event Name"] == event_name, "Event Name"] = update_data["newName"]
                 df.to_csv("Events.csv", index=False)
                 return jsonify({"status": "success", "name": update_data["newName"]})
-#            
-#        # Change club Topic
-#        if update_data["topic"] != "":
-#            df = pd.read_csv("ApprovedClubs.csv")
-#            df.loc[df["Club Name"] == club_name, "Topic"] = update_data["topic"]
-#            df.to_csv("ApprovedClubs.csv", index=False)
-#            return jsonify({"status": "success", "topic": update_data["topic"]})
+            
+        # Change event Date
+        if update_data["date"] != "":
+            df = pd.read_csv("Events.csv")
+            df.loc[df["Event Name"] == event_name, "Date"] = update_data["date"]
+            df.to_csv("Events.csv", index=False)
+            return jsonify({"status": "success", "date": update_data["date"]})
 #        
 #        # Change club Details
 #        if update_data["details"] != "":
