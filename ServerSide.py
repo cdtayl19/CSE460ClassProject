@@ -806,6 +806,35 @@ def get_leader():
 
 
 
+@app.route("/cancel-event", methods=["POST"])
+def cancel_event():
+    if request.method == "POST":
+        cancel_data = request.get_json()
+        print(cancel_data["event"])
+        print(cancel_data["host"])
+
+
+        # Remove Event from Host's Event List
+        df = pd.read_csv("ApprovedClubs.csv")
+
+        idx = df.index[df["Club Name"] == cancel_data["host"]][0]
+        current_events = df.at[idx, "Events"]
+        
+        current_events = json.loads(current_events)
+
+        current_events.remove(cancel_data["event"])
+        df.at[idx, "Events"] = json.dumps(current_events)
+        df.to_csv("ApprovedClubs.csv", index=False)
+
+        # Remove Event from Events.csv
+        df = pd.read_csv("Events.csv")
+
+        df = df[df["Event Name"] != cancel_data["event"]]
+        df.reset_index(drop=True, inplace=True)
+        df.to_csv("Events.csv", index=False)
+
+        return jsonify({"status": "success", "message": "Event canceled."})
+
 
 
 if __name__ == "__main__":

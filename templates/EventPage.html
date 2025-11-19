@@ -53,6 +53,12 @@
         </div><br>
     </div>
 
+    <div id="cnclCheck" hidden>
+        <span>Are you sure you want to cancel this event?</span>
+        <button id="cnclYes">Yes</button>
+        <button id="cnclNo">No</button>
+    </div>
+
     <script>
         let user = {};
         let eventName = document.getElementById("name").dataset.name;
@@ -119,7 +125,9 @@
         });
 
         document.getElementById("regBtn").addEventListener("click", async () => {                        
+            document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             const registerReq = {user, eventName}; 
 
@@ -145,6 +153,7 @@
         document.getElementById("chgName").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -198,6 +207,7 @@
         document.getElementById("chgDate").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -251,6 +261,7 @@
         document.getElementById("chgTime").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -304,6 +315,7 @@
         document.getElementById("chgLoc").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -357,6 +369,7 @@
         document.getElementById("chgDesc").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -411,6 +424,7 @@
         document.getElementById("gstList").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = true;
 
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
@@ -457,10 +471,27 @@
             document.getElementById("list").appendChild(cancel);
         });
         
-        // Needs Custom work ----------------------------------------------------------------------------------------------------------------------------------------------------
         document.getElementById("cnclEvent").addEventListener("click",  async () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("list").innerHTML = "";
+            document.getElementById("cnclCheck").hidden = false;
+            
+        });
+
+        document.getElementById("cnclYes").addEventListener("click",  async () => {
+            await fetch("/cancel-event", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json" 
+                },
+                body: JSON.stringify({"event": eventName, "host": hostName})
+            });
+
+            window.location.href = '/browse-events';
+        });
+
+        document.getElementById("cnclNo").addEventListener("click",  async () => {
+            document.getElementById("cnclCheck").hidden = true;
         });
         
 
