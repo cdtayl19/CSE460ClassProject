@@ -682,6 +682,26 @@ def manage_club():
                     df.at[idx, "Members"] = json.dumps(current_members)
                     df.to_csv("ApprovedClubs.csv", index=False)
                     return jsonify({"status": "success", "message": "Member removed."})
+        
+        # Cancel Event
+        if update_data["event"] != "":
+            df = pd.read_csv("ApprovedClubs.csv")
+
+            idx = df.index[df["Club Name"] == update_data["club"]][0]
+            current_events = df.at[idx, "Events"]
+            
+            if pd.isna(current_events):
+                return jsonify({"status": "fail", "message": "Club has no events to remove."})
+            else:
+                current_events = json.loads(current_events)
+
+                if update_data["event"] not in current_events:
+                    return jsonify({"status": "fail", "message": "Event not found."})
+                else:
+                    current_events.remove(update_data["event"])
+                    df.at[idx, "Events"] = json.dumps(current_events)
+                    df.to_csv("ApprovedClubs.csv", index=False)
+                    return jsonify({"status": "success", "message": "Event canceled."})
 
         return jsonify({"status": "fail", "message": "No input given."})
 
