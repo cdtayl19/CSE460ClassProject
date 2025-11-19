@@ -61,12 +61,12 @@
             window.location.href = '/student';
         });
 
-        document.addEventListener("input", e => {
+        document.getElementById("serchBar").addEventListener("input", () => {
             let clubNames = [];
             let results = [];
 
             data.clubs.forEach(club => {
-                clubNames.push(club["Club Name"])
+                clubNames.push(club["Club Name"]);
             });
 
             results = clubNames.filter(item => item.toLowerCase().includes(document.getElementById("serchBar").value));
