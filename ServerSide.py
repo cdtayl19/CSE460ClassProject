@@ -351,6 +351,7 @@ def viewRequests():
 def browseClubs():
     return render_template("ClubListings.html")
 
+
 @app.route("/browse-events")
 def browseEvents():
     return render_template("EventListings.html")
@@ -365,6 +366,7 @@ def getClubs():
     
     clubs = json.loads(df.to_json(orient="records"))
     return jsonify({"status": "success", "clubs": clubs})
+
 
 @app.route("/get-events")
 def getEvents():
@@ -385,6 +387,7 @@ def clubPage():
     club_info = club.iloc[0].to_dict()
 
     return render_template("ClubPage.html", club=club_info)
+
 
 @app.route("/event-page")
 def eventPage():
@@ -437,8 +440,8 @@ def get_registered_guests():
         registered_guests = []
     else:
         registered_guests = json.loads(event.iloc[0]["Registered Guests"])
-    
-    return jsonify({"status": "success", "max": max_guests,  "number": len(registered_guests)})
+        
+    return jsonify({"status": "success", "max": max_guests, "number": len(registered_guests), "list": registered_guests})
 
 
 @app.route("/get-join-request")
@@ -765,68 +768,27 @@ def manage_event():
             df.loc[df["Event Name"] == event_name, "Description"] = update_data["description"]
             df.to_csv("Events.csv", index=False)
             return jsonify({"status": "success", "description": update_data["description"]})
-#        
-#        # Change club Details
-#        if update_data["details"] != "":
-#            df = pd.read_csv("ApprovedClubs.csv")
-#            df.loc[df["Club Name"] == club_name, "Details"] = update_data["details"]
-#            df.to_csv("ApprovedClubs.csv", index=False)
-#            return jsonify({"status": "success", "details": update_data["details"]})
-#        
-#        # Remove Member
-#        if update_data["member"] != "":
-#            df = pd.read_csv("ApprovedClubs.csv")
-#
-#            idx = df.index[df["Club Name"] == update_data["club"]][0]
-#            current_members = df.at[idx, "Members"]
-#            
-#            if pd.isna(current_members):
-#                return jsonify({"status": "fail", "message": "Club has no members to remove."})
-#            else:
-#                current_members = json.loads(current_members)
-#
-#                if update_data["member"] not in current_members:
-#                    return jsonify({"status": "fail", "message": "Member not found in club."})
-#                else:
-#                    current_members.remove(update_data["member"])
-#                    df.at[idx, "Members"] = json.dumps(current_members)
-#                    df.to_csv("ApprovedClubs.csv", index=False)
-#                    return jsonify({"status": "success", "message": "Member removed."})
-#        
-#        # Cancel Event
-#        if update_data["event"] != "":
-#            df = pd.read_csv("ApprovedClubs.csv")
-#
-#            idx = df.index[df["Club Name"] == update_data["club"]][0]
-#            current_events = df.at[idx, "Events"]
-#            
-#            if pd.isna(current_events):
-#                return jsonify({"status": "fail", "message": "Club has no events to remove."})
-#            else:
-#                current_events = json.loads(current_events)
-#
-#                if update_data["event"] not in current_events:
-#                    return jsonify({"status": "fail", "message": "Event not found."})
-#                else:
-#                    current_events.remove(update_data["event"])
-#                    df.at[idx, "Events"] = json.dumps(current_events)
-#                    df.to_csv("ApprovedClubs.csv", index=False)
-#                    return jsonify({"status": "success", "message": "Event canceled."})
-#
-#        # Change club Name
-#        if update_data["name"] != "":
-#            df = pd.read_csv("ApprovedClubs.csv")
-#
-#            if update_data["name"] in df["Club Name"].values:
-#                return jsonify({"status": "fail", "message": "Club name already exists."})
-#            else:
-#                df.loc[df["Club Name"] == club_name, "Club Name"] = update_data["name"]
-#                df.to_csv("ApprovedClubs.csv", index=False)
-#                return jsonify({"status": "success", "name": update_data["name"]})
 
         return jsonify({"status": "fail", "message": "No input given."})
 
 
+@app.route("/remove-guest", methods=["POST"])
+def remove_guest():
+    if request.method == "POST":
+        remove_data = request.get_json()
+        print(remove_data["event"])
+        print(remove_data["guest"])
+
+        df = pd.read_csv("Events.csv")
+
+        idx = df.index[df["Event Name"] == remove_data["event"]][0]
+        current_guests = df.at[idx, "Registered Guests"]
+        current_guests = json.loads(current_guests)
+        
+        current_guests.remove(remove_data["guest"])
+        df.at[idx, "Registered Guests"] = json.dumps(current_guests)
+        df.to_csv("Events.csv", index=False)
+        return jsonify({"status": "success", "message": "Guest removed."})
 
 
 

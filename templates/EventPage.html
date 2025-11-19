@@ -38,17 +38,18 @@
         
         <div id="leaderButtons" hidden>
             <div id="dashboard">
-                <button id="chgName"    >Change Name</button>
-                <button id="chgDate"    >Change Date</button>
-                <button id="chgTime"    >Change Time</button>
-                <button id="chgLoc"     >Change Location</button>
-                <button id="chgDesc"    >Change Description</button>
-                <button id="chgAvail"   >Change Availability</button>
-                <button id="cnclEvent"  >Cancel Event</button>
+                <button id="chgName">Change Name</button>
+                <button id="chgDate">Change Date</button>
+                <button id="chgTime">Change Time</button>
+                <button id="chgLoc">Change Location</button>
+                <button id="chgDesc">Change Description</button>
+                <button id="gstList">Show Guest List</button>
+                <button id="cnclEvent">Cancel Event</button>
             </div>
 
             <div id="chgControls" hidden></div>
             <div id="message"></div>
+            <br><div id="list"></div>
         </div><br>
     </div>
 
@@ -57,6 +58,7 @@
         let eventName = document.getElementById("name").dataset.name;
         let hostName = document.getElementById("host").dataset.name;
         let clubLeader = "";
+        let guestList = [];
 
         async function findHostLeader() {   
             let ldrResponse = {club: hostName};
@@ -84,6 +86,7 @@
             
             let maxNum = data.max
             let guestNum = data.number;
+            guestList = data.list;
 
             if (maxNum - guestNum <= 0) {
                 document.getElementById("register").style.display = "none";
@@ -116,6 +119,8 @@
         });
 
         document.getElementById("regBtn").addEventListener("click", async () => {                        
+            document.getElementById("list").innerHTML = "";
+            
             const registerReq = {user, eventName}; 
 
             await fetch("/register-guest", {
@@ -139,6 +144,7 @@
     
         document.getElementById("chgName").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -191,6 +197,7 @@
 
         document.getElementById("chgDate").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -243,6 +250,7 @@
         
         document.getElementById("chgTime").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -295,6 +303,7 @@
         
         document.getElementById("chgLoc").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -345,8 +354,9 @@
             input.appendChild(cancel);
         });
         
-        document.getElementById("chgDesc").addEventListener("click",    async () => {
+        document.getElementById("chgDesc").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -398,60 +408,60 @@
             input.appendChild(cancel);
         });
         
-        document.getElementById("chgAvail").addEventListener("click",   async () => {
+        document.getElementById("gstList").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
-            
-            document.getElementById("chgControls").hidden = false;
-            const input = document.getElementById("chgControls");
-            
-            const tBox = document.createElement("input");
-            tBox.type = "text";
-            tBox.placeholder = "New Event Availability";
-
-            const confirm = document.createElement("button");
-            confirm.innerText = "Confirm";
+            document.getElementById("list").innerHTML = "";
 
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
-            // Confirm Name Change
-            /*confirm.addEventListener("click", async () => {
-                let newName = tBox.value;
-                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
-                
-                let response = await fetch("/manage-club", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(chgResponse)
-                });
-
-                let data = await response.json();
-
-                if (data.status == "success") {
-                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
-                } else {
-                    document.getElementById("message").innerHTML = data.message;
-                }
-            });*/
-
-            // Cancel Leader Change
             cancel.addEventListener("click", () => {
-                const chgControls = document.getElementById("chgControls");
-                chgControls.hidden = true;
-                chgControls.innerHTML = "";
-
-                document.getElementById("message").innerHTML = "";
+                document.getElementById("list").innerHTML = "";
+                document.getElementById("message").innerText = "";
             });
-            
-            input.appendChild(tBox);
-            input.appendChild(confirm);
-            input.appendChild(cancel);
+
+            console.log(guestList.length);
+            if (guestList.length == 0) {
+                document.getElementById("message").innerText = "No registered guests."
+            }
+
+            guestList.forEach(guest => {
+                const li = document.createElement("li");
+                
+                const rmvButton = document.createElement("button");
+                rmvButton.innerText = "Remove";
+                rmvButton.style.marginRight = "5px";
+
+                const gstSpan = document.createElement("span");
+                gstSpan.innerText = guest;
+
+                rmvButton.addEventListener("click", async () => {
+                    await fetch("/remove-guest", {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json" 
+                        },
+                        body: JSON.stringify({"event": eventName, "guest": guest})
+                    });
+                    
+                    li.remove();
+                    updateAvailability();
+                });
+                
+                li.appendChild(rmvButton);
+                li.appendChild(gstSpan);
+                document.getElementById("list").appendChild(li);
+            });
+
+            document.getElementById("list").appendChild(document.createElement("br"));
+            document.getElementById("list").appendChild(cancel);
         });
         
         // Needs Custom work ----------------------------------------------------------------------------------------------------------------------------------------------------
-        document.getElementById("cnclEvent").addEventListener("click",  async () => {});
+        document.getElementById("cnclEvent").addEventListener("click",  async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("list").innerHTML = "";
+        });
         
 
     </script>
