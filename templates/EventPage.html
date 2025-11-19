@@ -189,7 +189,7 @@
             input.appendChild(cancel);
         });
 
-        document.getElementById("chgDate").addEventListener("click",    async () => {
+        document.getElementById("chgDate").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
@@ -241,7 +241,7 @@
             input.appendChild(cancel);
         });
         
-        document.getElementById("chgTime").addEventListener("click",    async () => {
+        document.getElementById("chgTime").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
@@ -293,7 +293,7 @@
             input.appendChild(cancel);
         });
         
-        document.getElementById("chgLoc").addEventListener("click",     async () => {
+        document.getElementById("chgLoc").addEventListener("click", async () => {
             document.getElementById("chgControls").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
@@ -309,12 +309,12 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
-            // Confirm Name Change
-            /*confirm.addEventListener("click", async () => {
-                let newName = tBox.value;
-                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
+            // Confirm Location Change
+            confirm.addEventListener("click", async () => {
+                let newLocation = tBox.value;
+                let chgResponse = {club: hostName, event: eventName, newName: "", date: "", time: "", location: newLocation, description: "", availability: ""};
                 
-                let response = await fetch("/manage-club", {
+                let response = await fetch("/manage-event", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -325,11 +325,11 @@
                 let data = await response.json();
 
                 if (data.status == "success") {
-                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                    window.location.reload();
                 } else {
                     document.getElementById("message").innerHTML = data.message;
                 }
-            });*/
+            });
 
             // Cancel Leader Change
             cancel.addEventListener("click", () => {
