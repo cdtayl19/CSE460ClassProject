@@ -108,9 +108,6 @@
             
             await findHostLeader();
 
-            console.log("User: " + user.Username);
-            console.log("Leader: " + clubLeader);
-
             if (user.Username === clubLeader) {
                 leaderButtons.hidden = false;
             } 
@@ -157,11 +154,11 @@
             cancel.innerText = "Cancel";
 
             // Confirm Name Change
-            /*confirm.addEventListener("click", async () => {
+            confirm.addEventListener("click", async () => {
                 let newName = tBox.value;
-                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                let chgResponse = {club: hostName, event: eventName, newName: newName, data: "", time: "", location: "", description: "", availability: ""};
                 
-                let response = await fetch("/manage-club", {
+                let response = await fetch("/manage-event", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -172,11 +169,11 @@
                 let data = await response.json();
 
                 if (data.status == "success") {
-                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                    window.location.href = `/event-page?name=${encodeURIComponent(data.name)}`;
                 } else {
                     document.getElementById("message").innerHTML = data.message;
                 }
-            });*/
+            });
 
             // Cancel Leader Change
             cancel.addEventListener("click", () => {
