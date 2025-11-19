@@ -37,17 +37,19 @@
         </div><br>
         
         <div id="leaderButtons" hidden>
-            <button>Change Name</button>
-            <button>Change Date</button>
-            <button>Change Time</button>
-            <button>Change Location</button>
-            <button>Change Description</button>
-            <button>Change Availability</button>
-            <button>Cancel Event</button>
-        </div><br>
+            <div id="dashboard">
+                <button id="chgName"    >Change Name</button>
+                <button id="chgDate"    >Change Date</button>
+                <button id="chgTime"    >Change Time</button>
+                <button id="chgLoc"     >Change Location</button>
+                <button id="chgDesc"    >Change Description</button>
+                <button id="chgAvail"   >Change Availability</button>
+                <button id="cnclEvent"  >Cancel Event</button>
+            </div>
 
-        
-        
+            <div id="chgControls" hidden></div>
+            <div id="message"></div>
+        </div><br>
     </div>
 
     <script>
@@ -137,6 +139,324 @@
         document.getElementById("backBtn").addEventListener("click", () => {
             window.location.href = '/browse-events';
         });
+    
+        document.getElementById("chgName").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Event Name";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+
+        document.getElementById("chgDate").addEventListener("click",    async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Event Date";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+        
+        document.getElementById("chgTime").addEventListener("click",    async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Event Time";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+        
+        document.getElementById("chgLoc").addEventListener("click",     async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Event Location";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+        
+        document.getElementById("chgDesc").addEventListener("click",    async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("textarea");
+            tBox.rows = 4;
+            tBox.cols = 50;
+            tBox.placeholder = "New Event Description";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+        
+        document.getElementById("chgAvail").addEventListener("click",   async () => {
+            document.getElementById("chgControls").innerHTML = "";
+            
+            document.getElementById("chgControls").hidden = false;
+            const input = document.getElementById("chgControls");
+            
+            const tBox = document.createElement("input");
+            tBox.type = "text";
+            tBox.placeholder = "New Event Availability";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            // Confirm Name Change
+            /*confirm.addEventListener("click", async () => {
+                let newName = tBox.value;
+                let chgResponse = {club: clubName, leader: "", topic: "", details: "", member: "", event: "", name: newName};
+                
+                let response = await fetch("/manage-club", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(chgResponse)
+                });
+
+                let data = await response.json();
+
+                if (data.status == "success") {
+                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                } else {
+                    document.getElementById("message").innerHTML = data.message;
+                }
+            });*/
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                const chgControls = document.getElementById("chgControls");
+                chgControls.hidden = true;
+                chgControls.innerHTML = "";
+
+                document.getElementById("message").innerHTML = "";
+            });
+            
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+        
+        // Needs Custom work ----------------------------------------------------------------------------------------------------------------------------------------------------
+        document.getElementById("cnclEvent").addEventListener("click",  async () => {});
+        
+
     </script>
 </body>
 </html>
