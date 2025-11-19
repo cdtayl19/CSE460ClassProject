@@ -703,6 +703,17 @@ def manage_club():
                     df.to_csv("ApprovedClubs.csv", index=False)
                     return jsonify({"status": "success", "message": "Event canceled."})
 
+        # Change club Name
+        if update_data["name"] != "":
+            df = pd.read_csv("ApprovedClubs.csv")
+
+            if update_data["name"] in df["Club Name"].values:
+                return jsonify({"status": "fail", "message": "Club name already exists."})
+            else:
+                df.loc[df["Club Name"] == club_name, "Club Name"] = update_data["name"]
+                df.to_csv("ApprovedClubs.csv", index=False)
+                return jsonify({"status": "success", "name": update_data["name"]})
+
         return jsonify({"status": "fail", "message": "No input given."})
 
 
