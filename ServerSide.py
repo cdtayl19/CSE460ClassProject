@@ -717,6 +717,21 @@ def manage_club():
         return jsonify({"status": "fail", "message": "No input given."})
 
 
+@app.route("/get-club-leader")
+def get_leader():
+    club_name = request.args.get("club")
+    #print(club_name)
+
+    df = pd.read_csv("ApprovedClubs.csv")
+    
+    leader = df.loc[df["Club Name"] == club_name, "Leader"].iloc[0]
+    print(f"The leader is: {leader}")
+
+    return jsonify({"status": "success", "leader": leader})
+
+
+
+
 
 if __name__ == "__main__":
     app.run(port=8080)

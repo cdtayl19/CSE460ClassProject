@@ -30,21 +30,45 @@
             <span  id="availability"> 0 / {{ event["Max Guests"] }} students have registered.</span><br><br>
         </div>
 
-        <div id="register">
-            <button >Register for Event!</button><br>
-        </div>
+        <div>
+            <button id="regBtn">Register for Event!</button>
+            <span id="regMessage" hidden>You have registered for Infinity War!</span>
+            <button id="backBtn">Back</button>
+        </div><br>
         
-        <div id="leaderButtons">
-            <!-- NEED TO ADD EDIT BUTTONS for LEADER -->
+        <div id="leaderButtons" hidden>
+            <button>Change Name</button>
+            <button>Change Date</button>
+            <button>Change Time</button>
+            <button>Change Location</button>
+            <button>Change Description</button>
+            <button>Change Availability</button>
+            <button>Cancel Event</button>
         </div><br>
 
-        <button id="backBtn">Back</button>
+        
         
     </div>
 
     <script>
         let user = {};
         let eventName = document.getElementById("name").dataset.name;
+        let hostName = document.getElementById("host").dataset.name;
+        let clubLeader = "";
+
+        async function findHostLeader() {   
+            let ldrResponse = {club: hostName};
+            
+            let response = await fetch(`/get-club-leader?club=${hostName}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+            
+            let data = await response.json();
+            clubLeader = data.leader;
+        }
 
         async function updateAvailability() {   
             let response = await fetch(`/get-registered-guests?event=${eventName}`, {
@@ -78,18 +102,21 @@
             });
         
             let data = await response.json();
-            user = data.user;
-
-            //const leaderButtons = document.getElementById("leaderButtons");
-
-            //if (user.Username === leader) {
-            //    leaderButtons.style.display = "block";
-            //}            
+            user = data.user;            
             
+            await findHostLeader();
+
+            console.log("User: " + user.Username);
+            console.log("Leader: " + clubLeader);
+
+            if (user.Username === clubLeader) {
+                leaderButtons.hidden = false;
+            } 
+
             updateAvailability();
         });
 
-        document.getElementById("register").addEventListener("click", async () => {                        
+        document.getElementById("regBtn").addEventListener("click", async () => {                        
             const registerReq = {user, eventName}; 
 
             await fetch("/register-guest", {
@@ -100,7 +127,9 @@
                 body: JSON.stringify(registerReq)
             })
             
-            document.getElementById("register").innerHTML = "You have registered for " + eventName + "!";
+            //document.getElementById("register").innerHTML = "You have registered for " + eventName + "!";
+            document.getElementById("regBtn").hidden = true;
+            document.getElementById("regMessage").hidden = false;
             
             updateAvailability();
         });
