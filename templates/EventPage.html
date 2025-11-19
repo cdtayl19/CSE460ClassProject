@@ -257,12 +257,12 @@
             const cancel = document.createElement("button");
             cancel.innerText = "Cancel";
 
-            // Confirm Name Change
-            /*confirm.addEventListener("click", async () => {
-                let newName = tBox.value;
-                let chgResponse = {club: hostName, event: eventName, newName: newName, date: "", time: "", location: "", description: "", availability: ""};
+            // Confirm Time Change
+            confirm.addEventListener("click", async () => {
+                let newTime = tBox.value;
+                let chgResponse = {club: hostName, event: eventName, newName: "", date: "", time: newTime, location: "", description: "", availability: ""};
                 
-                let response = await fetch("/manage-club", {
+                let response = await fetch("/manage-event", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -273,11 +273,11 @@
                 let data = await response.json();
 
                 if (data.status == "success") {
-                    window.location.href = `/club-page?name=${encodeURIComponent(data.name)}`;
+                    window.location.reload();
                 } else {
                     document.getElementById("message").innerHTML = data.message;
                 }
-            });*/
+            });
 
             // Cancel Leader Change
             cancel.addEventListener("click", () => {
