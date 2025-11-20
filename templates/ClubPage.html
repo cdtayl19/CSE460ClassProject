@@ -121,6 +121,29 @@
             data = await response.json();
             requestNum = data.number;
             document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+
+
+            // Get and display flags
+            response = await fetch("/grab-flags", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(clubName)
+            })
+
+            data = await response.json();
+            console.log(data.flags);
+
+            let flagDisplay = document.getElementById("flagDisplay");
+            data.flags.forEach(flag => {
+                const li = document.createElement("li");
+                li.innerText = flag.Message;
+                li.style.color = "#D61F22";
+                document.getElementById("flagDisplay").appendChild(li);
+            });
+
+
         });
 
         document.getElementById("join").addEventListener("click", async () => {

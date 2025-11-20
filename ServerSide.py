@@ -942,7 +942,7 @@ def send_report():
 
 
 
-@app.route("/flag-content", methods=["GET", "POST"])
+@app.route("/flag-content", methods=["POST"])
 def flag_content():
     if request.method == "POST":
         flag_data = request.get_json()
@@ -952,6 +952,30 @@ def flag_content():
         write_flags(new_flag)
 
         return jsonify({"status": "success", "message": flag_data["message"]})
+    
+
+
+@app.route("/grab-flags", methods=["POST"])
+def grab_flags():
+    if request.method == "POST":
+        flag_data = request.get_json()
+        print(flag_data)
+
+        df = pd.read_csv("Flags.csv")
+        flags = df[df["Content Name"] == flag_data]
+        flags = flags.to_dict(orient="records")
+        
+        print(flags)
+        return jsonify({"status": "success", "flags": flags})
+    
+#    # Remove message
+#        df = pd.read_csv("Reports.csv")
+#        report = df[df["Student"] == data["Student"]]
+#        report = report[report["Content Name"] == data["Name"]]
+#        report = report[report["Section"] == data["Section"]]
+#        report = report[report["Details"] == data["Details"]]
+#        df = df.drop(report.index)
+#        df.to_csv("Reports.csv", index=False)
 
 
 
