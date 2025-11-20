@@ -58,6 +58,12 @@ def write_reports(message):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
+def write_flags(message):
+    with open("Flags.csv", 'a', newline='') as new_file:
+        fieldnames = ['Content Type', 'Content Name', 'Message']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(message)
+
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
@@ -936,22 +942,17 @@ def send_report():
 
 
 
-@app.route("/go-to-content", methods=["POST"])
+@app.route("/flag-content", methods=["GET", "POST"])
 def flag_content():
     if request.method == "POST":
         flag_data = request.get_json()
         print(flag_data)
 
-        if flag_data["Type"] == "Club":
-            df = pd.read_csv("ApprovedClubs.csv")
-            club = df[df["Club Name"] == flag_data["Name"]]
-            club_info = club.iloc[0].to_dict()
-            return render_template("ClubPage.html", club=club_info)
-        else:
-            df = pd.read_csv("Events.csv")
-            event = df[df["Event Name"] == flag_data["Name"]]
-            event_info = event.iloc[0].to_dict()
-            return render_template("EventPage.html", event=event_info)
+        new_flag = {"Content Type": flag_data["type"], "Content Name": flag_data["name"], "Message": flag_data["message"]}
+        write_flags(new_flag)
+
+        return jsonify({"status": "success", "message": flag_data["message"]})
+
 
 
 

@@ -533,7 +533,7 @@
             // Confirm Flag Message
             confirm.addEventListener("click", async () => {
                 let actMessage = tBox.value;
-                let flgResponse = {type: "Club", club: clubName, message: actMessage};
+                let flgResponse = {type: "Club", name: clubName, message: actMessage};
                 let data = {};
 
                 if (flgResponse["message"] == "") {
@@ -553,8 +553,6 @@
                 
                 if (data.status == "success") {
                     window.location.reload();
-                } else {
-                    document.getElementById("message2").innerHTML = data.message;
                 }
             });
 
