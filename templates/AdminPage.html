@@ -17,7 +17,10 @@
 			<button id="reportsBtn">View</button>
 		</div><br>
 
-        <button id="clubBrowseBtn">Browse Clubs</button><br><br>
+        <div id="browse-buttons">
+            <button id="clubBrowseBtn">Browse Clubs</button>
+            <button id="eventBrowseBtn">Browse Events</button>
+        </div><br>
 		
 		<button id="logoutBtn">Logout</button>
 	</div>
@@ -86,6 +89,10 @@
 
         document.getElementById("clubBrowseBtn").addEventListener("click", () => {
             window.location.href = '/browse-clubs';
+        });
+
+        document.getElementById("eventBrowseBtn").addEventListener("click", () => {
+            window.location.href = '/browse-events';
         });
 
     </script>
