@@ -54,7 +54,7 @@ def write_events(message):
 
 def write_reports(message):
     with open("Reports.csv", 'a', newline='') as new_file:
-        fieldnames = ['Student', 'Content Name', 'Section', 'Details']
+        fieldnames = ['Student', 'Content Type', 'Content Name', 'Section', 'Details']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
@@ -870,6 +870,7 @@ def send_report():
 
         club_event_name = ""
         club_event_section = ""
+        content_type = ""
 
         # Empty value checks
         if report_data["name"] == "":
@@ -884,12 +885,14 @@ def send_report():
 
         if report_data["name"] in df["Club Name"].values:
             in_clubs = True
+            content_type = "Club"
             club_event_name = report_data["name"]
         else:
             df = pd.read_csv("Events.csv")
             
             if report_data["name"] in df["Event Name"].values:
                 in_events = True
+                content_type = "Event"
                 club_event_name = report_data["name"]
             else:
                 return jsonify({"status": "fail", "message": "Could not find any Club or Event by that name."})
@@ -911,7 +914,7 @@ def send_report():
             else:
                 return jsonify({"status": "fail", "message": "Section not found in Events."})
             
-        report = {"Student": report_data["currentUser"], "Content Name": club_event_name, "Section": club_event_section, "Details": report_data["details"]}
+        report = {"Student": report_data["currentUser"], "Content Type": content_type, "Content Name": club_event_name, "Section": club_event_section, "Details": report_data["details"]}
         write_reports(report)
             
         
