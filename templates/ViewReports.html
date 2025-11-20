@@ -12,7 +12,7 @@
             <p id="section"></p>
             <p id="details"></p>
             <label></label><br>
-            <textarea id="description" rows="4" cols="50"></textarea><br><br>
+            <p id="description"></p><br><br>
         </div>
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
@@ -22,6 +22,19 @@
     <script>
         reports = [];
         i = 0;
+
+        function display() {
+            if (reports.length == 0) {
+                document.getElementById("description").innerText = "No new reports."
+            } else {
+                document.getElementById("description").innerText = 
+                `Student: ${reports[i]["Student"]} \n
+                Type: ${reports[i]["Content Type"]} \n
+                Name: ${reports[i]["Content Name"]} \n
+                Section: ${reports[i]["Section"]} \n
+                Details: ${reports[i]["Details"]}`
+            }
+        }
 
         window.addEventListener("DOMContentLoaded", async () => {
             let response = await fetch("/get-reports", {
@@ -33,22 +46,29 @@
 
             let data = await response.json();
             reports = data.reports;
-            //console.log(reports);
-            //console.log(reports[0]["Content Name"]);
+            console.log(reports);
+            console.log(reports[0]["Content Name"]);
             console.log(reports.length);
 
-            if (reports.length == 0) {
-                document.getElementById("description").innerText = "No new reports."
-            } else {
-                document.getElementById("description").innerText = 
-                `${reports[i]["Student"]} reports that the ${reports[i]["Section"]} section of ${reports[i]["Content Name"]}: ${reports[i]["Details"]}`
-            }
+            display();
+            
         });
 
         document.getElementById("goBackBtn").addEventListener("click", () => {
-          window.location.href = '/admin';
+            window.location.href = '/admin';
         });
 
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            i++;
+            if (i >= reports.length) i = 0;
+            display();
+        });
+
+        document.getElementById("prevBtn").addEventListener("click", () => {
+            i--;
+            if (i < 0) i = reports.length - 1;
+            display();
+        });            
 
         /*document.getElementById("deleteBtn").addEventListener("click", async () => {                        
             await fetch("/delete-report", {
