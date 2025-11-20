@@ -88,12 +88,18 @@ def get_club_requests():
     return jsonify({"status": "success", "number": len(df)})
 
 
+@app.route("/get-reports")
+def get_reports():
+    df = pd.read_csv("Reports.csv")
+    return jsonify({"status": "success", "number": len(df)})
+
+
 # Gets the number of messages in Messages.csv
 @app.route("/get-messages")
 def get_messages():
     df = pd.read_csv("Messages.csv")
-    user_messages = df[df["To"] == session["current_user"]["Username"]]
-    return jsonify({"status": "success", "number": len(user_messages)})
+    reports = df[df["To"] == session["current_user"]["Username"]]
+    return jsonify({"status": "success", "number": len(reports)})
     
 
 # Login Page
@@ -342,6 +348,11 @@ def requestNewClub():
 @app.route("/view-club-requests")
 def viewClubRequests():
     return render_template("ViewclubRequests.html")
+
+
+@app.route("/view-reports")
+def view_Reports():
+    return render_template("ViewReports.html")
 
 
 @app.route("/view-messages")

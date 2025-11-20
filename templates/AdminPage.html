@@ -6,9 +6,15 @@
 <body>
 	<div class="starter-container">
 		<h2 id="greeting">Admin Page</h2>
-		<div>
+		
+        <div id="clubRequests">
 			<label id="requests">You have {} new requests. </label>
 			<button id="requetsBtn">View</button>
+		</div><br>
+
+        <div id="reports">
+			<label id="numReports">You have {} new reports. </label>
+			<button id="reportsBtn">View</button>
 		</div><br>
 
         <button id="clubBrowseBtn">Browse Clubs</button><br><br>
@@ -21,7 +27,8 @@
 		let requests = 0;
 
 		window.addEventListener("DOMContentLoaded", async () => {
-			let response = await fetch("/current-user", {
+			// Get current User
+            let response = await fetch("/current-user", {
                 method: "GET",
 				headers: {
                     "Content-Type": "application/json"
@@ -32,6 +39,7 @@
             user = data.user;
             document.getElementById("greeting").innerHTML = "Welcome " + user.Firstname;
             
+            // Get number of new club requests
             response = await fetch("/club-requests", {
                 method: "GET",
                 headers: {
@@ -41,7 +49,27 @@
             
             data = await response.json();
             requestNum = data.number;
-            document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+            if (requestNum == 1) {
+                document.getElementById("requests").innerHTML = "You have " + requestNum + " new request.";
+            } else {
+                document.getElementById("requests").innerHTML = "You have " + requestNum + " new requests.";
+            }
+            
+            // Get number of new reports
+            response = await fetch("/get-reports", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            data = await response.json();
+            reportsNum = data.number;
+            if (reportsNum == 1) {
+                document.getElementById("numReports").innerHTML = "You have " + reportsNum + " new report.";
+            } else {
+                document.getElementById("numReports").innerHTML = "You have " + reportsNum + " new reports.";
+            }
         });
         
         document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -52,9 +80,14 @@
             window.location.href = '/view-club-requests';
         });
 
+        document.getElementById("reportsBtn").addEventListener("click", () => {
+            window.location.href = '/view-reports';
+        });
+
         document.getElementById("clubBrowseBtn").addEventListener("click", () => {
             window.location.href = '/browse-clubs';
         });
+
     </script>
 </body>
 </html>
