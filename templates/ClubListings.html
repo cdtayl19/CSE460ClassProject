@@ -57,8 +57,23 @@
             }
         });
 
-        document.getElementById("backBtn").addEventListener("click", () => {
-            window.location.href = '/student';
+        document.getElementById("backBtn").addEventListener("click", async () => {
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+
+            if (data.user["Role"] == "student") {
+                window.location.href = '/student';
+            }
+
+            if (data.user["Role"] == "admin") {
+                window.location.href = '/admin';
+            }
         });
 
         document.getElementById("serchBar").addEventListener("input", () => {
