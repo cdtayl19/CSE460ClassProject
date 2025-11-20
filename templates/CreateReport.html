@@ -17,3 +17,58 @@
     <div>
         <p id="message"></p>
     </div>
+
+    <script>
+        let user = {};
+        
+        window.addEventListener("DOMContentLoaded", async () => {
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+            user = data.user;
+        });
+
+        document.getElementById("send").addEventListener("click", async () => {
+            document.getElementById("message").innerText = "";
+
+            const currentUser = user.Username;
+            const name =    document.getElementById("name").value;
+            const section = document.getElementById("section").value;
+            const details = document.getElementById("details").value;
+        
+            const newReport = {currentUser, name, section, details};
+
+            let response = await fetch("/send-report", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newReport)
+            });
+
+            let data = await response.json();
+
+            if (data.status == "fail") {
+                document.getElementById("message").innerText = data.message;
+            } else {
+                document.getElementById("message").innerText = data.message;
+
+                document.getElementById("name").value = "";
+                document.getElementById("section").value = "";
+                document.getElementById("details").value = "";
+            }
+
+        });
+
+        document.getElementById("cancel").addEventListener("click", () => {
+            window.location.href = '/student';
+        });
+    </script>
+
+</body>
+</html>

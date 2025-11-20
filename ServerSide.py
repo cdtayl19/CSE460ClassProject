@@ -52,6 +52,12 @@ def write_events(message):
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
+def write_reports(message):
+    with open("Reports.csv", 'a', newline='') as new_file:
+        fieldnames = ['Student', 'Content Name', 'Section', 'Details']
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writerow(message)
+
 # Server Stuff
 app = Flask(__name__)
 app.secret_key = "32895"
@@ -841,6 +847,63 @@ def cancel_event():
 def create_report():
     return render_template("CreateReport.html")
 
+
+@app.route("/send-report", methods=["POST"])
+def send_report():
+    if request.method == "POST":
+        report_data = request.get_json()  
+
+        in_clubs = False
+        in_events = False
+
+        club_event_name = ""
+        club_event_section = ""
+
+        # Empty value checks
+        if report_data["name"] == "":
+            return jsonify({"status": "fail", "message": "Must enter name of Club or Event."})
+        if report_data["section"] == "":
+            return jsonify({"status": "fail", "message": "Must enter section of Club or Event containing offensive material."})
+        if report_data["details"] == "":
+            return jsonify({"status": "fail", "message": "Must provide details of the offensive content."})
+        
+        # Valid club/event name check
+        df = pd.read_csv("ApprovedClubs.csv")
+
+        if report_data["name"] in df["Club Name"].values:
+            in_clubs = True
+            club_event_name = report_data["name"]
+        else:
+            df = pd.read_csv("Events.csv")
+            
+            if report_data["name"] in df["Event Name"].values:
+                in_events = True
+                club_event_name = report_data["name"]
+            else:
+                return jsonify({"status": "fail", "message": "Could not find any Club or Event by that name."})
+        
+        # Valid section check
+        if in_clubs:
+            df = pd.read_csv("ApprovedClubs.csv")
+
+            if report_data["section"] in df.columns:
+                club_event_section = report_data["section"]
+            else:
+                return jsonify({"status": "fail", "message": "Section not found in Clubs."})
+            
+        if in_events:
+            df = pd.read_csv("Events.csv")
+
+            if report_data["section"] in df.columns:
+                club_event_section = report_data["section"]
+            else:
+                return jsonify({"status": "fail", "message": "Section not found in Events."})
+            
+        report = {"Student": report_data["currentUser"], "Content Name": club_event_name, "Section": club_event_section, "Details": report_data["details"]}
+        write_reports(report)
+            
+        
+        return jsonify({"status": "success", "message": "Your report has been sent."})
 
 
 if __name__ == "__main__":
