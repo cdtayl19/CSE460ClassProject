@@ -27,7 +27,9 @@
 
             <strong>Events: </strong>
             <span>{{ club["Events"] }}</span><br><br>
-        </div>       
+        </div>
+        
+        <div id="flagDisplay"></div>
 
         <div id="studentButtons" hidden>
             <button id="join">Request to Join!</button>
@@ -46,18 +48,28 @@
                 <button id="leaderBackBtn">Back</button>
             </div><br><br>
 
-            <div id="dashboard">
-                <button id="chgName">Change Name</button>
-                <button id="chgLeader">Change Leader</button>
-                <button id="chgTopic">Change Topic</button>
-                <button id="chgDetails">Change Details</button>
-                <button id="rmvMembers">Remove Members</button>
-                <button id="rmvEvents">Cancel Events</button>
-            </div>
-
-            <div id="chgControls" hidden></div>
-            <div id="message"></div>
+            
         </div><br>
+
+        <div id="dashboard" hidden>
+            <button id="chgName">Change Name</button>
+            <button id="chgLeader">Change Leader</button>
+            <button id="chgTopic">Change Topic</button>
+            <button id="chgDetails">Change Details</button>
+            <button id="rmvMembers">Remove Members</button>
+            <button id="rmvEvents">Cancel Events</button>
+        </div>
+
+        <div id="chgControls" hidden></div>
+        <div id="message"></div>
+        
+        <br>
+        <div id="adminDash" hidden>
+            <button id="flagBtn">Flag Content</button>
+            <div id="adminMessage" hidden></div>
+        </div>
+
+        <div id="message2"></div>
     </div>
 
     <script>
@@ -75,18 +87,28 @@
         
             let data = await response.json();
             user = data.user;
+            console.log(user.Role);
             
             clubName = document.getElementById("name").dataset.name;
             let leader = document.getElementById("leader").dataset.name;
 
             const studentButtons = document.getElementById("studentButtons");
             const leaderButtons = document.getElementById("leaderButtons");
+            const dashboard = document.getElementById("dashboard");
+            const admin = document.getElementById("adminDash");
 
             if (user.Username === leader) {
                 leaderButtons.hidden = false;
+                dashboard.hidden = false;
             } else {
                 studentButtons.hidden = false;
             }
+
+            if (user.Role === "admin") {
+                studentButtons.hidden = true;
+                dashboard.hidden = false;
+                admin.hidden = false;
+            } 
 
             // Get the number of join requests
             response = await fetch(`/get-join-requests?club=${clubName}`, {
@@ -153,6 +175,10 @@
         document.getElementById("chgName").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
             
+            document.getElementById("adminMessage").hidden = true;
+            document.getElementById("adminMessage").innerHTML = "";
+            document.getElementById("message2").innerHTML = "";
+            
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -204,6 +230,10 @@
 
         document.getElementById("chgLeader").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
+
+            document.getElementById("adminMessage").hidden = true;
+            document.getElementById("adminMessage").innerHTML = "";
+            document.getElementById("message2").innerHTML = "";
             
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -257,6 +287,10 @@
         document.getElementById("chgTopic").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
 
+            document.getElementById("adminMessage").hidden = true;                    
+            document.getElementById("adminMessage").innerHTML = "";   
+            document.getElementById("message2").innerHTML = "";             
+
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -273,7 +307,7 @@
             // Confirm Topic Change
             confirm.addEventListener("click", async () => {
                 let newTopic = tBox.value;
-                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: "", member: "", event: "", name: ""};
+                let chgResponse = {club: clubName, leader: "", topic: newTopic, details: "", member: "", event: "", name: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -309,6 +343,10 @@
         document.getElementById("chgDetails").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
 
+            document.getElementById("adminMessage").hidden = true;            
+            document.getElementById("adminMessage").innerHTML = "";   
+            document.getElementById("message2").innerHTML = "";             
+
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -326,7 +364,7 @@
             // Confirm Details Change
             confirm.addEventListener("click", async () => {
                 let newDetails = tBox.value;
-                let chgResponse = {club: clubName, leader: newLeader, topic: "", details: "", member: "", event: "", name: ""};
+                let chgResponse = {club: clubName, leader: "", topic: "", details: newDetails, member: "", event: "", name: ""};
                 
                 let response = await fetch("/manage-club", {
                     method: "POST",
@@ -361,6 +399,10 @@
 
         document.getElementById("rmvMembers").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
+
+            document.getElementById("adminMessage").hidden = true;
+            document.getElementById("adminMessage").innerHTML = "";
+            document.getElementById("message2").innerHTML = "";
 
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
@@ -414,6 +456,10 @@
         document.getElementById("rmvEvents").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
 
+            document.getElementById("adminMessage").hidden = true;
+            document.getElementById("adminMessage").innerHTML = "";
+            document.getElementById("message2").innerHTML = "";
+
             document.getElementById("chgControls").hidden = false;
             const input = document.getElementById("chgControls");
             
@@ -456,6 +502,67 @@
                 chgControls.innerHTML = "";
 
                 document.getElementById("message").innerHTML = "";
+            });
+
+            input.appendChild(tBox);
+            input.appendChild(confirm);
+            input.appendChild(cancel);
+        });
+    
+        document.getElementById("flagBtn").addEventListener("click", () => {
+            document.getElementById("chgControls").innerHTML = "";
+            document.getElementById("message").innerHTML = "";
+            document.getElementById("adminMessage").innerHTML = "";
+
+            document.getElementById("adminMessage").hidden = false;
+            const input = document.getElementById("adminMessage");
+            
+            const tBox = document.createElement("textarea");
+            tBox.rows = 4;
+            tBox.cols = 50;
+            tBox.placeholder = "Message";
+
+            const confirm = document.createElement("button");
+            confirm.innerText = "Confirm";
+
+            const cancel = document.createElement("button");
+            cancel.innerText = "Cancel";
+
+            //adminMsg
+
+            // Confirm Flag Message
+            confirm.addEventListener("click", async () => {
+                let actMessage = tBox.value;
+                let flgResponse = {type: "Club", club: clubName, message: actMessage};
+                let data = {};
+
+                if (flgResponse["message"] == "") {
+                    document.getElementById("message2").innerHTML = "Must enter a flag message.";
+                } else {
+                    let response = await fetch("/flag-content", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(flgResponse)
+                    });
+
+                    data = await response.json();
+                }
+                
+                
+                if (data.status == "success") {
+                    window.location.reload();
+                } else {
+                    document.getElementById("message2").innerHTML = data.message;
+                }
+            });
+
+            // Cancel Leader Change
+            cancel.addEventListener("click", () => {
+                document.getElementById("adminMessage").hidden = true;
+                document.getElementById("adminMessage").innerHTML = "";
+                document.getElementById("message2").innerHTML = "";
             });
 
             input.appendChild(tBox);
