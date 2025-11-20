@@ -16,11 +16,54 @@
         </div>
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
-        <button id="approveBtn">Approve</button>
-        <button id="denyBtn">Deny</button><br>
+        <button id="deleteBtn">Delete</button><br><br>
         <button id="goBackBtn">Back</button>
     </div>
     <script>
+        reports = [];
+        i = 0;
 
+        window.addEventListener("DOMContentLoaded", async () => {
+            let response = await fetch("/get-reports", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+
+            let data = await response.json();
+            reports = data.reports;
+            //console.log(reports);
+            //console.log(reports[0]["Content Name"]);
+            console.log(reports.length);
+
+            if (reports.length == 0) {
+                document.getElementById("description").innerText = "No new reports."
+            } else {
+                document.getElementById("description").innerText = 
+                `${reports[i]["Student"]} reports that the ${reports[i]["Section"]} section of ${reports[i]["Content Name"]}: ${reports[i]["Details"]}`
+            }
+        });
+
+        document.getElementById("goBackBtn").addEventListener("click", () => {
+          window.location.href = '/admin';
+        });
+
+
+        /*document.getElementById("deleteBtn").addEventListener("click", async () => {                        
+            await fetch("/delete-report", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(pending)
+            })
+
+            // Reset display to first request
+            currentIndex = 0
+
+            let data = await getMessage(currentIndex);
+            display(data);
+        });*/
     </script>
 </body>

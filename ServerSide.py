@@ -91,7 +91,8 @@ def get_club_requests():
 @app.route("/get-reports")
 def get_reports():
     df = pd.read_csv("Reports.csv")
-    return jsonify({"status": "success", "number": len(df)})
+    reports = df.to_dict(orient="records")
+    return jsonify({"status": "success", "number": len(df), "reports": reports})
 
 
 # Gets the number of messages in Messages.csv
