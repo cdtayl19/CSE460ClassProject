@@ -837,5 +837,11 @@ def cancel_event():
 
 
 
+@app.route("/create-report")
+def create_report():
+    return render_template("CreateReport.html")
+
+
+
 if __name__ == "__main__":
     app.run(port=8080)

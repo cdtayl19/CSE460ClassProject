@@ -19,6 +19,7 @@
         
 
         <button id="newClubBtn">Create Club Request</button>
+        <button id="newReportBtn">Report Content</button><br><br>
         <button id="logoutBtn">Logout</button>
     </div>
 
@@ -67,6 +68,10 @@
 
         document.getElementById("eventBrowseBtn").addEventListener("click", () => {
             window.location.href = '/browse-events';
+        });
+
+        document.getElementById("newReportBtn").addEventListener("click", () => {
+            window.location.href = '/create-report';
         });
     </script>
 </body>
