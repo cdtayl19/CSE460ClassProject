@@ -16,6 +16,7 @@
         </div>
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
+        <button id="flagBtn" hidden>Flag</button>
         <button id="deleteBtn">Delete</button><br><br>
         <button id="goBackBtn">Back</button>
     </div>
@@ -26,7 +27,9 @@
         function display() {
             if (reports.length == 0) {
                 document.getElementById("description").innerText = "No new reports."
+                document.getElementById("flagBtn").hidden = true;
             } else {
+                document.getElementById("flagBtn").hidden = false;
                 document.getElementById("description").innerText = 
                 `Student: ${reports[i]["Student"]} \n
                 Type: ${reports[i]["Content Type"]} \n
