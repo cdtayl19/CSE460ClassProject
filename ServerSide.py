@@ -201,6 +201,24 @@ def delete_message():
         return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
     
 
+@app.route("/delete-report", methods=["POST"])
+def delete_report():
+    if request.method == "POST":
+        data = request.get_json()
+        print(data)
+
+        # Remove message
+        df = pd.read_csv("Reports.csv")
+        report = df[df["Student"] == data["Student"]]
+        report = report[report["Content Name"] == data["Name"]]
+        report = report[report["Section"] == data["Section"]]
+        report = report[report["Details"] == data["Details"]]
+        df = df.drop(report.index)
+        df.to_csv("Reports.csv", index=False)
+
+        return jsonify({"status": "success", "message": "Message deleted."})
+    
+
 # Adds club to ApprovedClubs.csv
 @app.route("/approve-club-request", methods=["POST"])
 def approveRequest():
@@ -809,7 +827,6 @@ def remove_guest():
         return jsonify({"status": "success", "message": "Guest removed."})
 
 
-
 @app.route("/get-club-leader")
 def get_leader():
     club_name = request.args.get("club")
@@ -821,7 +838,6 @@ def get_leader():
     print(f"The leader is: {leader}")
 
     return jsonify({"status": "success", "leader": leader})
-
 
 
 @app.route("/cancel-event", methods=["POST"])
@@ -852,7 +868,6 @@ def cancel_event():
         df.to_csv("Events.csv", index=False)
 
         return jsonify({"status": "success", "message": "Event canceled."})
-
 
 
 @app.route("/create-report")
@@ -917,7 +932,6 @@ def send_report():
         report = {"Student": report_data["currentUser"], "Content Type": content_type, "Content Name": club_event_name, "Section": club_event_section, "Details": report_data["details"]}
         write_reports(report)
             
-        
         return jsonify({"status": "success", "message": "Your report has been sent."})
 
 

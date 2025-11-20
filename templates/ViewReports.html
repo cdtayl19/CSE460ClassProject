@@ -46,8 +46,8 @@
 
             let data = await response.json();
             reports = data.reports;
-            console.log(reports);
-            console.log(reports[0]["Content Name"]);
+            //console.log(reports);
+            //console.log(reports[0]["Content Name"]);
             console.log(reports.length);
 
             display();
@@ -70,20 +70,24 @@
             display();
         });            
 
-        /*document.getElementById("deleteBtn").addEventListener("click", async () => {                        
+        document.getElementById("deleteBtn").addEventListener("click", async () => {
+            let dltMsg = {"Student": reports[i]["Student"], "Type": reports[i]["Content Type"], "Name": reports[i]["Content Name"], "Section": reports[i]["Section"], "Details": reports[i]["Details"]}
+
             await fetch("/delete-report", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(pending)
+                body: JSON.stringify(dltMsg)
             })
 
-            // Reset display to first request
-            currentIndex = 0
+            window.location.reload();
 
-            let data = await getMessage(currentIndex);
-            display(data);
-        });*/
+            // Reset display to first request
+            i = 0;
+
+            //let data = await getMessage(i);
+            display();
+        });
     </script>
 </body>
