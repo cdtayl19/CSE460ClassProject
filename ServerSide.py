@@ -959,23 +959,28 @@ def flag_content():
 def grab_flags():
     if request.method == "POST":
         flag_data = request.get_json()
-        print(flag_data)
 
         df = pd.read_csv("Flags.csv")
         flags = df[df["Content Name"] == flag_data]
         flags = flags.to_dict(orient="records")
-        
-        print(flags)
+
         return jsonify({"status": "success", "flags": flags})
     
-#    # Remove message
-#        df = pd.read_csv("Reports.csv")
-#        report = df[df["Student"] == data["Student"]]
-#        report = report[report["Content Name"] == data["Name"]]
-#        report = report[report["Section"] == data["Section"]]
-#        report = report[report["Details"] == data["Details"]]
-#        df = df.drop(report.index)
-#        df.to_csv("Reports.csv", index=False)
+
+@app.route("/remove-flag", methods=["POST"])
+def remove_flag():
+    if request.method == "POST":
+        flag_data = request.get_json()
+        print(flag_data)
+        
+
+        df = pd.read_csv("Flags.csv")
+        dltFlag = df[df["Content Name"] == flag_data["name"]]
+        dltFlag = dltFlag[dltFlag["Message"] == flag_data["flag"]]
+        df = df.drop(dltFlag.index)
+        df.to_csv("Flags.csv", index=False)
+
+        return jsonify({"status": "success"})
 
 
 

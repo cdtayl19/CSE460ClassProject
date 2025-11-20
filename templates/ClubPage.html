@@ -148,6 +148,18 @@
                 rmvButton.innerText = "Unflag";
                 rmvButton.style.marginRight = "5px";
 
+                rmvButton.addEventListener("click", async () => {
+                    await fetch("/remove-flag", {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json" 
+                        },
+                        body: JSON.stringify({"name": clubName, "flag": flag.Message})
+                    });
+                    
+                    window.location.reload();
+                });
+
                 const reqUnflagBtn = document.createElement("button");
                 reqUnflagBtn.innerText = "Request Unflag";
                 reqUnflagBtn.style.marginRight = "5px";
