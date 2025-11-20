@@ -66,6 +66,7 @@
         <br>
         <div id="adminDash" hidden>
             <button id="flagBtn">Flag Content</button>
+            <button id="adminBackBtn">Back to Admin</button>
             <div id="adminMessage" hidden></div>
         </div>
 
@@ -589,6 +590,10 @@
             input.appendChild(tBox);
             input.appendChild(confirm);
             input.appendChild(cancel);
+        });
+
+        document.getElementById("adminBackBtn").addEventListener("click", () => {
+             window.location.href = '/admin';
         });
     </script>
 </body>
