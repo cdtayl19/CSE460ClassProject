@@ -31,6 +31,8 @@
         
         <div id="flagDisplay"></div>
 
+        <br>
+
         <div id="studentButtons" hidden>
             <button id="join">Request to Join!</button>
             <span id="sent" hidden>Your request to join has been sent!</span>
@@ -138,10 +140,31 @@
 
             let flagDisplay = document.getElementById("flagDisplay");
             data.flags.forEach(flag => {
-                const li = document.createElement("li");
-                li.innerText = flag.Message;
-                li.style.color = "#D61F22";
-                document.getElementById("flagDisplay").appendChild(li);
+                const flagDisp = document.createElement("span");
+                flagDisp.innerText = flag.Message;
+                flagDisp.style.color = "#D61F22";
+
+                const rmvButton = document.createElement("button");
+                rmvButton.innerText = "Unflag";
+                rmvButton.style.marginRight = "5px";
+
+                const reqUnflagBtn = document.createElement("button");
+                reqUnflagBtn.innerText = "Request Unflag";
+                reqUnflagBtn.style.marginRight = "5px";
+
+
+                if (user.Role != "admin") {
+                    rmvButton.hidden = true;
+                }
+
+                if (user.Username != leader) {
+                    reqUnflagBtn.hidden = true;
+                }
+
+                document.getElementById("flagDisplay").appendChild(rmvButton);
+                document.getElementById("flagDisplay").appendChild(reqUnflagBtn);
+                document.getElementById("flagDisplay").appendChild(flagDisp);
+                document.getElementById("flagDisplay").appendChild(document.createElement("br"));
             });
 
 
