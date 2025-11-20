@@ -935,5 +935,26 @@ def send_report():
         return jsonify({"status": "success", "message": "Your report has been sent."})
 
 
+
+@app.route("/go-to-content", methods=["POST"])
+def flag_content():
+    if request.method == "POST":
+        flag_data = request.get_json()
+        print(flag_data)
+
+        if flag_data["Type"] == "Club":
+            df = pd.read_csv("ApprovedClubs.csv")
+            club = df[df["Club Name"] == flag_data["Name"]]
+            club_info = club.iloc[0].to_dict()
+            return render_template("ClubPage.html", club=club_info)
+        else:
+            df = pd.read_csv("Events.csv")
+            event = df[df["Event Name"] == flag_data["Name"]]
+            event_info = event.iloc[0].to_dict()
+            return render_template("EventPage.html", event=event_info)
+
+
+
+
 if __name__ == "__main__":
     app.run(port=8080)

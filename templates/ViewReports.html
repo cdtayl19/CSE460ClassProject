@@ -16,7 +16,7 @@
         </div>
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
-        <button id="flagBtn" hidden>Flag</button>
+        <button id="goTo" hidden>Go To</button>
         <button id="deleteBtn">Delete</button><br><br>
         <button id="goBackBtn">Back</button>
     </div>
@@ -29,7 +29,7 @@
                 document.getElementById("description").innerText = "No new reports."
                 document.getElementById("flagBtn").hidden = true;
             } else {
-                document.getElementById("flagBtn").hidden = false;
+                document.getElementById("goTo").hidden = false;
                 document.getElementById("description").innerText = 
                 `Student: ${reports[i]["Student"]} \n
                 Type: ${reports[i]["Content Type"]} \n
@@ -91,6 +91,14 @@
 
             //let data = await getMessage(i);
             display();
+        });
+
+        document.getElementById("goTo").addEventListener("click", async () => {
+            if (reports[i]["Content Type"] == "Club") {
+                window.location.href = `/club-page?name=${encodeURIComponent(reports[i]["Content Name"])}`;
+            } else {
+                window.location.href = `/event-page?name=${encodeURIComponent(reports[i]["Content Name"])}`;
+            }
         });
     </script>
 </body>
