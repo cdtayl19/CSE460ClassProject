@@ -8,34 +8,34 @@
         
         <div id="info">
             <!-- Store club name -->
-            <button id="unflagName" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="unflagName" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
             <h1 id="Club Name" data-name="{{ club['Club Name'] }}">              
                 {{ club["Club Name"] }}
             </h1>
             
             <!-- Store leader -->
-            <button id="unflagLdr" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="unflagLdr" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagLdr" class="adminFlagBtns" hidden>Flag</button>
             <strong>Leader: </strong>
             <span id="Leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
             
-            <button id="unflagTpc" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="unflagTpc" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagTpc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Topic: </strong>
             <span id="Topic">{{ club["Topic"] }}</span><br><br>
 
-            <button id="unflagDtls" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="unflagDtls" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagDtls" class="adminFlagBtns" hidden>Flag</button>
             <strong>Details: </strong>
             <span id="Details">{{ club["Details"] }}</span><br><br>
 
-            <button id="unflagMbrs" class="adminUnflagBtns" hidden>Ungflag</button>            
+            <button id="unflagMbrs" class="adminUnflagBtns" hidden>Unflag</button>            
             <button id="flagMbrs" class="adminFlagBtns" hidden>Flag</button>
             <strong>Members: </strong>
             <span id="Members">{{ club["Members"] }}</span><br><br>
 
-            <button id="unflagEvts" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="unflagEvts" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagEvts" class="adminFlagBtns" hidden>Flag</button>
             <strong>Events: </strong>
             <span id="Events">{{ club["Events"] }}</span><br><br>
@@ -98,6 +98,40 @@
                 flags.forEach(flag => {
                     document.getElementById(flag["Section"]).innerText = flag["Message"];
                 })
+            }
+
+            unflagButtons()
+        }
+
+        function unflagButtons() {
+            if (document.getElementById("Club Name").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagName").hidden = false;
+                document.getElementById("flagName").hidden = true;
+            }
+
+            if (document.getElementById("Leader").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagLdr").hidden = false;
+                document.getElementById("flagLdr").hidden = true;
+            }
+
+            if (document.getElementById("Topic").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagTpc").hidden = false;
+                document.getElementById("flagTpc").hidden = true;
+            }
+
+            if (document.getElementById("Details").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagDtls").hidden = false;
+                document.getElementById("flagDtls").hidden = true;
+            }
+
+            if (document.getElementById("Members").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagMbrs").hidden = false;
+                document.getElementById("flagMbrs").hidden = true;
+            }
+
+            if (document.getElementById("Events").innerText == "Content flagged for inappropriateness.") {
+                document.getElementById("unflagEvts").hidden = false;
+                document.getElementById("flagEvts").hidden = true;
             }
         }
 
@@ -705,6 +739,46 @@
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(flag)
+                });
+
+                window.location.reload();
+            });
+        });
+    
+        document.querySelectorAll(".adminUnflagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let unflag = {};
+                
+                if (btn.id == "unflagName") {
+                    unflag = {"type": "club", "name": clubName, "section": "Club Name"};
+                }
+
+                if (btn.id == "unflagLdr") {
+                    unflag = {"type": "club", "name": clubName, "section": "Leader"};
+                }
+
+                if (btn.id == "unflagTpc") {
+                    unflag = {"type": "club", "name": clubName, "section": "Topic"};
+                }
+
+                if (btn.id == "unflagDtls") {
+                    unflag = {"type": "club", "name": clubName, "section": "Details"};
+                }
+
+                if (btn.id == "unflagMbrs") {
+                    unflag = {"type": "club", "name": clubName, "section": "Members"};
+                }
+
+                if (btn.id == "unflagEvts") {
+                    unflag = {"type": "club", "name": clubName, "section": "Events"};
+                }
+
+                let response = await fetch("/unflag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(unflag)
                 });
 
                 window.location.reload();

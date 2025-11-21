@@ -996,16 +996,35 @@ def grab_flags():
         return jsonify({"status": "success", "flags": flags})
     
 
-@app.route("/remove-flag", methods=["POST"])
+@app.route("/unflag-content", methods=["POST"])
 def remove_flag():
     if request.method == "POST":
-        flag_data = request.get_json()        
+        unflag_data = request.get_json()
+        print(unflag_data)
 
+        # Delete Flag
         df = pd.read_csv("Flags.csv")
-        dltFlag = df[df["Content Name"] == flag_data["name"]]
-        dltFlag = dltFlag[dltFlag["Message"] == flag_data["flag"]]
-        df = df.drop(dltFlag.index)
+        unflag = df[df["Content Name"] == unflag_data["name"]]
+        unflag = unflag[unflag["Section"] == unflag_data["section"]]
+        print(df)
+        df = df.drop(unflag.index)
         df.to_csv("Flags.csv", index=False)
+
+        # Inform Leader of Unflag
+        df = pd.read_csv("ApprovedClubs.csv")
+        df = df[df["Club Name"] == unflag_data["name"]]
+        leader = df["Leader"].iloc[0]
+        
+        new_message = {
+            "To": leader,
+            "From": "Administrator",
+            "Message": f"{unflag_data["name"]} {unflag_data["section"]} section has been unflagged."
+        }
+
+        df = pd.read_csv("Messages.csv")
+        df.loc[len(df)] = new_message
+        df.drop_duplicates(inplace = True)
+        df.to_csv("Messages.csv", index=False)
 
         return jsonify({"status": "success"})
     
