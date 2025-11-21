@@ -8,6 +8,7 @@
         
         <div id="info">
             <!-- Store event name -->
+            <button id="unflagName" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
             <h1 id="Event Name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
             
@@ -15,16 +16,22 @@
             <strong>Host:</strong>
             <span id="Club Name" data-name="{{ event['Club Name'] }}"> {{ event["Club Name"] }} </span><br><br>
 
+            <button id="unflagDate" class="adminUnflagBtns" hidden>Unflag</button>            
+            <button id="flagDate" class="adminFlagBtns" hidden>Flag</button>                
             <strong>Date:</strong>
             <span id="Date"> {{ event["Date"] }}</span><br><br>
-            
+
+            <button id="unflagTime" class="adminUnflagBtns" hidden>Unflag</button>
+            <button id="flagTime" class="adminFlagBtns" hidden>Flag</button>
             <strong>Time:</strong>
             <span id="Time"> {{ event["Time"] }}</span><br><br>
             
+            <button id="unflagLctn" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagLctn" class="adminFlagBtns" hidden>Flag</button>
             <strong>Location:</strong> 
             <span id="Location"> {{ event["Location"] }}</span><br><br>
             
+            <button id="unflagDesc" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagDesc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Description:</strong> 
             <span id="Description"> {{ event["Description"] }}</span><br><br>
@@ -54,6 +61,8 @@
             <div id="message"></div>
             <br><div id="list"></div>
         </div><br>
+
+        <button id="adminBackBtn" hidden>Back to Admin</button>
     </div>
 
     <div id="cnclCheck" hidden>
@@ -115,6 +124,63 @@
             }
         }
 
+        function displayUnflagBtns() {
+            if (document.getElementById("Event Name").innerText == "Content flagged for inappropriateness.") {
+                if (user.Role == "admin") {
+                    document.getElementById("unflagName").hidden = false;
+                    document.getElementById("flagName").hidden = true;
+                }
+
+                //if (user.Username == leader) {
+                //    document.getElementById("reqUnflagName").hidden = false;
+                //}
+            }
+
+            if (document.getElementById("Date").innerText == "Content flagged for inappropriateness.") {
+                if (user.Role == "admin") {
+                    document.getElementById("unflagDate").hidden = false;
+                    document.getElementById("flagDate").hidden = true;
+                }
+
+                //if (user.Username == leader) {
+                //    document.getElementById("reqUnflagName").hidden = false;
+                //}
+            }
+
+            if (document.getElementById("Time").innerText == "Content flagged for inappropriateness.") {
+                if (user.Role == "admin") {
+                    document.getElementById("unflagTime").hidden = false;
+                    document.getElementById("flagTime").hidden = true;
+                }
+
+                //if (user.Username == leader) {
+                //    document.getElementById("reqUnflagName").hidden = false;
+                //}
+            }            
+
+            if (document.getElementById("Location").innerText == "Content flagged for inappropriateness.") {
+                if (user.Role == "admin") {
+                    document.getElementById("unflagLctn").hidden = false;
+                    document.getElementById("flagLctn").hidden = true;
+                }
+
+                //if (user.Username == leader) {
+                //    document.getElementById("reqUnflagLdr").hidden = false;
+                //}
+            }
+
+            if (document.getElementById("Description").innerText == "Content flagged for inappropriateness.") {
+                if (user.Role == "admin") {
+                    document.getElementById("unflagDesc").hidden = false;
+                    document.getElementById("flagDesc").hidden = true;
+                }
+
+                //if (user.Username == leader) {
+                //    document.getElementById("reqUnflagTpc").hidden = false;
+                //}
+            }
+        }
+        
         function displayFlags() {
             if (flags.length > 0) {
                 flags.forEach(flag => {
@@ -122,7 +188,7 @@
                 })
             }
 
-            //unflagButtons()
+            displayUnflagBtns()
         }
 
         window.addEventListener("DOMContentLoaded", async () => {
@@ -139,9 +205,13 @@
             
             await findHostLeader();
 
-            if (user.Username === clubLeader) {
+            if (user.Username == clubLeader) {
                 leaderButtons.hidden = false;
             } 
+
+            if (user.Role == "admin") {
+                document.getElementById("adminBackBtn").hidden = false;
+            }
 
             // Get and display flags
             response = await fetch("/grab-flags", {
@@ -539,6 +609,14 @@
                     flag = {"type": "event", "name": eventName, "host": hostName, "section": "Event Name"};
                 }
 
+                if (btn.id == "flagDate") {
+                    flag = {"type": "event", "name": eventName, "host": hostName, "section": "Date"};
+                }  
+
+                if (btn.id == "flagTime") {
+                    flag = {"type": "event", "name": eventName, "host": hostName, "section": "Time"};
+                }                    
+
                 if (btn.id == "flagLctn") {
                     flag = {"type": "event", "name": eventName, "host": hostName, "section": "Location"};
                 }
@@ -560,6 +638,9 @@
             });
         });
 
+        document.getElementById("adminBackBtn").addEventListener("click", () => {
+            window.location.href = '/admin';
+        })
     </script>
 </body>
 </html>
