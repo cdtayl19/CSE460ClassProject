@@ -638,6 +638,42 @@
             });
         });
 
+        document.querySelectorAll(".adminUnflagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let unflag = {};
+                
+                if (btn.id == "unflagName") {
+                    unflag = {"type": "event", "name": eventName, "host": hostName, "section": "Event Name"};
+                }
+
+                if (btn.id == "unflagDate") {
+                    unflag = {"type": "event", "name": eventName, "host": hostName, "section": "Date"};
+                }
+
+                if (btn.id == "unflagTime") {
+                    unflag = {"type": "event", "name": eventName, "host": hostName, "section": "Time"};
+                }
+
+                if (btn.id == "unflagLctn") {
+                    unflag = {"type": "event", "name": eventName, "host": hostName, "section": "Location"};
+                }
+
+                if (btn.id == "unflagDesc") {
+                    unflag = {"type": "event", "name": eventName, "host": hostName, "section": "Description"};
+                }
+
+                let response = await fetch("/unflag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(unflag)
+                });
+
+                window.location.reload();
+            });
+        });
+
         document.getElementById("adminBackBtn").addEventListener("click", () => {
             window.location.href = '/admin';
         })

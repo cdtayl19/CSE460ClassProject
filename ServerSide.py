@@ -1003,11 +1003,14 @@ def grab_flags():
 def remove_flag():
     if request.method == "POST":
         unflag_data = request.get_json()
+        content_type = unflag_data["type"]
+        leader = ""
         print(unflag_data)
 
         # Delete Flag
         df = pd.read_csv("Flags.csv")
         unflag = df[df["Content Name"] == unflag_data["name"]]
+        unflag = unflag[unflag["Content Type"] == unflag_data["type"]]
         unflag = unflag[unflag["Section"] == unflag_data["section"]]
         print(df)
         df = df.drop(unflag.index)
@@ -1015,8 +1018,14 @@ def remove_flag():
 
         # Inform Leader of Unflag
         df = pd.read_csv("ApprovedClubs.csv")
-        df = df[df["Club Name"] == unflag_data["name"]]
-        leader = df["Leader"].iloc[0]
+
+        if content_type == "club":
+            df = df[df["Club Name"] == unflag_data["name"]]
+            leader = df["Leader"].iloc[0]
+
+        if content_type == "event":
+            df = df[df["Club Name"] == unflag_data["host"]]
+            leader = df["Leader"].iloc[0]
         
         new_message = {
             "To": leader,
