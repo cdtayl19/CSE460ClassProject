@@ -8,6 +8,7 @@
         
         <div id="info">
             <!-- Store event name -->
+            <button id="reqUnflagName" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagName" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
             <h1 id="Event Name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
@@ -16,21 +17,25 @@
             <strong>Host:</strong>
             <span id="Club Name" data-name="{{ event['Club Name'] }}"> {{ event["Club Name"] }} </span><br><br>
 
+            <button id="reqUnflagDate" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagDate" class="adminUnflagBtns" hidden>Unflag</button>            
             <button id="flagDate" class="adminFlagBtns" hidden>Flag</button>                
             <strong>Date:</strong>
             <span id="Date"> {{ event["Date"] }}</span><br><br>
 
+            <button id="reqUnflagTime" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagTime" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagTime" class="adminFlagBtns" hidden>Flag</button>
             <strong>Time:</strong>
             <span id="Time"> {{ event["Time"] }}</span><br><br>
             
+            <button id="reqUnflagLctn" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagLctn" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagLctn" class="adminFlagBtns" hidden>Flag</button>
             <strong>Location:</strong> 
             <span id="Location"> {{ event["Location"] }}</span><br><br>
             
+            <button id="reqUnflagDesc" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagDesc" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagDesc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Description:</strong> 
@@ -131,9 +136,9 @@
                     document.getElementById("flagName").hidden = true;
                 }
 
-                //if (user.Username == leader) {
-                //    document.getElementById("reqUnflagName").hidden = false;
-                //}
+                if (user.Username == clubLeader) {
+                    document.getElementById("reqUnflagName").hidden = false;
+                }
             }
 
             if (document.getElementById("Date").innerText == "Content flagged for inappropriateness.") {
@@ -142,9 +147,9 @@
                     document.getElementById("flagDate").hidden = true;
                 }
 
-                //if (user.Username == leader) {
-                //    document.getElementById("reqUnflagName").hidden = false;
-                //}
+                if (user.Username == clubLeader) {
+                    document.getElementById("reqUnflagDate").hidden = false;
+                }
             }
 
             if (document.getElementById("Time").innerText == "Content flagged for inappropriateness.") {
@@ -153,9 +158,9 @@
                     document.getElementById("flagTime").hidden = true;
                 }
 
-                //if (user.Username == leader) {
-                //    document.getElementById("reqUnflagName").hidden = false;
-                //}
+                if (user.Username == clubLeader) {
+                    document.getElementById("reqUnflagTime").hidden = false;
+                }
             }            
 
             if (document.getElementById("Location").innerText == "Content flagged for inappropriateness.") {
@@ -164,9 +169,9 @@
                     document.getElementById("flagLctn").hidden = true;
                 }
 
-                //if (user.Username == leader) {
-                //    document.getElementById("reqUnflagLdr").hidden = false;
-                //}
+                if (user.Username == clubLeader) {
+                    document.getElementById("reqUnflagLctn").hidden = false;
+                }
             }
 
             if (document.getElementById("Description").innerText == "Content flagged for inappropriateness.") {
@@ -175,9 +180,9 @@
                     document.getElementById("flagDesc").hidden = true;
                 }
 
-                //if (user.Username == leader) {
-                //    document.getElementById("reqUnflagTpc").hidden = false;
-                //}
+                if (user.Username == clubLeader) {
+                    document.getElementById("reqUnflagDesc").hidden = false;
+                }
             }
         }
         
