@@ -8,7 +8,7 @@
         
         <div id="info">
             <!-- Store club name -->
-            <h1 id="name" data-name="{{ club['Club Name'] }}">
+            <h1 id="Club Name" data-name="{{ club['Club Name'] }}">
                 <button id="unflagName" class="adminUnflagBtns" hidden>Ungflag</button>
                 <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
                 {{ club["Club Name"] }}
@@ -18,27 +18,27 @@
             <button id="unflagLdr" class="adminUnflagBtns" hidden>Ungflag</button>
             <button id="flagLdr" class="adminFlagBtns" hidden>Flag</button>
             <strong>Leader: </strong>
-            <span id="leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
+            <span id="Leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
             
             <button id="unflagTpc" class="adminUnflagBtns" hidden>Ungflag</button>
             <button id="flagTpc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Topic: </strong>
-            <span id="topic">{{ club["Topic"] }}</span><br><br>
+            <span id="Topic">{{ club["Topic"] }}</span><br><br>
 
             <button id="unflagDtls" class="adminUnflagBtns" hidden>Ungflag</button>
             <button id="flagDtls" class="adminFlagBtns" hidden>Flag</button>
             <strong>Details: </strong>
-            <span id="details">{{ club["Details"] }}</span><br><br>
+            <span id="Details">{{ club["Details"] }}</span><br><br>
 
             <button id="unflagMbrs" class="adminUnflagBtns" hidden>Ungflag</button>            
             <button id="flagMbrs" class="adminFlagBtns" hidden>Flag</button>
             <strong>Members: </strong>
-            <span>{{ club["Members"] }}</span><br><br>
+            <span id="Members">{{ club["Members"] }}</span><br><br>
 
             <button id="unflagEvts" class="adminUnflagBtns" hidden>Ungflag</button>
             <button id="flagEvts" class="adminFlagBtns" hidden>Flag</button>
             <strong>Events: </strong>
-            <span>{{ club["Events"] }}</span><br><br>
+            <span id="Events">{{ club["Events"] }}</span><br><br>
         </div>
         
         <!--<div id="flagDisplay"></div>-->
@@ -104,8 +104,8 @@
             user = data.user;
             console.log(user.Role);
             
-            clubName = document.getElementById("name").dataset.name;
-            let leader = document.getElementById("leader").dataset.name;
+            clubName = document.getElementById("Club Name").dataset.name;
+            let leader = document.getElementById("Leader").dataset.name;
 
             const studentButtons = document.getElementById("studentButtons");
             const leaderButtons = document.getElementById("leaderButtons");
@@ -224,8 +224,8 @@
             
             user = data.user;   
             
-            let clubName = document.getElementById("name").dataset.name;
-            let leader = document.getElementById("leader").dataset.name;
+            let clubName = document.getElementById("Club Name").dataset.name;
+            let leader = document.getElementById("Leader").dataset.name;
             
             const joinReq = {user, leader, clubName}; 
 
@@ -251,12 +251,12 @@
         });
 
         document.getElementById("viewBtn").addEventListener("click", () => {
-            let clubName = document.getElementById("name").dataset.name;
+            let clubName = document.getElementById("Club Name").dataset.name;
             window.location.href = `/view-join-requests?club=${clubName}`;
         })
 
         document.getElementById("createEventBtn").addEventListener("click", () => {
-            let clubName = document.getElementById("name").dataset.name;
+            let clubName = document.getElementById("Club Name").dataset.name;
             window.location.href = `/create-event?club=${clubName}`;
         });
     
@@ -597,7 +597,7 @@
             input.appendChild(cancel);
         });
     
-        document.getElementById("flagBtn").addEventListener("click", () => {
+        /*document.getElementById("flagBtn").addEventListener("click", () => {
             document.getElementById("chgControls").innerHTML = "";
             document.getElementById("message").innerHTML = "";
             document.getElementById("adminMessage").innerHTML = "";
@@ -654,7 +654,7 @@
             input.appendChild(tBox);
             input.appendChild(confirm);
             input.appendChild(cancel);
-        });
+        });*/
 
         document.getElementById("adminBackBtn").addEventListener("click", () => {
              window.location.href = '/admin';
@@ -695,6 +695,8 @@
                     },
                     body: JSON.stringify(flag)
                 });
+
+                window.location.reload();
             });
         });
     </script>

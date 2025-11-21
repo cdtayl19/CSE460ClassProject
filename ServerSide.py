@@ -950,10 +950,18 @@ def flag_content():
         flag_data = request.get_json()
         print(flag_data)
 
-        new_flag = {"Content Type": flag_data["type"], "Content Name": flag_data["name"], "Section": flag_data["section"], "Message": "Content flagged for inappropriateness."}
-        write_flags(new_flag)
+        new_flag = {
+            "Content Type": flag_data["type"],
+            "Content Name": flag_data["name"],
+            "Section": flag_data["section"],
+            "Message": "Content flagged for inappropriateness."
+        }
 
-        #return jsonify({"status": "success", "message": flag_data["message"]})
+        df = pd.read_csv("Flags.csv")
+        df.loc[len(df)] = new_flag
+        df.drop_duplicates(inplace = True)
+        df.to_csv("Flags.csv", index=False)
+
         return jsonify({"status": "success"})
     
 
