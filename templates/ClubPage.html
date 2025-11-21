@@ -164,6 +164,19 @@
                 reqUnflagBtn.innerText = "Request Unflag";
                 reqUnflagBtn.style.marginRight = "5px";
 
+                reqUnflagBtn.addEventListener("click", async () => {
+                    await fetch("/request-remove-flag", {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json" 
+                        },
+                        body: JSON.stringify({"name": clubName, "flag": flag.Message})
+                    });
+                    
+                    reqUnflagBtn.hidden = true;
+                    flagDisp.innerText = "Unflag request has been sent."
+                });
+
 
                 if (user.Role != "admin") {
                     rmvButton.hidden = true;

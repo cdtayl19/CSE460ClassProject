@@ -970,15 +970,32 @@ def grab_flags():
 @app.route("/remove-flag", methods=["POST"])
 def remove_flag():
     if request.method == "POST":
-        flag_data = request.get_json()
-        print(flag_data)
-        
+        flag_data = request.get_json()        
 
         df = pd.read_csv("Flags.csv")
         dltFlag = df[df["Content Name"] == flag_data["name"]]
         dltFlag = dltFlag[dltFlag["Message"] == flag_data["flag"]]
         df = df.drop(dltFlag.index)
         df.to_csv("Flags.csv", index=False)
+
+        return jsonify({"status": "success"})
+    
+
+@app.route("/request-remove-flag", methods=["POST"])
+def request_unflag():
+    if request.method == "POST":
+        flag_data = request.get_json()
+        print(flag_data)
+
+        df = pd.read_csv("User_Accounts.csv")
+        admin = df[df["Role"] == "admin"]
+        admin = admin.to_dict(orient="records")
+        admin = admin[0]["Username"]
+
+
+        # Send message to admin 
+        message = {"To": admin, "From": session["current_user"]["Username"], "Message":f"Requests that the flag:: {flag_data["flag"]} :: be removed."}
+        write_messages(message)
 
         return jsonify({"status": "success"})
 
