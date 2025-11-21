@@ -1029,26 +1029,22 @@ def remove_flag():
         return jsonify({"status": "success"})
     
 
-@app.route("/request-remove-flag", methods=["POST"])
+@app.route("/request-unflag-content", methods=["POST"])
 def request_unflag():
     if request.method == "POST":
-        flag_data = request.get_json()
-        print(flag_data)
+        unflag_data = request.get_json()
+        print(unflag_data)
 
         df = pd.read_csv("User_Accounts.csv")
         admin = df[df["Role"] == "admin"]
         admin = admin.to_dict(orient="records")
         admin = admin[0]["Username"]
 
-
         # Send message to admin 
-        message = {"To": admin, "From": session["current_user"]["Username"], "Message":f"Requests that the flag:: {flag_data["flag"]} :: be removed."}
+        message = {"To": admin, "From": session["current_user"]["Username"], "Message":f"Please review {unflag_data["type"]}: {unflag_data["name"]}, section: {unflag_data["section"]} for flag removal."}
         write_messages(message)
 
         return jsonify({"status": "success"})
-
-
-
 
 
 if __name__ == "__main__":

@@ -770,6 +770,46 @@
                 window.location.reload();
             });
         });
+    
+        document.querySelectorAll(".reqUnflagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let unflag = {};
+                
+                if (btn.id == "reqUnflagName") {
+                    unflag = {"type": "club", "name": clubName, "section": "Club Name"};
+                }
+
+                if (btn.id == "reqUnflagLdr") {
+                    unflag = {"type": "club", "name": clubName, "section": "Leader"};
+                }
+
+                if (btn.id == "reqUnflagTpc") {
+                    unflag = {"type": "club", "name": clubName, "section": "Topic"};
+                }
+
+                if (btn.id == "reqUnflagDtls") {
+                    unflag = {"type": "club", "name": clubName, "section": "Details"};
+                }
+
+                if (btn.id == "reqUnflagMbrs") {
+                    unflag = {"type": "club", "name": clubName, "section": "Members"};
+                }
+
+                if (btn.id == "reqUnflagEvts") {
+                    unflag = {"type": "club", "name": clubName, "section": "Events"};
+                }
+
+                let response = await fetch("/request-unflag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(unflag)
+                });
+
+                window.location.reload();
+            });
+        });
     </script>
 </body>
 </html>
