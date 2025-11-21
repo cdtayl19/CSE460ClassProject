@@ -19,70 +19,77 @@
     <script>
         let currentIndex = 0;
         let pending = {"to": "", "from": "", "message": ""};
+        let user = {};
+        let messages = [];
 
-        async function getMessage(index) {
-            const response = await fetch(`/get-message?index=${index}`, {
-                method: "GET",
-                headers: { 
-                    "Content-Type": "application/json" 
-                },
-            });
-            
-            data = await response.json();
-            return data;
-        }
-
-        function display(data) {
-            if (data.status === "success") {
-                document.getElementById("from").innerHTML = "from: " + data.data["From"];
-                document.getElementById("message").innerHTML = data.data["Message"];
-
-                pending.to = data.data["To"];
-                pending.from = data.data["From"];
-                pending.message = data.data["Message"];
-
-                currentIndex = data.index;
+        function display() {
+            if (messages.length > 0) {
+                document.getElementById("from").innerHTML =`From: ${messages[currentIndex]["From"]}`;
+                document.getElementById("message").innerHTML = messages[currentIndex]["Message"];
             } else {
-                document.getElementById("from").innerHTML = "";
-                document.getElementById("message").innerHTML = data.message;
-            }            
+                document.getElementById("message").innerHTML = "No messages";
+            }
         }
     
         window.addEventListener("DOMContentLoaded", async () => {
-            let data = await getMessage(currentIndex);
-            display(data);
+            let response = await fetch("/current-user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        
+            let data = await response.json();
+            user = data.user;
+            
+            response = await fetch("/get-messages", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            data = await response.json();
+            messages = data["messages"];
+            display();
         });
 
         document.getElementById("prevBtn").addEventListener("click", async () => {
             currentIndex--;
-            let data = await getMessage(currentIndex);
-            display(data);
+            if (currentIndex < 0) currentIndex = messages.length - 1;
+            display();
         });
 
         document.getElementById("nextBtn").addEventListener("click", async () => {
             currentIndex++;
-            let data = await getMessage(currentIndex);
-            display(data);
+            if (currentIndex >= messages.length) currentIndex = 0;
+            display();
         });
 
-        document.getElementById("deleteBtn").addEventListener("click", async () => {                        
+        document.getElementById("deleteBtn").addEventListener("click", async () => {                                    
+            dltMessage = messages[currentIndex];
+            console.log(dltMessage);
+            
             await fetch("/delete-message", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(pending)
+                body: JSON.stringify(dltMessage)
             })
 
-            // Reset display to first request
-            currentIndex = 0
-
-            let data = await getMessage(currentIndex);
-            display(data);
+            window.location.reload();
+            //display(data);
         });
 
         document.getElementById("goBackBtn").addEventListener("click", () => {
-            window.location.href = '/student';
+            if (user["Role"] == "student") {
+                window.location.href = '/student';
+            }
+
+            if (user["Role"] == "admin") {
+                window.location.href = '/admin';
+            }
         });
     </script>
 </body>

@@ -105,8 +105,9 @@ def get_reports():
 @app.route("/get-messages")
 def get_messages():
     df = pd.read_csv("Messages.csv")
-    reports = df[df["To"] == session["current_user"]["Username"]]
-    return jsonify({"status": "success", "number": len(reports)})
+    messages = df[df["To"] == session["current_user"]["Username"]]
+    messages = json.loads(messages.to_json(orient="records"))
+    return jsonify({"status": "success", "number": len(messages), "messages": messages})
     
 
 # Login Page
@@ -196,15 +197,16 @@ def get_message():
 @app.route("/delete-message", methods=["POST"])
 def delete_message():
     if request.method == "POST":
-        data = request.get_json()
+        message_data = request.get_json()
 
         # Remove message
         df = pd.read_csv("Messages.csv")
-        df = df[df["Message"] != data["message"]]
-        df.reset_index(drop=True, inplace=True)
+        dltMsg = df[df["To"] == message_data["To"]]
+        dltMsg = dltMsg[dltMsg["From"] == message_data["From"]]
+        dltMsg = dltMsg[dltMsg["Message"] == message_data["Message"]]
+        df = df.drop(dltMsg.index)
         df.to_csv("Messages.csv", index=False)
-
-        return jsonify({"status": "success", "message": "Message deleted.", "length": len(df)})
+        return jsonify({"status": "success"})
     
 
 @app.route("/delete-report", methods=["POST"])
