@@ -1052,9 +1052,20 @@ def request_unflag():
         admin = admin.to_dict(orient="records")
         admin = admin[0]["Username"]
 
+        new_message = {
+            "To": admin,
+            "From": unflag_data["user"],
+            "Message": f"Please review {unflag_data["type"]}: {unflag_data["name"]}, section: {unflag_data["section"]} for flag removal."
+        }
+
+        df = pd.read_csv("Messages.csv")
+        df.loc[len(df)] = new_message
+        df.drop_duplicates(inplace = True)
+        df.to_csv("Messages.csv", index=False)
+
         # Send message to admin 
-        message = {"To": admin, "From": session["current_user"]["Username"], "Message":f"Please review {unflag_data["type"]}: {unflag_data["name"]}, section: {unflag_data["section"]} for flag removal."}
-        write_messages(message)
+        #message = {"To": admin, "From": session["current_user"]["Username"], "Message":f"Please review {unflag_data["type"]}: {unflag_data["name"]}, section: {unflag_data#["section"]} for flag removal."}
+        #write_messages(message)
 
         return jsonify({"status": "success"})
 

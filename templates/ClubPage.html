@@ -715,27 +715,27 @@
                 let unflag = {};
                 
                 if (btn.id == "reqUnflagName") {
-                    unflag = {"type": "club", "name": clubName, "section": "Club Name"};
+                    unflag = {"type": "club", "name": clubName, "section": "Club Name", "user": user.Username};
                 }
 
                 if (btn.id == "reqUnflagLdr") {
-                    unflag = {"type": "club", "name": clubName, "section": "Leader"};
+                    unflag = {"type": "club", "name": clubName, "section": "Leader", "user": user.Username};
                 }
 
                 if (btn.id == "reqUnflagTpc") {
-                    unflag = {"type": "club", "name": clubName, "section": "Topic"};
+                    unflag = {"type": "club", "name": clubName, "section": "Topic", "user": user.Username};
                 }
 
                 if (btn.id == "reqUnflagDtls") {
-                    unflag = {"type": "club", "name": clubName, "section": "Details"};
+                    unflag = {"type": "club", "name": clubName, "section": "Details", "user": user.Username};
                 }
 
                 if (btn.id == "reqUnflagMbrs") {
-                    unflag = {"type": "club", "name": clubName, "section": "Members"};
+                    unflag = {"type": "club", "name": clubName, "section": "Members", "user": user.Username};
                 }
 
                 if (btn.id == "reqUnflagEvts") {
-                    unflag = {"type": "club", "name": clubName, "section": "Events"};
+                    unflag = {"type": "club", "name": clubName, "section": "Events", "user": user.Username};
                 }
 
                 let response = await fetch("/request-unflag-content", {

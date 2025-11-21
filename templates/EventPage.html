@@ -682,6 +682,42 @@
         document.getElementById("adminBackBtn").addEventListener("click", () => {
             window.location.href = '/admin';
         })
+    
+        document.querySelectorAll(".reqUnflagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let unflag = {};
+                
+                if (btn.id == "reqUnflagName") {
+                    unflag = {"type": "event", "name": eventName, "section": "Event Name", "user": user.Username};
+                }
+
+                if (btn.id == "reqUnflagDate") {
+                    unflag = {"type": "event", "name": eventName, "section": "Date", "user": user.Username};
+                }
+
+                if (btn.id == "reqUnflagTime") {
+                    unflag = {"type": "event", "name": eventName, "section": "Time", "user": user.Username};
+                }
+
+                if (btn.id == "reqUnflagLctn") {
+                    unflag = {"type": "event", "name": eventName, "section": "Location", "user": user.Username};
+                }
+
+                if (btn.id == "reqUnflagDesc") {
+                    unflag = {"type": "event", "name": eventName, "section": "Description", "user": user.Username};
+                }
+
+                let response = await fetch("/request-unflag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(unflag)
+                });
+
+                window.location.reload();
+            });
+        });
     </script>
 </body>
 </html>
