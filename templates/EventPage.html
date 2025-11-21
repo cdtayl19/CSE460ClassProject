@@ -8,26 +8,26 @@
         
         <div id="info">
             <!-- Store event name -->
-            <h1 id="name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
+            <h1 id="Event Name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
             
             <!-- Store host -->
             <strong>Host:</strong>
-            <span id="host" data-name="{{ event['Club Name'] }}"> {{ event["Club Name"] }} </span><br><br>
+            <span id="Club Name" data-name="{{ event['Club Name'] }}"> {{ event["Club Name"] }} </span><br><br>
 
             <strong>Date:</strong>
-            <span> {{ event["Date"] }}</span><br><br>
+            <span id="Date"> {{ event["Date"] }}</span><br><br>
             
             <strong>Time:</strong>
-            <span> {{ event["Time"] }}</span><br><br>
+            <span id="Time"> {{ event["Time"] }}</span><br><br>
             
             <strong>Location:</strong> 
-            <span> {{ event["Location"] }}</span><br><br>
+            <span id="Location"> {{ event["Location"] }}</span><br><br>
             
             <strong>Description:</strong> 
-            <span> {{ event["Description"] }}</span><br><br>
+            <span id="Description"> {{ event["Description"] }}</span><br><br>
             
             <strong>Availability:</strong>
-            <span  id="availability"> 0 / {{ event["Max Guests"] }} students have registered.</span><br><br>
+            <span  id="Availability"> 0 / {{ event["Max Guests"] }} students have registered.</span><br><br>
         </div>
 
         <div>
@@ -61,8 +61,8 @@
 
     <script>
         let user = {};
-        let eventName = document.getElementById("name").dataset.name;
-        let hostName = document.getElementById("host").dataset.name;
+        let eventName = document.getElementById("Event Name").dataset.name;
+        let hostName = document.getElementById("Club Name").dataset.name;
         let clubLeader = "";
         let guestList = [];
 
@@ -96,9 +96,9 @@
 
             if (maxNum - guestNum <= 0) {
                 document.getElementById("register").style.display = "none";
-                document.getElementById("availability").innerHTML = "Registration for this event is full.";
+                document.getElementById("Availability").innerHTML = "Registration for this event is full.";
             } else {
-                document.getElementById("availability").innerHTML = guestNum + " / " + maxNum + " students have registered.";
+                document.getElementById("Availability").innerHTML = guestNum + " / " + maxNum + " students have registered.";
             }
 
         }
