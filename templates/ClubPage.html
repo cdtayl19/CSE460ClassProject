@@ -628,65 +628,6 @@
             input.appendChild(cancel);
         });
     
-        /*document.getElementById("flagBtn").addEventListener("click", () => {
-            document.getElementById("chgControls").innerHTML = "";
-            document.getElementById("message").innerHTML = "";
-            document.getElementById("adminMessage").innerHTML = "";
-
-            document.getElementById("adminMessage").hidden = false;
-            const input = document.getElementById("adminMessage");
-            
-            const tBox = document.createElement("textarea");
-            tBox.rows = 4;
-            tBox.cols = 50;
-            tBox.placeholder = "Message";
-
-            const confirm = document.createElement("button");
-            confirm.innerText = "Confirm";
-
-            const cancel = document.createElement("button");
-            cancel.innerText = "Cancel";
-
-            //adminMsg
-
-            // Confirm Flag Message
-            confirm.addEventListener("click", async () => {
-                let actMessage = tBox.value;
-                let flgResponse = {type: "Club", name: clubName, message: actMessage};
-                let data = {};
-
-                if (flgResponse["message"] == "") {
-                    document.getElementById("message2").innerHTML = "Must enter a flag message.";
-                } else {
-                    let response = await fetch("/flag-content", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(flgResponse)
-                    });
-
-                    data = await response.json();
-                }
-                
-                
-                if (data.status == "success") {
-                    window.location.reload();
-                }
-            });
-
-            // Cancel Leader Change
-            cancel.addEventListener("click", () => {
-                document.getElementById("adminMessage").hidden = true;
-                document.getElementById("adminMessage").innerHTML = "";
-                document.getElementById("message2").innerHTML = "";
-            });
-
-            input.appendChild(tBox);
-            input.appendChild(confirm);
-            input.appendChild(cancel);
-        });*/
-
         document.getElementById("adminBackBtn").addEventListener("click", () => {
              window.location.href = '/admin';
         });
