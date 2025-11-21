@@ -8,9 +8,9 @@
         
         <div id="info">
             <!-- Store club name -->
-            <h1 id="Club Name" data-name="{{ club['Club Name'] }}">
-                <button id="unflagName" class="adminUnflagBtns" hidden>Ungflag</button>
-                <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
+            <button id="unflagName" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
+            <h1 id="Club Name" data-name="{{ club['Club Name'] }}">              
                 {{ club["Club Name"] }}
             </h1>
             
@@ -90,6 +90,16 @@
     <script>
         let user = {};
         let clubName = "";
+        let flags = [];
+        let clubLeader = "";
+
+        function displayFlags() {
+            if (flags.length > 0) {
+                flags.forEach(flag => {
+                    document.getElementById(flag["Section"]).innerText = flag["Message"];
+                })
+            }
+        }
 
         window.addEventListener("DOMContentLoaded", async () => {
             // Get the current user
@@ -105,7 +115,7 @@
             console.log(user.Role);
             
             clubName = document.getElementById("Club Name").dataset.name;
-            let leader = document.getElementById("Leader").dataset.name;
+            leader = document.getElementById("Leader").dataset.name;
 
             const studentButtons = document.getElementById("studentButtons");
             const leaderButtons = document.getElementById("leaderButtons");
@@ -152,7 +162,8 @@
             })
 
             data = await response.json();
-            console.log(data.flags);
+            flags = data.flags;
+            displayFlags();
 
             /*let flagDisplay = document.getElementById("flagDisplay");
             data.flags.forEach(flag => {
