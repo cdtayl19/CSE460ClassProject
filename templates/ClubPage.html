@@ -85,7 +85,6 @@
         
         <br>
         <div id="adminDash" hidden>
-            <button id="flagBtn">Flag Content</button>
             <button id="adminBackBtn">Back to Admin</button>
             <div id="adminMessage" hidden></div>
         </div>
@@ -188,7 +187,6 @@
         
             let data = await response.json();
             user = data.user;
-            console.log(user.Role);
             
             clubName = document.getElementById("Club Name").dataset.name;
             leader = document.getElementById("Leader").dataset.name;
