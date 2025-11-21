@@ -213,7 +213,6 @@ def delete_message():
 def delete_report():
     if request.method == "POST":
         data = request.get_json()
-        print(data)
 
         # Remove message
         df = pd.read_csv("Reports.csv")
@@ -770,9 +769,6 @@ def manage_event():
         update_data = request.get_json()
         club_name = update_data["club"]
         event_name = update_data["event"]
-        print(club_name)
-        print(event_name)
-        print(update_data["newName"])
 
         # Change club Name
         if update_data["newName"] != "":
@@ -843,7 +839,6 @@ def get_leader():
     df = pd.read_csv("ApprovedClubs.csv")
     
     leader = df.loc[df["Club Name"] == club_name, "Leader"].iloc[0]
-    print(f"The leader is: {leader}")
 
     return jsonify({"status": "success", "leader": leader})
 
@@ -948,6 +943,8 @@ def send_report():
 def flag_content():
     if request.method == "POST":
         flag_data = request.get_json()
+        content_type = flag_data["type"]
+        leader = ""
         print(flag_data)
 
         # Create Flag
@@ -966,8 +963,14 @@ def flag_content():
 
         # Inform Leader of Flag
         df = pd.read_csv("ApprovedClubs.csv")
-        df = df[df["Club Name"] == flag_data["name"]]
-        leader = df["Leader"].iloc[0]
+
+        if content_type == "club":
+            df = df[df["Club Name"] == flag_data["name"]]
+            leader = df["Leader"].iloc[0]
+        
+        if content_type == "event":
+            df = df[df["Club Name"] == flag_data["host"]]
+            leader = df["Leader"].iloc[0]       
         
         new_message = {
             "To": leader,

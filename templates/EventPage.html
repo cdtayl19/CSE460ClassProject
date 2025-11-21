@@ -8,6 +8,7 @@
         
         <div id="info">
             <!-- Store event name -->
+            <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
             <h1 id="Event Name" data-name="{{ event['Event Name'] }}"> {{ event["Event Name"] }} </h1>
             
             <!-- Store host -->
@@ -20,9 +21,11 @@
             <strong>Time:</strong>
             <span id="Time"> {{ event["Time"] }}</span><br><br>
             
+            <button id="flagLctn" class="adminFlagBtns" hidden>Flag</button>
             <strong>Location:</strong> 
             <span id="Location"> {{ event["Location"] }}</span><br><br>
             
+            <button id="flagDesc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Description:</strong> 
             <span id="Description"> {{ event["Description"] }}</span><br><br>
             
@@ -103,6 +106,14 @@
 
         }
 
+        function displayFlagBtns() {
+            if (user.Role == "admin") {
+                document.querySelectorAll(".adminFlagBtns").forEach(btn => {
+                    btn.hidden = false;
+                });
+            }
+        }
+
         window.addEventListener("DOMContentLoaded", async () => {
             // Get the current user
             let response = await fetch("/current-user", {
@@ -122,6 +133,7 @@
             } 
 
             updateAvailability();
+            displayFlagBtns();
         });
 
         document.getElementById("regBtn").addEventListener("click", async () => {                        
@@ -494,6 +506,34 @@
             document.getElementById("cnclCheck").hidden = true;
         });
         
+        document.querySelectorAll(".adminFlagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let flag = {};
+                
+                if (btn.id == "flagName") {
+                    flag = {"type": "event", "name": eventName, "host": hostName, "section": "Event Name"};
+                }
+
+                if (btn.id == "flagLctn") {
+                    flag = {"type": "event", "name": eventName, "host": hostName, "section": "Location"};
+                }
+
+                if (btn.id == "flagDesc") {
+                    flag = {"type": "event", "name": eventName, "host": hostName, "section": "Description"};
+                }
+
+
+                let response = await fetch("/flag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(flag)
+                });
+
+                window.location.reload();
+            });
+        });
 
     </script>
 </body>
