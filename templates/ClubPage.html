@@ -8,6 +8,7 @@
         
         <div id="info">
             <!-- Store club name -->
+            <button id="reqUnflagName" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagName" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
             <h1 id="Club Name" data-name="{{ club['Club Name'] }}">              
@@ -15,26 +16,31 @@
             </h1>
             
             <!-- Store leader -->
+            <button id="reqUnflagLdr" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagLdr" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagLdr" class="adminFlagBtns" hidden>Flag</button>
             <strong>Leader: </strong>
             <span id="Leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
             
+            <button id="reqUnflagTpc" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagTpc" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagTpc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Topic: </strong>
             <span id="Topic">{{ club["Topic"] }}</span><br><br>
 
+            <button id="reqUnflagDtls" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagDtls" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagDtls" class="adminFlagBtns" hidden>Flag</button>
             <strong>Details: </strong>
             <span id="Details">{{ club["Details"] }}</span><br><br>
 
+            <button id="reqUnflagMbrs" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagMbrs" class="adminUnflagBtns" hidden>Unflag</button>            
             <button id="flagMbrs" class="adminFlagBtns" hidden>Flag</button>
             <strong>Members: </strong>
             <span id="Members">{{ club["Members"] }}</span><br><br>
 
+            <button id="reqUnflagEvts" class="reqUnflagBtns" hidden>Request Unflag</button>
             <button id="unflagEvts" class="adminUnflagBtns" hidden>Unflag</button>
             <button id="flagEvts" class="adminFlagBtns" hidden>Flag</button>
             <strong>Events: </strong>
@@ -105,33 +111,69 @@
 
         function unflagButtons() {
             if (document.getElementById("Club Name").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagName").hidden = false;
-                document.getElementById("flagName").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagName").hidden = false;
+                    document.getElementById("flagName").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagName").hidden = false;
+                }
             }
 
             if (document.getElementById("Leader").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagLdr").hidden = false;
-                document.getElementById("flagLdr").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagLdr").hidden = false;
+                    document.getElementById("flagLdr").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagLdr").hidden = false;
+                }
             }
 
             if (document.getElementById("Topic").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagTpc").hidden = false;
-                document.getElementById("flagTpc").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagTpc").hidden = false;
+                    document.getElementById("flagTpc").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagTpc").hidden = false;
+                }
             }
 
             if (document.getElementById("Details").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagDtls").hidden = false;
-                document.getElementById("flagDtls").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagDtls").hidden = false;
+                    document.getElementById("flagDtls").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagDtls").hidden = false;
+                }
             }
 
             if (document.getElementById("Members").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagMbrs").hidden = false;
-                document.getElementById("flagMbrs").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagMbrs").hidden = false;
+                    document.getElementById("flagMbrs").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagMbrs").hidden = false;
+                }
             }
 
             if (document.getElementById("Events").innerText == "Content flagged for inappropriateness.") {
-                document.getElementById("unflagEvts").hidden = false;
-                document.getElementById("flagEvts").hidden = true;
+                if (user.Role == "admin") {
+                    document.getElementById("unflagEvts").hidden = false;
+                    document.getElementById("flagEvts").hidden = true;
+                }
+
+                if (user.Username == leader) {
+                    document.getElementById("reqUnflagEvts").hidden = false;
+                }
             }
         }
 
@@ -157,14 +199,14 @@
             const admin = document.getElementById("adminDash");
             const adminFlagBtns = document.getElementsByClassName("adminFlagBtns");
 
-            if (user.Username === leader) {
+            if (user.Username == leader) {
                 leaderButtons.hidden = false;
                 dashboard.hidden = false;
             } else {
                 studentButtons.hidden = false;
             }
 
-            if (user.Role === "admin") {
+            if (user.Role == "admin") {
                 studentButtons.hidden = true;
                 dashboard.hidden = false;
                 admin.hidden = false;
@@ -198,62 +240,6 @@
             data = await response.json();
             flags = data.flags;
             displayFlags();
-
-            /*let flagDisplay = document.getElementById("flagDisplay");
-            data.flags.forEach(flag => {
-                const flagDisp = document.createElement("span");
-                flagDisp.innerText = flag.Message;
-                flagDisp.style.color = "#D61F22";
-
-                const rmvButton = document.createElement("button");
-                rmvButton.innerText = "Unflag";
-                rmvButton.style.marginRight = "5px";
-
-                rmvButton.addEventListener("click", async () => {
-                    await fetch("/remove-flag", {
-                        method: "POST",
-                        headers: { 
-                            "Content-Type": "application/json" 
-                        },
-                        body: JSON.stringify({"name": clubName, "flag": flag.Message})
-                    });
-                    
-                    window.location.reload();
-                });
-
-                const reqUnflagBtn = document.createElement("button");
-                reqUnflagBtn.innerText = "Request Unflag";
-                reqUnflagBtn.style.marginRight = "5px";
-
-                reqUnflagBtn.addEventListener("click", async () => {
-                    await fetch("/request-remove-flag", {
-                        method: "POST",
-                        headers: { 
-                            "Content-Type": "application/json" 
-                        },
-                        body: JSON.stringify({"name": clubName, "flag": flag.Message})
-                    });
-                    
-                    reqUnflagBtn.hidden = true;
-                    flagDisp.innerText = "Unflag request has been sent."
-                });
-
-
-                if (user.Role != "admin") {
-                    rmvButton.hidden = true;
-                }
-
-                if (user.Username != leader) {
-                    reqUnflagBtn.hidden = true;
-                }
-
-                //document.getElementById("flagDisplay").appendChild(rmvButton);
-                //document.getElementById("flagDisplay").appendChild(reqUnflagBtn);
-                //document.getElementById("flagDisplay").appendChild(flagDisp);
-                //document.getElementById("flagDisplay").appendChild(document.createElement("br"));
-            });*/
-
-
         });
 
         document.getElementById("join").addEventListener("click", async () => {
