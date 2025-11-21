@@ -68,6 +68,7 @@
         let hostName = document.getElementById("Club Name").dataset.name;
         let clubLeader = "";
         let guestList = [];
+        let flags = [];
 
         async function findHostLeader() {   
             let ldrResponse = {club: hostName};
@@ -114,6 +115,16 @@
             }
         }
 
+        function displayFlags() {
+            if (flags.length > 0) {
+                flags.forEach(flag => {
+                    document.getElementById(flag["Section"]).innerText = flag["Message"];
+                })
+            }
+
+            //unflagButtons()
+        }
+
         window.addEventListener("DOMContentLoaded", async () => {
             // Get the current user
             let response = await fetch("/current-user", {
@@ -132,8 +143,22 @@
                 leaderButtons.hidden = false;
             } 
 
+            // Get and display flags
+            response = await fetch("/grab-flags", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(eventName)
+            })
+
+            data = await response.json();
+            flags = data.flags;
+            
+
             updateAvailability();
             displayFlagBtns();
+            displayFlags();
         });
 
         document.getElementById("regBtn").addEventListener("click", async () => {                        
