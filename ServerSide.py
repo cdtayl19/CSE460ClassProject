@@ -60,7 +60,7 @@ def write_reports(message):
 
 def write_flags(message):
     with open("Flags.csv", 'a', newline='') as new_file:
-        fieldnames = ['Content Type', 'Content Name', 'Message']
+        fieldnames = ['Content Type', 'Content Name', 'Section', 'Message']
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writerow(message)
 
@@ -950,10 +950,11 @@ def flag_content():
         flag_data = request.get_json()
         print(flag_data)
 
-        new_flag = {"Content Type": flag_data["type"], "Content Name": flag_data["name"], "Message": flag_data["message"]}
+        new_flag = {"Content Type": flag_data["type"], "Content Name": flag_data["name"], "Section": flag_data["section"], "Message": "Content flagged for inappropriateness."}
         write_flags(new_flag)
 
-        return jsonify({"status": "success", "message": flag_data["message"]})
+        #return jsonify({"status": "success", "message": flag_data["message"]})
+        return jsonify({"status": "success"})
     
 
 

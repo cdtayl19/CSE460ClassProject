@@ -1,4 +1,3 @@
-Content Type,Content Name,Message
-Club,Wayne Manor,11111
-Club,Wayne Manor,22222
-Club,Wayne Manor,Test
+Content Type,Content Name,Section,Message
+club,Wayne Manor,Club Name,Content flagged for inappropriateness.
+

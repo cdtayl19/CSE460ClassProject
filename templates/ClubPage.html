@@ -9,27 +9,39 @@
         <div id="info">
             <!-- Store club name -->
             <h1 id="name" data-name="{{ club['Club Name'] }}">
+                <button id="unflagName" class="adminUnflagBtns" hidden>Ungflag</button>
+                <button id="flagName" class="adminFlagBtns" hidden>Flag</button>
                 {{ club["Club Name"] }}
             </h1>
             
             <!-- Store leader -->
+            <button id="unflagLdr" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="flagLdr" class="adminFlagBtns" hidden>Flag</button>
             <strong>Leader: </strong>
             <span id="leader" data-name="{{ club['Leader'] }}">{{ club["Leader"] }}</span><br><br>
             
+            <button id="unflagTpc" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="flagTpc" class="adminFlagBtns" hidden>Flag</button>
             <strong>Topic: </strong>
             <span id="topic">{{ club["Topic"] }}</span><br><br>
 
+            <button id="unflagDtls" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="flagDtls" class="adminFlagBtns" hidden>Flag</button>
             <strong>Details: </strong>
             <span id="details">{{ club["Details"] }}</span><br><br>
 
+            <button id="unflagMbrs" class="adminUnflagBtns" hidden>Ungflag</button>            
+            <button id="flagMbrs" class="adminFlagBtns" hidden>Flag</button>
             <strong>Members: </strong>
             <span>{{ club["Members"] }}</span><br><br>
 
+            <button id="unflagEvts" class="adminUnflagBtns" hidden>Ungflag</button>
+            <button id="flagEvts" class="adminFlagBtns" hidden>Flag</button>
             <strong>Events: </strong>
             <span>{{ club["Events"] }}</span><br><br>
         </div>
         
-        <div id="flagDisplay"></div>
+        <!--<div id="flagDisplay"></div>-->
 
         <br>
 
@@ -99,6 +111,7 @@
             const leaderButtons = document.getElementById("leaderButtons");
             const dashboard = document.getElementById("dashboard");
             const admin = document.getElementById("adminDash");
+            const adminFlagBtns = document.getElementsByClassName("adminFlagBtns");
 
             if (user.Username === leader) {
                 leaderButtons.hidden = false;
@@ -111,6 +124,9 @@
                 studentButtons.hidden = true;
                 dashboard.hidden = false;
                 admin.hidden = false;
+                document.querySelectorAll(".adminFlagBtns").forEach(btn => {
+                    btn.hidden = false;
+                });
             } 
 
             // Get the number of join requests
@@ -138,7 +154,7 @@
             data = await response.json();
             console.log(data.flags);
 
-            let flagDisplay = document.getElementById("flagDisplay");
+            /*let flagDisplay = document.getElementById("flagDisplay");
             data.flags.forEach(flag => {
                 const flagDisp = document.createElement("span");
                 flagDisp.innerText = flag.Message;
@@ -186,11 +202,11 @@
                     reqUnflagBtn.hidden = true;
                 }
 
-                document.getElementById("flagDisplay").appendChild(rmvButton);
-                document.getElementById("flagDisplay").appendChild(reqUnflagBtn);
-                document.getElementById("flagDisplay").appendChild(flagDisp);
-                document.getElementById("flagDisplay").appendChild(document.createElement("br"));
-            });
+                //document.getElementById("flagDisplay").appendChild(rmvButton);
+                //document.getElementById("flagDisplay").appendChild(reqUnflagBtn);
+                //document.getElementById("flagDisplay").appendChild(flagDisp);
+                //document.getElementById("flagDisplay").appendChild(document.createElement("br"));
+            });*/
 
 
         });
@@ -642,6 +658,44 @@
 
         document.getElementById("adminBackBtn").addEventListener("click", () => {
              window.location.href = '/admin';
+        });
+    
+        document.querySelectorAll(".adminFlagBtns").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                let flag = {};
+                
+                if (btn.id == "flagName") {
+                    flag = {"type": "club", "name": clubName, "section": "Club Name"};
+                }
+
+                if (btn.id == "flagLdr") {
+                    flag = {"type": "club", "name": clubName, "section": "Leader"};
+                }
+
+                if (btn.id == "flagTpc") {
+                    flag = {"type": "club", "name": clubName, "section": "Topic"};
+                }
+
+                if (btn.id == "flagDtls") {
+                    flag = {"type": "club", "name": clubName, "section": "Details"};
+                }
+
+                if (btn.id == "flagMbrs") {
+                    flag = {"type": "club", "name": clubName, "section": "Members"};
+                }
+
+                if (btn.id == "flagEvts") {
+                    flag = {"type": "club", "name": clubName, "section": "Events"};
+                }
+
+                let response = await fetch("/flag-content", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(flag)
+                });
+            });
         });
     </script>
 </body>
