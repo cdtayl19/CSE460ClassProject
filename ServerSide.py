@@ -747,6 +747,13 @@ def manage_club():
                     current_events.remove(update_data["event"])
                     df.at[idx, "Events"] = json.dumps(current_events)
                     df.to_csv("ApprovedClubs.csv", index=False)
+
+                    # Remove Event from Events.csv
+                    df = pd.read_csv("Events.csv")
+
+                    df = df[df["Event Name"] != update_data["event"]]
+                    df.reset_index(drop=True, inplace=True)
+                    df.to_csv("Events.csv", index=False)
                     return jsonify({"status": "success", "message": "Event canceled."})
 
         # Change club Name
